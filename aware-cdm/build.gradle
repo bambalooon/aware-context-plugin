@@ -27,7 +27,6 @@ android {
 dependencies {
     compile 'com.google.guava:guava:18.0'
     compile 'com.awareframework:aware-core:3.2.8@aar'
-    compile 'com.awareframework:aware-plugin-google_FusedLocation:3.5@aar'
     compile 'com.awareframework:aware-plugin-google_ActivityRecognition:6.3@aar'
     compile 'com.awareframework:aware-plugin-OpenWeather:1.2@aar'
     compile 'com.android.support:appcompat-v7:21.0.3'
