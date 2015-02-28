@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.aware.cdm"
+        android:versionCode="1"
+        android:versionName="0.1">
+
+    <uses-sdk
+            android:minSdkVersion="9"
+            android:targetSdkVersion="21"/>
+
+    <application/>
+
+</manifest>
