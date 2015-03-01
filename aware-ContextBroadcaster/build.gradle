@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.aware.plugin.contextbroadcaster"
-        minSdkVersion 9
+        minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
         versionName "0.1"
@@ -18,17 +18,12 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    applicationVariants.all { variant ->
-        variant.processResources.manifestFile = file('src/main/AndroidManifest.xml')
-        variant.processManifest.enabled = false
     }
 }
 
 dependencies {
     compile project(':aware-cdm')
-    compile 'com.awareframework:aware-core:3.2.8@aar'
 }
