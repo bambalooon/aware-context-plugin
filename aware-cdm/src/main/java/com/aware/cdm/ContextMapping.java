@@ -18,24 +18,24 @@ public class ContextMapping {
     private static ContextMapping INSTANCE;
     public static ContextMapping getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ContextMapping(ImmutableMap.<Uri, ContextRecordFactory>builder()
-                    .put(Locations_Provider.Locations_Data.CONTENT_URI, new LocationsDataRecordFactory())
-                    .put(Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI, new GoogleActivityRecognitionDataRecordFactory())
-                    .put(Provider.OpenWeather_Data.CONTENT_URI, new OpenWeatherDataRecordFactory())
-                    .put(WiFi_Provider.WiFi_Sensor.CONTENT_URI, new WifiSensorRecordFactory())
-                    .put(WiFi_Provider.WiFi_Data.CONTENT_URI, new WifiDataRecordFactory())
+            INSTANCE = new ContextMapping(ImmutableMap.<Uri, ContextPropertyFactory>builder()
+                    .put(Locations_Provider.Locations_Data.CONTENT_URI, new LocationPropertyFactory())
+                    .put(Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI, new GoogleActivityRecognitionPropertyFactory())
+                    .put(Provider.OpenWeather_Data.CONTENT_URI, new OpenWeatherPropertyFactory())
+                    .put(WiFi_Provider.WiFi_Sensor.CONTENT_URI, new WifiSensorPropertyFactory())
+                    .put(WiFi_Provider.WiFi_Data.CONTENT_URI, new WifiDataPropertyFactory())
                     .build());
         }
         return INSTANCE;
     }
 
-    private final Map<Uri, ContextRecordFactory> map;
+    private final Map<Uri, ContextPropertyFactory> map;
 
-    public ContextMapping(Map<Uri, ContextRecordFactory> map) {
+    public ContextMapping(Map<Uri, ContextPropertyFactory> map) {
         this.map = map;
     }
 
-    public ContextRecordFactory getContextRecordFactory(Uri uri) {
+    public ContextPropertyFactory getContextPropertyFactory(Uri uri) {
         return map.get(uri);
     }
 

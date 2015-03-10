@@ -5,16 +5,16 @@ import android.os.Parcel;
 /**
  * Created by Krzysztof Balon on 2015-02-23.
  */
-public class LocationsDataRecord implements ContextRecord {
-    public static final Creator<LocationsDataRecord> CREATOR = new Creator<LocationsDataRecord>() {
+public class LocationProperty implements ContextProperty {
+    public static final Creator<LocationProperty> CREATOR = new Creator<LocationProperty>() {
         @Override
-        public LocationsDataRecord createFromParcel(Parcel parcel) {
-            return new LocationsDataRecord(parcel);
+        public LocationProperty createFromParcel(Parcel parcel) {
+            return new LocationProperty(parcel);
         }
 
         @Override
-        public LocationsDataRecord[] newArray(int size) {
-            return new LocationsDataRecord[size];
+        public LocationProperty[] newArray(int size) {
+            return new LocationProperty[size];
         }
     };
 
@@ -30,7 +30,7 @@ public class LocationsDataRecord implements ContextRecord {
     private final double accuracy;
     private final String label;
 
-    public LocationsDataRecord(int id, long timestamp, String deviceId, double latitude, double longitude, double bearing, double speed, double altitude, String provider, double accuracy, String label) {
+    public LocationProperty(int id, long timestamp, String deviceId, double latitude, double longitude, double bearing, double speed, double altitude, String provider, double accuracy, String label) {
         this.id = id;
         this.timestamp = timestamp;
         this.deviceId = deviceId;
@@ -44,7 +44,7 @@ public class LocationsDataRecord implements ContextRecord {
         this.label = label;
     }
 
-    public LocationsDataRecord(Parcel in) {
+    public LocationProperty(Parcel in) {
         this.id = in.readInt();
         this.timestamp = in.readLong();
         this.deviceId = in.readString();

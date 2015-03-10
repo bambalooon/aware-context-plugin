@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextRecord;
-import com.aware.cdm.record.LocationsDataRecord;
+import com.aware.cdm.record.ContextProperty;
+import com.aware.cdm.record.LocationProperty;
 import com.aware.providers.Locations_Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-23.
  */
-public class LocationsDataRecordFactory implements ContextRecordFactory {
+public class LocationPropertyFactory implements ContextPropertyFactory {
     
     @Override
-    public ContextRecord createInstance(Cursor cursor) {
+    public ContextProperty createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data._ID);
         int timestampIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data.TIMESTAMP);
         int deviceIdIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data.DEVICE_ID);
@@ -36,6 +36,6 @@ public class LocationsDataRecordFactory implements ContextRecordFactory {
         double accuracy = cursor.getDouble(accuracyIndex);
         String label = cursor.getString(labelIndex);
 
-        return new LocationsDataRecord(id, timestamp, deviceId, latitude, longitude, bearing, speed, altitude, provider, accuracy, label);
+        return new LocationProperty(id, timestamp, deviceId, latitude, longitude, bearing, speed, altitude, provider, accuracy, label);
     }
 }

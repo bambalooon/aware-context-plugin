@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.util.Log;
 import com.aware.Aware;
 import com.aware.cdm.ContextMapping;
-import com.aware.cdm.ContextRecordCreator;
-import com.aware.cdm.processor.ContextRecordProcessor;
+import com.aware.cdm.ContextPropertyCreator;
+import com.aware.cdm.processor.ContextPropertyProcessor;
 import com.aware.cdm.processor.ContextUpdateBroadcaster;
 import com.aware.cdm.receiver.ContextUpdateReceiver;
-import com.aware.cdm.record.ContextRecord;
+import com.aware.cdm.record.ContextProperty;
 import com.aware.plugin.contextbroadcaster.positioner.NewRecordsCursorPositioner;
 import com.aware.utils.Aware_Plugin;
 
@@ -50,16 +50,16 @@ public class Plugin extends Aware_Plugin {
                     contextChangeHandler,
                     contentUri,
                     NewRecordsCursorPositioner.createInstancePositionedAtEnd(contentUri, contentResolver),
-                    new ContextRecordCreator(),
+                    new ContextPropertyCreator(),
                     new ContextUpdateBroadcaster(applicationContext));
             contentResolver.registerContentObserver(contentUri, true, contextObserver);
             contentObservers.add(contextObserver);
         }
 
-        broadcastReceiver = new ContextUpdateReceiver(new ContextRecordProcessor() {
+        broadcastReceiver = new ContextUpdateReceiver(new ContextPropertyProcessor() {
             @Override
-            public void process(ContextRecord contextRecord) {
-                Log.d(TAG, contextRecord.toString());
+            public void process(ContextProperty contextProperty) {
+                Log.d(TAG, contextProperty.toString());
             }
         });
         registerReceiver(broadcastReceiver, new IntentFilter(ContextUpdateBroadcaster.ACTION_AWARE_CONTEXT_UPDATE));

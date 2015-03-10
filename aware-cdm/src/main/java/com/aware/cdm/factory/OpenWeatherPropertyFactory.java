@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextRecord;
-import com.aware.cdm.record.OpenWeatherDataRecord;
+import com.aware.cdm.record.ContextProperty;
+import com.aware.cdm.record.OpenWeatherProperty;
 import com.aware.plugin.openweather.Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-26.
  */
-public class OpenWeatherDataRecordFactory implements ContextRecordFactory {
+public class OpenWeatherPropertyFactory implements ContextPropertyFactory {
 
     @Override
-    public ContextRecord createInstance(Cursor cursor) {
+    public ContextProperty createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(Provider.OpenWeather_Data._ID);
         int timestampIndex = cursor.getColumnIndex(Provider.OpenWeather_Data.TIMESTAMP);
         int deviceIdIndex = cursor.getColumnIndex(Provider.OpenWeather_Data.DEVICE_ID);
@@ -44,7 +44,7 @@ public class OpenWeatherDataRecordFactory implements ContextRecordFactory {
         int weatherIconId = cursor.getInt(weatherIconIdIndex);
         String weatherDescription = cursor.getString(weatherDescriptionIndex);
 
-        return new OpenWeatherDataRecord(id, timestamp, deviceId, city, temperature, temperatureMax, temperatureMin, units, humidity,
+        return new OpenWeatherProperty(id, timestamp, deviceId, city, temperature, temperatureMax, temperatureMin, units, humidity,
                 pressure, windSpeed, windDegrees, cloudiness, weatherIconId, weatherDescription);
     }
 }

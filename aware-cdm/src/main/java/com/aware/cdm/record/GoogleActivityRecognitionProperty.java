@@ -5,16 +5,16 @@ import android.os.Parcel;
 /**
  * Created by Krzysztof Balon on 2015-02-24.
  */
-public class GoogleActivityRecognitionDataRecord implements ContextRecord {
-    public static final Creator<GoogleActivityRecognitionDataRecord> CREATOR = new Creator<GoogleActivityRecognitionDataRecord>() {
+public class GoogleActivityRecognitionProperty implements ContextProperty {
+    public static final Creator<GoogleActivityRecognitionProperty> CREATOR = new Creator<GoogleActivityRecognitionProperty>() {
         @Override
-        public GoogleActivityRecognitionDataRecord createFromParcel(Parcel parcel) {
-            return new GoogleActivityRecognitionDataRecord(parcel);
+        public GoogleActivityRecognitionProperty createFromParcel(Parcel parcel) {
+            return new GoogleActivityRecognitionProperty(parcel);
         }
 
         @Override
-        public GoogleActivityRecognitionDataRecord[] newArray(int size) {
-            return new GoogleActivityRecognitionDataRecord[size];
+        public GoogleActivityRecognitionProperty[] newArray(int size) {
+            return new GoogleActivityRecognitionProperty[size];
         }
     };
     
@@ -26,7 +26,7 @@ public class GoogleActivityRecognitionDataRecord implements ContextRecord {
     private final int confidence;
     private final String activities;
 
-    public GoogleActivityRecognitionDataRecord(int id, long timestamp, String deviceId, String activityName, int activityType, int confidence, String activities) {
+    public GoogleActivityRecognitionProperty(int id, long timestamp, String deviceId, String activityName, int activityType, int confidence, String activities) {
         this.id = id;
         this.timestamp = timestamp;
         this.deviceId = deviceId;
@@ -36,7 +36,7 @@ public class GoogleActivityRecognitionDataRecord implements ContextRecord {
         this.activities = activities;
     }
 
-    public GoogleActivityRecognitionDataRecord(Parcel in) {
+    public GoogleActivityRecognitionProperty(Parcel in) {
         this.id = in.readInt();
         this.timestamp = in.readLong();
         this.deviceId = in.readString();

@@ -5,10 +5,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-import com.aware.cdm.ContextRecordCreator;
-import com.aware.cdm.processor.ContextRecordProcessor;
+import com.aware.cdm.ContextPropertyCreator;
+import com.aware.cdm.processor.ContextPropertyProcessor;
 import com.aware.cdm.processor.ContextUpdateBroadcaster;
-import com.aware.cdm.record.ContextRecord;
+import com.aware.cdm.record.ContextProperty;
 import com.aware.plugin.contextbroadcaster.positioner.CursorPositioner;
 
 /**
@@ -19,15 +19,15 @@ public class ContextObserver extends ContentObserver {
 
     private final Uri contentUri;
     private final CursorPositioner cursorPositioner;
-    private final ContextRecordCreator contextRecordCreator;
-    private final ContextRecordProcessor contextRecordProcessor;
+    private final ContextPropertyCreator contextPropertyCreator;
+    private final ContextPropertyProcessor contextPropertyProcessor;
 
-    public ContextObserver(Handler handler, Uri contentUri, CursorPositioner cursorPositioner, ContextRecordCreator contextRecordCreator, ContextUpdateBroadcaster contextRecordProcessor) {
+    public ContextObserver(Handler handler, Uri contentUri, CursorPositioner cursorPositioner, ContextPropertyCreator contextPropertyCreator, ContextUpdateBroadcaster contextPropertyProcessor) {
         super(handler);
         this.contentUri = contentUri;
         this.cursorPositioner = cursorPositioner;
-        this.contextRecordCreator = contextRecordCreator;
-        this.contextRecordProcessor = contextRecordProcessor;
+        this.contextPropertyCreator = contextPropertyCreator;
+        this.contextPropertyProcessor = contextPropertyProcessor;
     }
 
     @Override
@@ -37,9 +37,9 @@ public class ContextObserver extends ContentObserver {
 
         Cursor cursor;
         while ((cursor = cursorPositioner.moveToNext()) != null) {
-            ContextRecord contextRecord = contextRecordCreator.createContextRecord(contentUri, cursor);
-            contextRecordProcessor.process(contextRecord);
-            Log.d(TAG, contextRecord.toString());
+            ContextProperty contextProperty = contextPropertyCreator.createContextProperty(contentUri, cursor);
+            contextPropertyProcessor.process(contextProperty);
+            Log.d(TAG, contextProperty.toString());
         }
     }
 }

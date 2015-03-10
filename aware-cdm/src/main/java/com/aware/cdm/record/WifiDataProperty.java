@@ -5,16 +5,16 @@ import android.os.Parcel;
 /**
  * Created by Krzysztof Balon on 2015-02-21.
  */
-public class WifiDataRecord implements ContextRecord {
-    public static final Creator<WifiDataRecord> CREATOR = new Creator<WifiDataRecord>() {
+public class WifiDataProperty implements ContextProperty {
+    public static final Creator<WifiDataProperty> CREATOR = new Creator<WifiDataProperty>() {
         @Override
-        public WifiDataRecord createFromParcel(Parcel parcel) {
-            return new WifiDataRecord(parcel);
+        public WifiDataProperty createFromParcel(Parcel parcel) {
+            return new WifiDataProperty(parcel);
         }
 
         @Override
-        public WifiDataRecord[] newArray(int size) {
-            return new WifiDataRecord[size];
+        public WifiDataProperty[] newArray(int size) {
+            return new WifiDataProperty[size];
         }
     };
 
@@ -27,7 +27,7 @@ public class WifiDataRecord implements ContextRecord {
     private final int rssi;
     private final String label;
 
-    public WifiDataRecord(int id, long timestamp, String bssid, String ssid, String security, int frequency, int rssi, String label) {
+    public WifiDataProperty(int id, long timestamp, String bssid, String ssid, String security, int frequency, int rssi, String label) {
         this.id = id;
         this.timestamp = timestamp;
         this.bssid = bssid;
@@ -38,7 +38,7 @@ public class WifiDataRecord implements ContextRecord {
         this.label = label;
     }
 
-    private WifiDataRecord(Parcel in) {
+    private WifiDataProperty(Parcel in) {
         this.id = in.readInt();
         this.timestamp = in.readLong();
         this.bssid = in.readString();

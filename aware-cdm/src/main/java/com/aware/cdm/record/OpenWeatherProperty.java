@@ -5,16 +5,16 @@ import android.os.Parcel;
 /**
  * Created by Krzysztof Balon on 2015-02-26.
  */
-public class OpenWeatherDataRecord implements ContextRecord {
-    public static final Creator<OpenWeatherDataRecord> CREATOR = new Creator<OpenWeatherDataRecord>() {
+public class OpenWeatherProperty implements ContextProperty {
+    public static final Creator<OpenWeatherProperty> CREATOR = new Creator<OpenWeatherProperty>() {
         @Override
-        public OpenWeatherDataRecord createFromParcel(Parcel parcel) {
-            return new OpenWeatherDataRecord(parcel);
+        public OpenWeatherProperty createFromParcel(Parcel parcel) {
+            return new OpenWeatherProperty(parcel);
         }
 
         @Override
-        public OpenWeatherDataRecord[] newArray(int size) {
-            return new OpenWeatherDataRecord[size];
+        public OpenWeatherProperty[] newArray(int size) {
+            return new OpenWeatherProperty[size];
         }
     };
     
@@ -34,7 +34,7 @@ public class OpenWeatherDataRecord implements ContextRecord {
     private final int weatherIconId;
     private final String weatherDescription;
 
-    public OpenWeatherDataRecord(int id, long timestamp, String deviceId, String city, double temperature, double temperatureMax, double temperatureMin, String units, double humidity, double pressure, double windSpeed, double windDegrees, double cloudiness, int weatherIconId, String weatherDescription) {
+    public OpenWeatherProperty(int id, long timestamp, String deviceId, String city, double temperature, double temperatureMax, double temperatureMin, String units, double humidity, double pressure, double windSpeed, double windDegrees, double cloudiness, int weatherIconId, String weatherDescription) {
         this.id = id;
         this.timestamp = timestamp;
         this.deviceId = deviceId;
@@ -52,7 +52,7 @@ public class OpenWeatherDataRecord implements ContextRecord {
         this.weatherDescription = weatherDescription;
     }
 
-    public OpenWeatherDataRecord(Parcel in) {
+    public OpenWeatherProperty(Parcel in) {
         this.id = in.readInt();
         this.timestamp = in.readLong();
         this.deviceId = in.readString();
