@@ -13,8 +13,9 @@ import com.aware.cdm.factory.ContextPropertyFactory;
 import com.aware.cdm.factory.GenericContextPropertyFactory;
 import com.aware.cdm.processor.ContextPropertyProcessor;
 import com.aware.cdm.processor.ContextUpdateBroadcaster;
-import com.aware.cdm.receiver.ContextUpdateReceiver;
 import com.aware.cdm.property.ContextProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.receiver.ContextUpdateReceiver;
 import com.aware.plugin.contextbroadcaster.positioner.NewRecordsCursorPositioner;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 import com.aware.providers.Locations_Provider;
@@ -113,10 +114,10 @@ public class Plugin extends Aware_Plugin {
             contentObservers.add(contextObserver);
         }
 
-        broadcastReceiver = new ContextUpdateReceiver(new ContextPropertyProcessor<ContextProperty>() {
+        broadcastReceiver = new ContextUpdateReceiver(new ContextPropertyProcessor<ContextPropertyParcel>() {
             @Override
-            public void process(ContextProperty contextProperty) {
-                Log.d(TAG, contextProperty.toString());
+            public void process(ContextPropertyParcel contextPropertyParcel) {
+                Log.d(TAG, contextPropertyParcel.toString());
             }
         });
         registerReceiver(broadcastReceiver, new IntentFilter(ContextUpdateBroadcaster.ACTION_AWARE_CONTEXT_UPDATE));
