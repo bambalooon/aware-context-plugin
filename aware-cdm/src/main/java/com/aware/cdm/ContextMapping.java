@@ -6,6 +6,7 @@ import com.aware.cdm.factory.ContextPropertyFactory;
 import com.aware.cdm.factory.GenericContextPropertyFactory;
 import com.aware.cdm.property.ContextProperty;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
+import com.aware.plugin.openweather.Provider;
 import com.aware.providers.Locations_Provider;
 import com.google.common.collect.ImmutableMap;
 
@@ -52,8 +53,29 @@ public class ContextMapping<CP extends ContextProperty> {
                                             .put(Locations_Provider.Locations_Data.PROVIDER, String.class)
                                             .put(Locations_Provider.Locations_Data.ACCURACY, Double.class)
                                             .put(Locations_Provider.Locations_Data.LABEL, String.class)
-                                            .build())
-                    )
+                                            .build()))
+                    .put(
+                            Provider.OpenWeather_Data.CONTENT_URI,
+                            new GenericContextPropertyFactory(
+                                    new CellValueRetriever(),
+                                    Provider.AUTHORITY,
+                                    ImmutableMap.<String, Class<?>>builder()
+                                            .put(Provider.OpenWeather_Data._ID, Integer.class)
+                                            .put(Provider.OpenWeather_Data.TIMESTAMP, Long.class)
+                                            .put(Provider.OpenWeather_Data.DEVICE_ID, String.class)
+                                            .put(Provider.OpenWeather_Data.CITY, String.class)
+                                            .put(Provider.OpenWeather_Data.TEMPERATURE, Double.class)
+                                            .put(Provider.OpenWeather_Data.TEMPERATURE_MAX, Double.class)
+                                            .put(Provider.OpenWeather_Data.TEMPERATURE_MIN, Double.class)
+                                            .put(Provider.OpenWeather_Data.UNITS, String.class)
+                                            .put(Provider.OpenWeather_Data.HUMIDITY, Double.class)
+                                            .put(Provider.OpenWeather_Data.PRESSURE, Double.class)
+                                            .put(Provider.OpenWeather_Data.WIND_SPEED, Double.class)
+                                            .put(Provider.OpenWeather_Data.WIND_DEGREES, Double.class)
+                                            .put(Provider.OpenWeather_Data.CLOUDINESS, Double.class)
+                                            .put(Provider.OpenWeather_Data.WEATHER_ICON_ID, Integer.class)
+                                            .put(Provider.OpenWeather_Data.WEATHER_DESCRIPTION, String.class)
+                                            .build()))
                     .build());
         }
         return INSTANCE;
