@@ -1,11 +1,11 @@
-package com.aware.cdm.receiver;
+package com.aware.cdm.broadcast.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.aware.cdm.processor.ContextPropertyProcessor;
-import com.aware.cdm.processor.ContextUpdateBroadcaster;
-import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.broadcast.processor.ContextUpdateBroadcaster;
+import com.aware.cdm.broadcast.property.ContextPropertyParcel;
 
 /**
  * Created by Krzysztof Balon on 2015-02-22.

@@ -1,9 +1,10 @@
 package com.aware.cdm;
 
 import android.net.Uri;
+import com.aware.cdm.broadcast.factory.*;
 import com.aware.cdm.factory.*;
 import com.aware.cdm.property.ContextProperty;
-import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.broadcast.property.ContextPropertyParcel;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 import com.aware.plugin.openweather.Provider;
 import com.aware.providers.Locations_Provider;

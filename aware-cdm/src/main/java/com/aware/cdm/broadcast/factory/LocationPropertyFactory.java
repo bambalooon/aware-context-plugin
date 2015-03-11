@@ -1,8 +1,9 @@
-package com.aware.cdm.factory;
+package com.aware.cdm.broadcast.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.property.broadcast.ContextPropertyParcel;
-import com.aware.cdm.property.broadcast.LocationProperty;
+import com.aware.cdm.factory.ContextPropertyFactory;
+import com.aware.cdm.broadcast.property.ContextPropertyParcel;
+import com.aware.cdm.broadcast.property.LocationProperty;
 import com.aware.providers.Locations_Provider;
 
 /**

@@ -1,4 +1,4 @@
-package com.aware.cdm.property.broadcast;
+package com.aware.cdm.broadcast.property;
 
 import android.os.Parcel;
 

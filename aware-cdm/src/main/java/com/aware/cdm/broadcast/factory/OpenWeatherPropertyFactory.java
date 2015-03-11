@@ -1,8 +1,9 @@
-package com.aware.cdm.factory;
+package com.aware.cdm.broadcast.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.property.broadcast.ContextPropertyParcel;
-import com.aware.cdm.property.broadcast.OpenWeatherProperty;
+import com.aware.cdm.factory.ContextPropertyFactory;
+import com.aware.cdm.broadcast.property.ContextPropertyParcel;
+import com.aware.cdm.broadcast.property.OpenWeatherProperty;
 import com.aware.plugin.openweather.Provider;
 
 /**

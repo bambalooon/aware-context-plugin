@@ -1,8 +1,9 @@
-package com.aware.cdm.factory;
+package com.aware.cdm.broadcast.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.property.broadcast.ContextPropertyParcel;
-import com.aware.cdm.property.broadcast.WifiDataProperty;
+import com.aware.cdm.factory.ContextPropertyFactory;
+import com.aware.cdm.broadcast.property.ContextPropertyParcel;
+import com.aware.cdm.broadcast.property.WifiDataProperty;
 import com.aware.providers.WiFi_Provider;
 
 /**
