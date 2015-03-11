@@ -1,11 +1,11 @@
-package com.aware.cdm.record;
+package com.aware.cdm.property.broadcast;
 
 import android.os.Parcel;
 
 /**
  * Created by Krzysztof Balon on 2015-02-24.
  */
-public class GoogleActivityRecognitionProperty implements ContextProperty {
+public class GoogleActivityRecognitionProperty implements ContextPropertyParcel {
     public static final Creator<GoogleActivityRecognitionProperty> CREATOR = new Creator<GoogleActivityRecognitionProperty>() {
         @Override
         public GoogleActivityRecognitionProperty createFromParcel(Parcel parcel) {

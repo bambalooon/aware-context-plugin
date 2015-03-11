@@ -7,22 +7,22 @@ import android.os.Handler;
 import android.util.Log;
 import com.aware.cdm.ContextPropertyCreator;
 import com.aware.cdm.processor.ContextPropertyProcessor;
-import com.aware.cdm.processor.ContextUpdateBroadcaster;
-import com.aware.cdm.record.ContextProperty;
+import com.aware.cdm.property.ContextProperty;
 import com.aware.plugin.contextbroadcaster.positioner.CursorPositioner;
 
 /**
  * Created by Krzysztof Balon on 2015-02-21.
+ * @param <CP> processed ContextProperty type
  */
-public class ContextObserver extends ContentObserver {
+public class ContextObserver<CP extends ContextProperty> extends ContentObserver {
     private static final String TAG = ContextObserver.class.getSimpleName();
 
     private final Uri contentUri;
     private final CursorPositioner cursorPositioner;
-    private final ContextPropertyCreator contextPropertyCreator;
-    private final ContextPropertyProcessor contextPropertyProcessor;
+    private final ContextPropertyCreator<CP> contextPropertyCreator;
+    private final ContextPropertyProcessor<CP> contextPropertyProcessor;
 
-    public ContextObserver(Handler handler, Uri contentUri, CursorPositioner cursorPositioner, ContextPropertyCreator contextPropertyCreator, ContextUpdateBroadcaster contextPropertyProcessor) {
+    public ContextObserver(Handler handler, Uri contentUri, CursorPositioner cursorPositioner, ContextPropertyCreator<CP> contextPropertyCreator, ContextPropertyProcessor<CP> contextPropertyProcessor) {
         super(handler);
         this.contentUri = contentUri;
         this.cursorPositioner = cursorPositioner;
@@ -37,7 +37,7 @@ public class ContextObserver extends ContentObserver {
 
         Cursor cursor;
         while ((cursor = cursorPositioner.moveToNext()) != null) {
-            ContextProperty contextProperty = contextPropertyCreator.createContextProperty(contentUri, cursor);
+            CP contextProperty = contextPropertyCreator.createContextProperty(contentUri, cursor);
             contextPropertyProcessor.process(contextProperty);
             Log.d(TAG, contextProperty.toString());
         }

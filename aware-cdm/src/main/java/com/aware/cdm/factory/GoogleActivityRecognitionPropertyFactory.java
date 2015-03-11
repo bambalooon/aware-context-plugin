@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextProperty;
-import com.aware.cdm.record.GoogleActivityRecognitionProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.property.broadcast.GoogleActivityRecognitionProperty;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-24.
  */
-public class GoogleActivityRecognitionPropertyFactory implements ContextPropertyFactory {
+public class GoogleActivityRecognitionPropertyFactory implements ContextPropertyFactory<ContextPropertyParcel> {
 
     @Override
-    public ContextProperty createInstance(Cursor cursor) {
+    public ContextPropertyParcel createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(Google_AR_Provider.Google_Activity_Recognition_Data._ID);
         int timestampIndex = cursor.getColumnIndex(Google_AR_Provider.Google_Activity_Recognition_Data.TIMESTAMP);
         int deviceIdIndex = cursor.getColumnIndex(Google_AR_Provider.Google_Activity_Recognition_Data.DEVICE_ID);

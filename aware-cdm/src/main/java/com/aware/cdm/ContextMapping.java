@@ -2,6 +2,8 @@ package com.aware.cdm;
 
 import android.net.Uri;
 import com.aware.cdm.factory.*;
+import com.aware.cdm.property.ContextProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 import com.aware.plugin.openweather.Provider;
 import com.aware.providers.Locations_Provider;
@@ -13,12 +15,13 @@ import java.util.Set;
 
 /**
  * Created by Krzysztof Balon on 2015-02-21.
+ * @param <CP> mapped ContextProperty type
  */
-public class ContextMapping {
+public class ContextMapping<CP extends ContextProperty> {
     private static ContextMapping INSTANCE;
-    public static ContextMapping getInstance() {
+    public static ContextMapping<ContextPropertyParcel> getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ContextMapping(ImmutableMap.<Uri, ContextPropertyFactory>builder()
+            INSTANCE = new ContextMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<ContextPropertyParcel>>builder()
                     .put(Locations_Provider.Locations_Data.CONTENT_URI, new LocationPropertyFactory())
                     .put(Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI, new GoogleActivityRecognitionPropertyFactory())
                     .put(Provider.OpenWeather_Data.CONTENT_URI, new OpenWeatherPropertyFactory())
@@ -29,13 +32,13 @@ public class ContextMapping {
         return INSTANCE;
     }
 
-    private final Map<Uri, ContextPropertyFactory> map;
+    private final Map<Uri, ContextPropertyFactory<CP>> map;
 
-    public ContextMapping(Map<Uri, ContextPropertyFactory> map) {
+    public ContextMapping(Map<Uri, ContextPropertyFactory<CP>> map) {
         this.map = map;
     }
 
-    public ContextPropertyFactory getContextPropertyFactory(Uri uri) {
+    public ContextPropertyFactory<CP> getContextPropertyFactory(Uri uri) {
         return map.get(uri);
     }
 

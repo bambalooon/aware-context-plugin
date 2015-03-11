@@ -1,11 +1,11 @@
-package com.aware.cdm.record;
+package com.aware.cdm.property.broadcast;
 
 import android.os.Parcel;
 
 /**
  * Created by Krzysztof Balon on 2015-02-21.
  */
-public class WifiDataProperty implements ContextProperty {
+public class WifiDataProperty implements ContextPropertyParcel {
     public static final Creator<WifiDataProperty> CREATOR = new Creator<WifiDataProperty>() {
         @Override
         public WifiDataProperty createFromParcel(Parcel parcel) {

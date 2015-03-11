@@ -1,11 +1,11 @@
-package com.aware.cdm.record;
+package com.aware.cdm.property.broadcast;
 
 import android.os.Parcel;
 
 /**
  * Created by Krzysztof Balon on 2015-02-26.
  */
-public class OpenWeatherProperty implements ContextProperty {
+public class OpenWeatherProperty implements ContextPropertyParcel {
     public static final Creator<OpenWeatherProperty> CREATOR = new Creator<OpenWeatherProperty>() {
         @Override
         public OpenWeatherProperty createFromParcel(Parcel parcel) {

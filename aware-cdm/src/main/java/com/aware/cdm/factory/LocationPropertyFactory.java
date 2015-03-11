@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextProperty;
-import com.aware.cdm.record.LocationProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.property.broadcast.LocationProperty;
 import com.aware.providers.Locations_Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-23.
  */
-public class LocationPropertyFactory implements ContextPropertyFactory {
+public class LocationPropertyFactory implements ContextPropertyFactory<ContextPropertyParcel> {
     
     @Override
-    public ContextProperty createInstance(Cursor cursor) {
+    public ContextPropertyParcel createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data._ID);
         int timestampIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data.TIMESTAMP);
         int deviceIdIndex = cursor.getColumnIndex(Locations_Provider.Locations_Data.DEVICE_ID);

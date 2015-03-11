@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextProperty;
-import com.aware.cdm.record.WifiDataProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.property.broadcast.WifiDataProperty;
 import com.aware.providers.WiFi_Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-22.
  */
-public class WifiDataPropertyFactory implements ContextPropertyFactory {
+public class WifiDataPropertyFactory implements ContextPropertyFactory<ContextPropertyParcel> {
 
     @Override
-    public ContextProperty createInstance(Cursor cursor) {
+    public ContextPropertyParcel createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(WiFi_Provider.WiFi_Data._ID);
         int timestampIndex = cursor.getColumnIndex(WiFi_Provider.WiFi_Data.TIMESTAMP);
         int bssidIndex = cursor.getColumnIndex(WiFi_Provider.WiFi_Data.BSSID);

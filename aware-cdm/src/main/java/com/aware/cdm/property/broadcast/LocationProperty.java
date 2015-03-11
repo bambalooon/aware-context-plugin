@@ -1,11 +1,11 @@
-package com.aware.cdm.record;
+package com.aware.cdm.property.broadcast;
 
 import android.os.Parcel;
 
 /**
  * Created by Krzysztof Balon on 2015-02-23.
  */
-public class LocationProperty implements ContextProperty {
+public class LocationProperty implements ContextPropertyParcel {
     public static final Creator<LocationProperty> CREATOR = new Creator<LocationProperty>() {
         @Override
         public LocationProperty createFromParcel(Parcel parcel) {

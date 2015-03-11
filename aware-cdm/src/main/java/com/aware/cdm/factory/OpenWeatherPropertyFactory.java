@@ -1,17 +1,17 @@
 package com.aware.cdm.factory;
 
 import android.database.Cursor;
-import com.aware.cdm.record.ContextProperty;
-import com.aware.cdm.record.OpenWeatherProperty;
+import com.aware.cdm.property.broadcast.ContextPropertyParcel;
+import com.aware.cdm.property.broadcast.OpenWeatherProperty;
 import com.aware.plugin.openweather.Provider;
 
 /**
  * Created by Krzysztof Balon on 2015-02-26.
  */
-public class OpenWeatherPropertyFactory implements ContextPropertyFactory {
+public class OpenWeatherPropertyFactory implements ContextPropertyFactory<ContextPropertyParcel> {
 
     @Override
-    public ContextProperty createInstance(Cursor cursor) {
+    public ContextPropertyParcel createInstance(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(Provider.OpenWeather_Data._ID);
         int timestampIndex = cursor.getColumnIndex(Provider.OpenWeather_Data.TIMESTAMP);
         int deviceIdIndex = cursor.getColumnIndex(Provider.OpenWeather_Data.DEVICE_ID);
