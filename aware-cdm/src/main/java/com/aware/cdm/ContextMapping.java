@@ -18,7 +18,7 @@ import java.util.Set;
  * @param <CP> mapped ContextProperty type
  */
 public class ContextMapping<CP extends ContextProperty> {
-    private static ContextMapping INSTANCE;
+    private static ContextMapping<ContextPropertyParcel> INSTANCE;
     public static ContextMapping<ContextPropertyParcel> getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ContextMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<ContextPropertyParcel>>builder()

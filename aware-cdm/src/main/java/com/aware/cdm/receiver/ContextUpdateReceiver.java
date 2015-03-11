@@ -13,7 +13,7 @@ import com.aware.cdm.property.broadcast.ContextPropertyParcel;
 public class ContextUpdateReceiver extends BroadcastReceiver {
     private final ContextPropertyProcessor<ContextPropertyParcel> contextPropertyProcessor;
 
-    public ContextUpdateReceiver(ContextPropertyProcessor contextPropertyProcessor) {
+    public ContextUpdateReceiver(ContextPropertyProcessor<ContextPropertyParcel> contextPropertyProcessor) {
         this.contextPropertyProcessor = contextPropertyProcessor;
     }
 
