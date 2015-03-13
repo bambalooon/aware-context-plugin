@@ -8,8 +8,6 @@ import android.net.Uri;
  * Created by Krzysztof Balon on 2015-02-22.
  */
 public abstract class AbstractCursorPositioner implements CursorPositioner {
-    public static final int CURSOR_START_POSITION = -1;
-
     private final Uri contentUri;
     private final ContentResolver contentResolver;
     protected Cursor cursor;
