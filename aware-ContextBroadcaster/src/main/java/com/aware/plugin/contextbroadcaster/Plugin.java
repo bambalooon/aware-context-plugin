@@ -7,10 +7,10 @@ import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import com.aware.Aware;
-import com.aware.cdm.ContextMapping;
-import com.aware.cdm.ContextPropertyCreator;
-import com.aware.cdm.processor.ContextPropertyProcessor;
-import com.aware.cdm.property.ContextProperty;
+import com.aware.context.ContextMapping;
+import com.aware.context.ContextPropertyCreator;
+import com.aware.context.processor.ContextPropertyProcessor;
+import com.aware.context.property.ContextProperty;
 import com.aware.plugin.contextbroadcaster.positioner.NewRecordsCursorPositioner;
 import com.aware.utils.Aware_Plugin;
 

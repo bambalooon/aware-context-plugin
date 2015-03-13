@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-import com.aware.cdm.ContextPropertyCreator;
-import com.aware.cdm.processor.ContextPropertyProcessor;
-import com.aware.cdm.property.ContextProperty;
+import com.aware.context.ContextPropertyCreator;
+import com.aware.context.processor.ContextPropertyProcessor;
+import com.aware.context.property.ContextProperty;
 import com.aware.plugin.contextbroadcaster.positioner.CursorPositioner;
 
 /**
