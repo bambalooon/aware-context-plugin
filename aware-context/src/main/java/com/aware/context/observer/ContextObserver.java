@@ -4,9 +4,8 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 import com.aware.context.ContextPropertyCreator;
-import com.aware.context.observer.positioner.CursorPositioner;
+import com.aware.context.positioner.CursorPositioner;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;
 
@@ -15,8 +14,6 @@ import com.aware.context.property.ContextProperty;
  * @param <CP> processed ContextProperty type
  */
 public class ContextObserver<CP extends ContextProperty> extends ContentObserver {
-    private static final String TAG = ContextObserver.class.getSimpleName();
-
     private final Uri contentUri;
     private final CursorPositioner cursorPositioner;
     private final ContextPropertyCreator<CP> contextPropertyCreator;

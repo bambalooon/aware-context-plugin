@@ -12,7 +12,7 @@ import com.aware.context.ContextPropertyCreator;
 import com.aware.context.observer.ContextObserver;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;
-import com.aware.context.observer.positioner.NewRecordsCursorPositioner;
+import com.aware.context.positioner.NewRecordsCursorPositioner;
 import com.aware.utils.Aware_Plugin;
 
 import java.util.ArrayList;
