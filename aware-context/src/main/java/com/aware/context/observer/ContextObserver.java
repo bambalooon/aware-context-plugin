@@ -39,7 +39,6 @@ public class ContextObserver<CP extends ContextProperty> extends ContentObserver
         while ((cursor = cursorPositioner.moveToNext()) != null) {
             CP contextProperty = contextPropertyCreator.createContextProperty(contentUri, cursor);
             contextPropertyProcessor.process(contextProperty);
-            Log.d(TAG, contextProperty.toString());
         }
     }
 }
