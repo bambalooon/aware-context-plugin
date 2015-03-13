@@ -9,9 +9,10 @@ import android.util.Log;
 import com.aware.Aware;
 import com.aware.context.ContextMapping;
 import com.aware.context.ContextPropertyCreator;
+import com.aware.context.observer.ContextObserver;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;
-import com.aware.plugin.contextbroadcaster.positioner.NewRecordsCursorPositioner;
+import com.aware.context.observer.positioner.NewRecordsCursorPositioner;
 import com.aware.utils.Aware_Plugin;
 
 import java.util.ArrayList;

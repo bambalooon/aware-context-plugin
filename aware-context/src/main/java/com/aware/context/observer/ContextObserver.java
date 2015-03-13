@@ -1,4 +1,4 @@
-package com.aware.plugin.contextbroadcaster;
+package com.aware.context.observer;
 
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -6,9 +6,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import com.aware.context.ContextPropertyCreator;
+import com.aware.context.observer.positioner.CursorPositioner;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;
-import com.aware.plugin.contextbroadcaster.positioner.CursorPositioner;
 
 /**
  * Created by Krzysztof Balon on 2015-02-21.

@@ -1,4 +1,4 @@
-package com.aware.plugin.contextbroadcaster.positioner;
+package com.aware.context.observer.positioner;
 
 import android.database.Cursor;
 
