@@ -13,15 +13,15 @@ import com.aware.context.property.ContextProperty;
  * Created by Krzysztof Balon on 2015-02-21.
  * @param <CP> processed ContextProperty type
  */
-public class ContextObserver<CP extends ContextProperty> extends ContentObserver {
-    private final Uri contentUri;
+public class ContextPropertyObserver<CP extends ContextProperty> extends ContentObserver {
+    private final Uri contextPropertyUri;
     private final CursorPositioner cursorPositioner;
     private final ContextPropertyCreator<CP> contextPropertyCreator;
     private final ContextPropertyProcessor<CP> contextPropertyProcessor;
 
-    public ContextObserver(Handler handler, Uri contentUri, CursorPositioner cursorPositioner, ContextPropertyCreator<CP> contextPropertyCreator, ContextPropertyProcessor<CP> contextPropertyProcessor) {
+    public ContextPropertyObserver(Handler handler, Uri contextPropertyUri, CursorPositioner cursorPositioner, ContextPropertyCreator<CP> contextPropertyCreator, ContextPropertyProcessor<CP> contextPropertyProcessor) {
         super(handler);
-        this.contentUri = contentUri;
+        this.contextPropertyUri = contextPropertyUri;
         this.cursorPositioner = cursorPositioner;
         this.contextPropertyCreator = contextPropertyCreator;
         this.contextPropertyProcessor = contextPropertyProcessor;
@@ -34,7 +34,7 @@ public class ContextObserver<CP extends ContextProperty> extends ContentObserver
 
         Cursor cursor;
         while ((cursor = cursorPositioner.moveToNext()) != null) {
-            CP contextProperty = contextPropertyCreator.createContextProperty(contentUri, cursor);
+            CP contextProperty = contextPropertyCreator.createContextProperty(contextPropertyUri, cursor);
             contextPropertyProcessor.process(contextProperty);
         }
     }

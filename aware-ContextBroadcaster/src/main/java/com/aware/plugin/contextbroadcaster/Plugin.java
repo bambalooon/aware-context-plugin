@@ -9,7 +9,7 @@ import android.util.Log;
 import com.aware.Aware;
 import com.aware.context.ContextMapping;
 import com.aware.context.ContextPropertyCreator;
-import com.aware.context.observer.ContextObserver;
+import com.aware.context.observer.ContextPropertyObserver;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;
 import com.aware.context.positioner.NewRecordsCursorPositioner;
@@ -43,7 +43,7 @@ public class Plugin extends Aware_Plugin {
         ContentResolver contentResolver = getContentResolver();
         contentObservers = new ArrayList<>();
         for (Uri contentUri : ContextMapping.getInstance().getContextUriList()) {
-            ContentObserver contextObserver = new ContextObserver<>(
+            ContentObserver contextObserver = new ContextPropertyObserver<>(
                     contextChangeHandler,
                     contentUri,
                     NewRecordsCursorPositioner.createInstancePositionedAtEnd(contentUri, contentResolver),
