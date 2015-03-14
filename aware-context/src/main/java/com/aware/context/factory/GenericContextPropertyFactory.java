@@ -1,7 +1,6 @@
 package com.aware.context.factory;
 
 import android.database.Cursor;
-import com.aware.context.property.ContextProperty;
 import com.aware.context.property.GenericContextProperty;
 import com.google.common.collect.ImmutableMap;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 /**
  * Created by BamBalooon on 2015-03-10.
  */
-public class GenericContextPropertyFactory implements ContextPropertyFactory<ContextProperty> {
+public class GenericContextPropertyFactory implements ContextPropertyFactory<GenericContextProperty> {
     private final CellValueRetriever cellValueRetriever;
     private final String propertyName;
     private final Map<String, Class<?>> propertyColumns;
@@ -22,7 +21,7 @@ public class GenericContextPropertyFactory implements ContextPropertyFactory<Con
     }
 
     @Override
-    public ContextProperty createInstance(Cursor cursor) {
+    public GenericContextProperty createInstance(Cursor cursor) {
         ImmutableMap.Builder<String, Object> propertyValuesBuilder = ImmutableMap.builder();
         for (Map.Entry<String, Class<?>> propertyColumn : propertyColumns.entrySet()) {
             String columnName = propertyColumn.getKey();

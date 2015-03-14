@@ -4,6 +4,7 @@ import android.net.Uri;
 import com.aware.context.factory.ContextPropertyFactory;
 import com.aware.context.factory.GenericContextPropertyFactory;
 import com.aware.context.property.ContextProperty;
+import com.aware.context.property.GenericContextProperty;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 import com.aware.plugin.openweather.Provider;
 import com.aware.providers.Locations_Provider;
@@ -17,10 +18,10 @@ import java.util.Set;
  * @param <CP> mapped ContextProperty type
  */
 public class ContextPropertyMapping<CP extends ContextProperty> {
-    private static ContextPropertyMapping<ContextProperty> DEFAULT_INSTANCE;
-    public static ContextPropertyMapping<ContextProperty> getDefaultInstance() {
+    private static ContextPropertyMapping<GenericContextProperty> DEFAULT_INSTANCE;
+    public static ContextPropertyMapping<GenericContextProperty> getDefaultInstance() {
         if (DEFAULT_INSTANCE == null) {
-            DEFAULT_INSTANCE = new ContextPropertyMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<ContextProperty>>builder()
+            DEFAULT_INSTANCE = new ContextPropertyMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<GenericContextProperty>>builder()
                     .put(
                             Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI,
                             new GenericContextPropertyFactory(
