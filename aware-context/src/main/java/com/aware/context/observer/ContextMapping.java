@@ -1,7 +1,6 @@
-package com.aware.context;
+package com.aware.context.observer;
 
 import android.net.Uri;
-import com.aware.context.factory.CellValueRetriever;
 import com.aware.context.factory.ContextPropertyFactory;
 import com.aware.context.factory.GenericContextPropertyFactory;
 import com.aware.context.property.ContextProperty;
@@ -25,7 +24,6 @@ public class ContextMapping<CP extends ContextProperty> {
                     .put(
                             Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI,
                             new GenericContextPropertyFactory(
-                                    new CellValueRetriever(),
                                     Google_AR_Provider.AUTHORITY,
                                     ImmutableMap.<String, Class<?>>builder()
                                             .put(Google_AR_Provider.Google_Activity_Recognition_Data._ID, Integer.class)
@@ -39,7 +37,6 @@ public class ContextMapping<CP extends ContextProperty> {
                     .put(
                             Locations_Provider.Locations_Data.CONTENT_URI,
                             new GenericContextPropertyFactory(
-                                    new CellValueRetriever(),
                                     Locations_Provider.AUTHORITY,
                                     ImmutableMap.<String, Class<?>>builder()
                                             .put(Locations_Provider.Locations_Data._ID, Integer.class)
@@ -57,7 +54,6 @@ public class ContextMapping<CP extends ContextProperty> {
                     .put(
                             Provider.OpenWeather_Data.CONTENT_URI,
                             new GenericContextPropertyFactory(
-                                    new CellValueRetriever(),
                                     Provider.AUTHORITY,
                                     ImmutableMap.<String, Class<?>>builder()
                                             .put(Provider.OpenWeather_Data._ID, Integer.class)

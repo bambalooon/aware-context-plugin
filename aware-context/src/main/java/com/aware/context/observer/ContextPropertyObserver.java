@@ -4,7 +4,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import com.aware.context.ContextPropertyCreator;
 import com.aware.context.positioner.CursorPositioner;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.ContextProperty;

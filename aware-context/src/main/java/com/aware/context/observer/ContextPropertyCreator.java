@@ -1,4 +1,4 @@
-package com.aware.context;
+package com.aware.context.observer;
 
 import android.database.Cursor;
 import android.net.Uri;
