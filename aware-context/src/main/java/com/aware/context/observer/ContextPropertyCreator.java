@@ -10,14 +10,21 @@ import com.aware.context.property.ContextProperty;
  * @param <CP> created ContextProperty type
  */
 public class ContextPropertyCreator<CP extends ContextProperty> {
-    private final ContextMapping<CP> contextMapping;
+    private static ContextPropertyCreator<ContextProperty> DEFAULT_INSTANCE;
+    public static ContextPropertyCreator<ContextProperty> getDefaultInstance() {
+        if (DEFAULT_INSTANCE == null) {
+            DEFAULT_INSTANCE = new ContextPropertyCreator<>(ContextPropertyMapping.getDefaultInstance());
+        }
+        return DEFAULT_INSTANCE;
+    }
+    private final ContextPropertyMapping<CP> contextPropertyMapping;
 
-    public ContextPropertyCreator(ContextMapping<CP> contextMapping) {
-        this.contextMapping = contextMapping;
+    public ContextPropertyCreator(ContextPropertyMapping<CP> contextPropertyMapping) {
+        this.contextPropertyMapping = contextPropertyMapping;
     }
 
     public CP createContextProperty(Uri uri, Cursor cursor) {
-        ContextPropertyFactory<CP> contextPropertyFactory = contextMapping.getContextPropertyFactory(uri);
+        ContextPropertyFactory<CP> contextPropertyFactory = contextPropertyMapping.getContextPropertyFactory(uri);
         return contextPropertyFactory.createInstance(cursor);
     }
 }

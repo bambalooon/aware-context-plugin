@@ -16,11 +16,11 @@ import java.util.Set;
  * Created by Krzysztof Balon on 2015-02-21.
  * @param <CP> mapped ContextProperty type
  */
-public class ContextMapping<CP extends ContextProperty> {
-    private static ContextMapping<ContextProperty> INSTANCE;
-    public static ContextMapping<ContextProperty> getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ContextMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<ContextProperty>>builder()
+public class ContextPropertyMapping<CP extends ContextProperty> {
+    private static ContextPropertyMapping<ContextProperty> DEFAULT_INSTANCE;
+    public static ContextPropertyMapping<ContextProperty> getDefaultInstance() {
+        if (DEFAULT_INSTANCE == null) {
+            DEFAULT_INSTANCE = new ContextPropertyMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<ContextProperty>>builder()
                     .put(
                             Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI,
                             new GenericContextPropertyFactory(
@@ -74,12 +74,12 @@ public class ContextMapping<CP extends ContextProperty> {
                                             .build()))
                     .build());
         }
-        return INSTANCE;
+        return DEFAULT_INSTANCE;
     }
 
     private final Map<Uri, ContextPropertyFactory<CP>> map;
 
-    public ContextMapping(Map<Uri, ContextPropertyFactory<CP>> map) {
+    public ContextPropertyMapping(Map<Uri, ContextPropertyFactory<CP>> map) {
         this.map = map;
     }
 
@@ -87,7 +87,7 @@ public class ContextMapping<CP extends ContextProperty> {
         return map.get(uri);
     }
 
-    public Set<Uri> getContextUriList() {
+    public Set<Uri> getContextPropertyUriList() {
         return map.keySet();
     }
 }

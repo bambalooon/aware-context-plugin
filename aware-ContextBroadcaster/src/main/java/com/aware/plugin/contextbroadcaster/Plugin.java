@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import com.aware.Aware;
-import com.aware.context.observer.ContextMapping;
+import com.aware.context.observer.ContextPropertyMapping;
 import com.aware.context.observer.ContextPropertyCreator;
 import com.aware.context.observer.ContextPropertyObserver;
 import com.aware.context.processor.ContextPropertyProcessor;
@@ -42,19 +42,19 @@ public class Plugin extends Aware_Plugin {
 
         ContentResolver contentResolver = getContentResolver();
         contentObservers = new ArrayList<>();
-        for (Uri contentUri : ContextMapping.getInstance().getContextUriList()) {
+        for (Uri contextPropertyUri : ContextPropertyMapping.getDefaultInstance().getContextPropertyUriList()) {
             ContentObserver contextObserver = new ContextPropertyObserver<>(
                     contextChangeHandler,
-                    contentUri,
-                    NewRecordsCursorPositioner.createInstancePositionedAtEnd(contentUri, contentResolver),
-                    new ContextPropertyCreator<>(ContextMapping.getInstance()),
+                    contextPropertyUri,
+                    NewRecordsCursorPositioner.createInstancePositionedAtEnd(contextPropertyUri, contentResolver),
+                    ContextPropertyCreator.getDefaultInstance(),
                     new ContextPropertyProcessor<ContextProperty>() {
                         @Override
                         public void process(ContextProperty contextProperty) {
                             Log.d(TAG, contextProperty.toString());
                         }
                     });
-            contentResolver.registerContentObserver(contentUri, true, contextObserver);
+            contentResolver.registerContentObserver(contextPropertyUri, true, contextObserver);
             contentObservers.add(contextObserver);
         }
     }

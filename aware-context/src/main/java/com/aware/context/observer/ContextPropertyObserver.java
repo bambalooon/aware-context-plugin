@@ -18,7 +18,11 @@ public class ContextPropertyObserver<CP extends ContextProperty> extends Content
     private final ContextPropertyCreator<CP> contextPropertyCreator;
     private final ContextPropertyProcessor<CP> contextPropertyProcessor;
 
-    public ContextPropertyObserver(Handler handler, Uri contextPropertyUri, CursorPositioner cursorPositioner, ContextPropertyCreator<CP> contextPropertyCreator, ContextPropertyProcessor<CP> contextPropertyProcessor) {
+    public ContextPropertyObserver(Handler handler,
+                                   Uri contextPropertyUri,
+                                   CursorPositioner cursorPositioner,
+                                   ContextPropertyCreator<CP> contextPropertyCreator,
+                                   ContextPropertyProcessor<CP> contextPropertyProcessor) {
         super(handler);
         this.contextPropertyUri = contextPropertyUri;
         this.cursorPositioner = cursorPositioner;
