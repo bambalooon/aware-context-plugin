@@ -11,26 +11,26 @@ import java.util.Map;
  */
 public class GenericContextProperty implements ContextProperty {
     private final String name;
-    private final Map<String, Object> values;
+    private final Map<String, Object> attributes;
 
-    public GenericContextProperty(String name, Map<String, Object> values) {
+    public GenericContextProperty(String name, Map<String, Object> attributes) {
         this.name = name;
-        this.values = values;
+        this.attributes = attributes;
     }
 
     public String getName() {
         return name;
     }
 
-    public Map<String, Object> getValues() {
-        return values;
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
     public String toString() {
         return "GenericContextProperty{" +
                 "name='" + name + "', " +
-                FluentIterable.from(values.entrySet())
+                FluentIterable.from(attributes.entrySet())
                         .transform(new Function<Map.Entry<String, Object>, String>() {
                             @Override
                             public String apply(Map.Entry<String, Object> input) {
