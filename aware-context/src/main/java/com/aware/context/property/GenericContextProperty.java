@@ -3,7 +3,6 @@ package com.aware.context.property;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Maps;
 
 import java.util.Map;
 
@@ -17,10 +16,6 @@ public class GenericContextProperty implements ContextProperty {
     public GenericContextProperty(String name, Map<String, Object> attributes) {
         this.name = name;
         this.attributes = attributes;
-    }
-
-    public GenericContextProperty(String name) {
-        this(name, Maps.<String, Object>newHashMap());
     }
 
     public String getName() {
