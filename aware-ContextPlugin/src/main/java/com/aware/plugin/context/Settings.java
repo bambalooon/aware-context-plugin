@@ -1,6 +1,6 @@
-package com.aware.plugin.contextbroadcaster;
+package com.aware.plugin.context;
 
-import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -15,9 +15,9 @@ import com.aware.Aware;
 public class Settings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /**
-     * State of Context Broadcaster plugin
+     * State of Context plugin
      */
-    public static final String STATUS_PLUGIN_CONTEXT_BROADCASTER = "status_plugin_context_broadcaster";
+    public static final String STATUS_PLUGIN_CONTEXT = "status_plugin_context";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
     }
 
     private void syncSettings() {
-        CheckBoxPreference check = (CheckBoxPreference) findPreference(STATUS_PLUGIN_CONTEXT_BROADCASTER);
-        check.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_CONTEXT_BROADCASTER).equals("true"));
+        CheckBoxPreference check = (CheckBoxPreference) findPreference(STATUS_PLUGIN_CONTEXT);
+        check.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_CONTEXT).equals("true"));
     }
 
     @Override
@@ -42,17 +42,16 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
-        if (preference.getKey().equals(STATUS_PLUGIN_CONTEXT_BROADCASTER)) {
+        if (preference.getKey().equals(STATUS_PLUGIN_CONTEXT)) {
             boolean isActive = sharedPreferences.getBoolean(key, false);
-            Aware.setSetting(getApplicationContext(), key, isActive);
+            Context applicationContext = getApplicationContext();
+            Aware.setSetting(applicationContext, key, isActive);
 
             if (isActive) {
-                Aware.startPlugin(getApplicationContext(), getPackageName());
+                Aware.startPlugin(applicationContext, getPackageName());
             } else {
-                Aware.stopPlugin(getApplicationContext(), getPackageName());
+                Aware.stopPlugin(applicationContext, getPackageName());
             }
         }
-        Intent apply = new Intent(Aware.ACTION_AWARE_REFRESH);
-        sendBroadcast(apply);
     }
 }
