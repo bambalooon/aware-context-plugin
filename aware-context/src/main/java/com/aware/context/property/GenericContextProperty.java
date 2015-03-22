@@ -9,17 +9,18 @@ import java.util.Map;
 /**
  * Created by BamBalooon on 2015-03-10.
  */
-public class GenericContextProperty implements ContextProperty {
-    private final String name;
+public class GenericContextProperty implements ContextProperty<String> {
+    private final String id;
     private final Map<String, Object> attributes;
 
-    public GenericContextProperty(String name, Map<String, Object> attributes) {
-        this.name = name;
+    public GenericContextProperty(String id, Map<String, Object> attributes) {
+        this.id = id;
         this.attributes = attributes;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getId() {
+        return id;
     }
 
     public Map<String, Object> getAttributes() {
@@ -29,7 +30,7 @@ public class GenericContextProperty implements ContextProperty {
     @Override
     public String toString() {
         return "GenericContextProperty{" +
-                "name='" + name + "', " +
+                "id='" + id + "', " +
                 FluentIterable.from(attributes.entrySet())
                         .transform(new Function<Map.Entry<String, Object>, String>() {
                             @Override
