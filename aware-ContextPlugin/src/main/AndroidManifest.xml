@@ -38,7 +38,7 @@
             />
 
         <service
-            android:name=".ContextService"
+            android:name="com.aware.context.service.ContextService"
             android:exported="true"
             android:label="@string/app_name"
             android:permission="com.aware.plugin.context.MANAGE_CONTEXT_DATA"

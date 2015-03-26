@@ -1,4 +1,4 @@
-package com.aware.plugin.context;
+package com.aware.context.service;
 
 import android.app.Activity;
 import android.app.IntentService;
