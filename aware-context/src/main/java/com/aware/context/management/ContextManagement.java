@@ -13,8 +13,8 @@ import com.aware.context.storage.PersistenceContextStorage;
  * Created by BamBalooon
  */
 public class ContextManagement {
-    private MemoryContextStorage<GenericContext> memoryContextStorage;
-    private PersistenceContextStorage<GenericContext> persistenceContextStorage;
+    private final MemoryContextStorage<GenericContext> memoryContextStorage;
+    private final PersistenceContextStorage<GenericContext> persistenceContextStorage;
 
     public ContextManagement(android.content.Context applicationContext) {
         this.memoryContextStorage = MemoryContextStorage.getDefaultInstance();
