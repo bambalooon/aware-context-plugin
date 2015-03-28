@@ -89,8 +89,6 @@ public class Plugin extends Aware_Plugin {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         ContentResolver contentResolver = getContentResolver();
         for (ContentObserver contentObserver : contentObservers) {
             contentResolver.unregisterContentObserver(contentObserver);
@@ -103,5 +101,7 @@ public class Plugin extends Aware_Plugin {
         //Apply AWARE settings
         Intent refresh = new Intent(Aware.ACTION_AWARE_REFRESH);
         sendBroadcast(refresh);
+
+        super.onDestroy();
     }
 }
