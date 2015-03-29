@@ -1,9 +1,11 @@
 package com.aware.context.storage;
 
 import android.content.SharedPreferences;
-import com.aware.context.Context;
-import com.aware.context.GenericContext;
-import com.aware.context.transform.ContextSerialization;
+import com.aware.context.property.ContextProperty;
+import com.aware.context.transform.ContextPropertySerialization;
+import com.google.common.collect.Lists;
+
+import java.util.Collection;
 
 /**
  * Name: PersistenceContextStorage
@@ -11,35 +13,43 @@ import com.aware.context.transform.ContextSerialization;
  * Date: 2015-03-22
  * Created by BamBalooon
  */
-public class PersistenceContextStorage<CTX extends Context> implements ContextStorage<CTX> {
-    public static final String CONTEXT_PREFERENCES = "CONTEXT_PREFERENCES";
-    private static final String CONTEXT_PREFERENCE = "CONTEXT_PREFERENCE";
+public class PersistenceContextStorage<CP extends ContextProperty>
+        extends AbstractContextStorage<CP> implements ContextStorage<CP> {
 
-    public static PersistenceContextStorage<GenericContext> getDefaultInstance(android.content.Context applicationContext) {
-        return new PersistenceContextStorage<>(
-                applicationContext.getSharedPreferences(CONTEXT_PREFERENCES, android.content.Context.MODE_PRIVATE),
-                ContextSerialization.getDefaultInstance());
-    }
+    public static final String CONTEXT_PREFERENCES = "CONTEXT_PREFERENCES";
 
     private final SharedPreferences sharedPreferences;
-    private final ContextSerialization<CTX> contextSerialization;
+    private final ContextPropertySerialization<CP> contextPropertySerialization;
 
-    protected PersistenceContextStorage(SharedPreferences sharedPreferences,
-                                        ContextSerialization<CTX> contextSerialization) {
+    public PersistenceContextStorage(SharedPreferences sharedPreferences,
+                                     ContextPropertySerialization<CP> contextPropertySerialization) {
         this.sharedPreferences = sharedPreferences;
-        this.contextSerialization = contextSerialization;
+        this.contextPropertySerialization = contextPropertySerialization;
     }
 
     @Override
-    public CTX getContext() {
-        String contextJson = sharedPreferences.getString(CONTEXT_PREFERENCE, null);
-        return contextSerialization.CONTEXT_DESERIALIZER.apply(contextJson);
+    public CP getContextProperty(String contextPropertyId) {
+        String contextJson = sharedPreferences.getString(contextPropertyId, null);
+        return contextPropertySerialization.CONTEXT_DESERIALIZER.apply(contextJson);
     }
 
     @Override
-    public void setContext(CTX context) {
+    public void setContextProperty(CP contextProperty) {
         sharedPreferences.edit()
-                .putString(CONTEXT_PREFERENCE, contextSerialization.CONTEXT_SERIALIZER.apply(context))
+                .putString(
+                        contextProperty.getId(),
+                        contextPropertySerialization.CONTEXT_SERIALIZER.apply(contextProperty))
                 .apply();
+    }
+
+    @Override
+    public Collection<CP> getContextProperties() {
+        Collection<CP> contextProperties = Lists.newLinkedList();
+        for (Object contextPropertyJson : sharedPreferences.getAll().values()) {
+            contextProperties.add(
+                    contextPropertySerialization.CONTEXT_DESERIALIZER.apply((String) contextPropertyJson)
+            );
+        }
+        return contextProperties;
     }
 }
