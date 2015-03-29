@@ -1,9 +1,8 @@
 package com.aware.context.management;
 
-import com.aware.context.GenericContext;
+import com.aware.context.Context;
 import com.aware.context.property.GenericContextProperty;
-import com.aware.context.storage.MemoryContextStorage;
-import com.aware.context.storage.PersistenceContextStorage;
+import com.aware.context.storage.ContextStorage;
 
 /**
  * Name: ContextManagement
@@ -12,30 +11,18 @@ import com.aware.context.storage.PersistenceContextStorage;
  * Date: 2015-03-22
  * Created by BamBalooon
  */
-public class ContextManagement {
-    private final MemoryContextStorage<GenericContext> memoryContextStorage;
-    private final PersistenceContextStorage<GenericContext> persistenceContextStorage;
+public final class ContextManagement {
+    private final ContextStorage<GenericContextProperty> contextStorage;
 
-    public ContextManagement(android.content.Context applicationContext) {
-        this.memoryContextStorage = MemoryContextStorage.getDefaultInstance();
-        this.persistenceContextStorage = PersistenceContextStorage.getDefaultInstance(applicationContext);
+    public ContextManagement(ContextStorage<GenericContextProperty> contextStorage) {
+        this.contextStorage = contextStorage;
     }
 
-    public GenericContext getContext() {
-        GenericContext memoryContext = memoryContextStorage.getContext();
-        if (memoryContext == null) {
-            return persistenceContextStorage.getContext();
-        }
-        return memoryContext;
+    public synchronized Context<GenericContextProperty> getContext() {
+        return contextStorage.getContext();
     }
 
-    public void setContextProperty(GenericContextProperty contextProperty) {
-        GenericContext context = getContext();
-        if (context == null) {
-            context = new GenericContext();
-        }
-        context.setContextProperty(contextProperty);
-        memoryContextStorage.setContext(context);
-        persistenceContextStorage.setContext(context);
+    public synchronized void setContextProperty(GenericContextProperty contextProperty) {
+        contextStorage.setContextProperty(contextProperty);
     }
 }
