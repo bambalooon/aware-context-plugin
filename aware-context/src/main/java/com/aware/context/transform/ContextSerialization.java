@@ -1,7 +1,6 @@
 package com.aware.context.transform;
 
 import com.aware.context.Context;
-import com.aware.context.GenericContext;
 import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,11 +18,7 @@ public class ContextSerialization<CTX extends Context> {
             .create();
     private final Class<CTX> contextClass;
 
-    public static ContextSerialization<GenericContext> getDefaultInstance() {
-        return new ContextSerialization<>(GenericContext.class);
-    }
-
-    private ContextSerialization(Class<CTX> contextClass) {
+    public ContextSerialization(Class<CTX> contextClass) {
         this.contextClass = contextClass;
     }
 
