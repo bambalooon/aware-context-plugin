@@ -1,13 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
         package="com.aware.plugin.context">
 
-    <!--suppress AndroidDomInspection -->
-    <uses-permission tools:node="removeAll"/>
-    <uses-permission android:name="com.aware.WRITE_CONTEXT_DATA"/>
-    <uses-permission android:name="com.aware.READ_CONTEXT_DATA"/>
-
-    <uses-feature tools:node="removeAll"/>
-
     <permission
         android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA"
         android:description="@string/manage_context_data_permission_description"
@@ -16,7 +9,14 @@
         android:protectionLevel="normal"
         />
 
+    <!--suppress AndroidDomInspection -->
+    <uses-permission tools:node="removeAll"/>
+    <uses-permission android:name="com.aware.WRITE_CONTEXT_DATA"/>
+    <uses-permission android:name="com.aware.READ_CONTEXT_DATA"/>
+
     <uses-permission android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA" />
+
+    <uses-feature tools:node="removeAll"/>
 
     <application
             android:allowBackup="true"
