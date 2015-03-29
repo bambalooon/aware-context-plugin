@@ -10,6 +10,7 @@ import android.os.HandlerThread;
 import android.util.Log;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
+import com.aware.context.application.ContextApplication;
 import com.aware.context.management.ContextManagement;
 import com.aware.context.observer.ContextPropertyCreator;
 import com.aware.context.observer.ContextPropertyMapping;
@@ -54,7 +55,7 @@ public class Plugin extends Aware_Plugin {
         handlerThread.start();
         Handler contextPropertyChangeHandler = new Handler(handlerThread.getLooper());
 
-        contextManagement = new ContextManagement(applicationContext);
+        contextManagement = ContextApplication.getInstance().getContextManagement();
         ContentResolver contentResolver = getContentResolver();
         contentObservers = new ArrayList<>();
         for (Uri contextPropertyUri : ContextPropertyMapping.getDefaultInstance().getContextPropertyUriList()) {

@@ -1,5 +1,5 @@
-<manifest package="com.aware.context">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.aware.context">
 
-    <application/>
+    <application android:name=".application.ContextApplication"/>
 
 </manifest>
