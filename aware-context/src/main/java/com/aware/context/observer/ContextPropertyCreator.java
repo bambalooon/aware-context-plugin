@@ -11,6 +11,7 @@ import com.aware.context.property.GenericContextProperty;
  * @param <CP> created ContextProperty type
  */
 public class ContextPropertyCreator<CP extends ContextProperty> {
+    //TODO: should it be moved to ContextApplication?
     private static ContextPropertyCreator<GenericContextProperty> DEFAULT_INSTANCE;
     public static ContextPropertyCreator<GenericContextProperty> getDefaultInstance() {
         if (DEFAULT_INSTANCE == null) {

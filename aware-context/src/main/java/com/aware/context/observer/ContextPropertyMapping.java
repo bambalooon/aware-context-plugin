@@ -18,6 +18,7 @@ import java.util.Set;
  * @param <CP> mapped ContextProperty type
  */
 public class ContextPropertyMapping<CP extends ContextProperty> {
+    //TODO: should it be moved to ContextApplication?
     private static ContextPropertyMapping<GenericContextProperty> DEFAULT_INSTANCE;
     public static ContextPropertyMapping<GenericContextProperty> getDefaultInstance() {
         if (DEFAULT_INSTANCE == null) {
