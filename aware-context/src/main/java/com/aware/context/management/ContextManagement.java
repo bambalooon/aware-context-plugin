@@ -22,6 +22,10 @@ public final class ContextManagement {
         return contextStorage.getContext();
     }
 
+    public synchronized GenericContextProperty getContextProperty(String contextPropertyId) {
+        return contextStorage.getContextProperty(contextPropertyId);
+    }
+
     //TODO: should it be block write of 2 different context properties?
     public synchronized void setContextProperty(GenericContextProperty contextProperty) {
         contextStorage.setContextProperty(contextProperty);
