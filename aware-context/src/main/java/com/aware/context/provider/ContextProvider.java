@@ -93,7 +93,7 @@ public class ContextProvider extends ContentProvider {
                 cursor.addRow(values);
                 break;
             default:
-                throw new IllegalArgumentException("Unknown or Invalid URI " + uri);
+                throw new IllegalArgumentException("Querying not possible with uri: " + uri);
         }
         return cursor;
     }
