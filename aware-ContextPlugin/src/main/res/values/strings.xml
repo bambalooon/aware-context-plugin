@@ -2,4 +2,8 @@
     <string name="app_name">Context</string>
     <string name="manage_context_data_permission_description">Allow manage access to context data in ContextPlugin</string>
     <string name="manage_context_data_permission_label">Manage ContextPlugin\'s context</string>
+    <string name="read_current_context_data_permission_description">Allow read access to current context data in ContextPlugin</string>
+    <string name="read_current_context_data_permission_label">Read ContextPlugin\'s current context</string>
+    <string name="write_current_context_data_permission_description">Allow write access to current context data in ContextPlugin</string>
+    <string name="write_current_context_data_permission_label">Write ContextPlugin\'s current context</string>
 </resources>

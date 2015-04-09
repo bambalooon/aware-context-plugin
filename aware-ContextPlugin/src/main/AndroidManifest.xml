@@ -9,12 +9,30 @@
         android:protectionLevel="normal"
         />
 
+    <permission
+        android:name="com.aware.context.provider.current_context.READ"
+        android:description="@string/read_current_context_data_permission_description"
+        android:icon="@drawable/ic_action"
+        android:label="@string/read_current_context_data_permission_label"
+        android:protectionLevel="normal"
+        />
+
+    <permission
+        android:name="com.aware.context.provider.current_context.WRITE"
+        android:description="@string/write_current_context_data_permission_description"
+        android:icon="@drawable/ic_action"
+        android:label="@string/write_current_context_data_permission_label"
+        android:protectionLevel="signature"
+        />
+
     <!--suppress AndroidDomInspection -->
     <uses-permission tools:node="removeAll"/>
     <uses-permission android:name="com.aware.WRITE_CONTEXT_DATA"/>
     <uses-permission android:name="com.aware.READ_CONTEXT_DATA"/>
 
-    <uses-permission android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA" />
+    <uses-permission android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA"/>
+    <uses-permission android:name="com.aware.context.provider.current_context.READ"/>
+    <uses-permission android:name="com.aware.context.provider.current_context.WRITE"/>
 
     <uses-feature tools:node="removeAll"/>
 
@@ -43,6 +61,15 @@
             android:exported="true"
             android:label="@string/app_name"
             android:permission="com.aware.plugin.context.MANAGE_CONTEXT_DATA"
+            />
+
+        <provider
+            android:authorities="com.aware.context.provider.current_context"
+            android:name="com.aware.context.provider.CurrentContextProvider"
+            android:exported="true"
+            android:label="CurrentContextProvider"
+            android:readPermission="com.aware.context.provider.current_context.READ"
+            android:writePermission="com.aware.context.provider.current_context.WRITE"
             />
 
     </application>
