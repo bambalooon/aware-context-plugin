@@ -13,12 +13,12 @@ import com.aware.context.property.GenericContextProperty;
 import java.util.Collection;
 
 /**
- * Name: ContextProvider
- * Description: ContextProvider
+ * Name: CurrentContextProvider
+ * Description: CurrentContextProvider
  * Date: 2015-03-28
  * Created by BamBalooon
  */
-public class ContextProvider extends ContentProvider {
+public class CurrentContextProvider extends ContentProvider {
     private static final int CONTEXT = 1;
     private static final int CONTEXT_PROPERTY = 2;
     private static final UriMatcher URI_MATCHER;
@@ -27,8 +27,8 @@ public class ContextProvider extends ContentProvider {
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(ContextContract.AUTHORITY, "context", CONTEXT);
-        URI_MATCHER.addURI(ContextContract.AUTHORITY, "context/*", CONTEXT_PROPERTY);
+        URI_MATCHER.addURI(CurrentContextContract.AUTHORITY, "properties", CONTEXT);
+        URI_MATCHER.addURI(CurrentContextContract.AUTHORITY, "properties/*", CONTEXT_PROPERTY);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class ContextProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (URI_MATCHER.match(uri)) {
             case CONTEXT:
-                return ContextContract.Context.CONTENT_TYPE;
+                return CurrentContextContract.Properties.CONTENT_TYPE;
             case CONTEXT_PROPERTY:
-                return ContextContract.Context.CONTENT_ITEM_TYPE;
+                return CurrentContextContract.Properties.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown or Invalid URI " + uri);
         }
@@ -52,7 +52,7 @@ public class ContextProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         if (projection == null) {
-            projection = ContextContract.Context.PROJECTION_ALL;
+            projection = CurrentContextContract.Properties.PROJECTION_ALL;
         }
 
         final MatrixCursor cursor;
@@ -64,9 +64,9 @@ public class ContextProvider extends ContentProvider {
                     Object values[] = new Object[projection.length];
                     int i = 0;
                     for (String column : projection) {
-                        if (ContextContract.Context._ID.equals(column)) {
+                        if (CurrentContextContract.Properties._ID.equals(column)) {
                             values[i++] = contextProperty.getId();
-                        } else if (ContextContract.Context._CONTEXT_PROPERTY.equals(column)) {
+                        } else if (CurrentContextContract.Properties._CONTEXT_PROPERTY.equals(column)) {
                             values[i++] = contextProperty;
                         }
                     }
@@ -84,9 +84,9 @@ public class ContextProvider extends ContentProvider {
                 Object values[] = new Object[projection.length];
                 int i = 0;
                 for (String column : projection) {
-                    if (ContextContract.Context._ID.equals(column)) {
+                    if (CurrentContextContract.Properties._ID.equals(column)) {
                         values[i++] = contextPropertyIdFromUri;
-                    } else if (ContextContract.Context._CONTEXT_PROPERTY.equals(column)) {
+                    } else if (CurrentContextContract.Properties._CONTEXT_PROPERTY.equals(column)) {
                         values[i++] = contextProperty;
                     }
                 }
