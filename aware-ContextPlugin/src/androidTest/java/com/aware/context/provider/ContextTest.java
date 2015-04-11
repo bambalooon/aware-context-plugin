@@ -1,55 +1,73 @@
 package com.aware.context.provider;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.Suppress;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.net.Uri;
+import android.test.InstrumentationTestCase;
+import android.test.mock.MockContentProvider;
+import android.test.mock.MockContentResolver;
 import com.aware.context.property.GenericContextProperty;
-import com.aware.context.storage.ContextStorage;
-import com.aware.context.storage.PersistenceContextStorage;
 import com.aware.context.transform.ContextPropertySerialization;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
-//TODO: change to work on mocks
-@Suppress
-public class ContextTest extends AndroidTestCase {
-    private static final String TEST_CONTEXT_PREFERENCES = "TEST_CONTEXT_PREFERENCES";
-    private static final String TEST_CONTEXT_PROPERTY_ID_1 = "TEST_CONTEXT_PROPERTY_1";
-    private static final String TEST_CONTEXT_PROPERTY_ID_2 = "TEST_CONTEXT_PROPERTY_2";
-    private static final GenericContextProperty TEST_CONTEXT_PROPERTY_1 = new GenericContextProperty(
-            TEST_CONTEXT_PROPERTY_ID_1, ImmutableMap.<String, Object>of("k1", "v1", "k2", 2));
-    private static final GenericContextProperty TEST_CONTEXT_PROPERTY_2 = new GenericContextProperty(
-            TEST_CONTEXT_PROPERTY_ID_2, ImmutableMap.<String, Object>of("k3", "v3", "k4", 4));
+import java.util.Map;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
+//TODO: (mocks) add custom InstrumentationTestRunner that sets dexmaker path to cache (http://stackoverflow.com/questions/12267572/mockito-dexmaker-on-android)
+public class ContextTest extends InstrumentationTestCase {
+    private final String contextPropertyId = "ContextPropertyId";
+    private final String contextPropertyJson = "ContextPropertyJson";
+    private final GenericContextProperty expectedContextProperty = new GenericContextProperty(
+            contextPropertyId, Maps.<String, Object>newHashMap());
+    private final Uri contextPropertyUri = Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI,
+            contextPropertyId);
+    private final MatrixCursor contextPropertyCursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 1);
+    {
+        contextPropertyCursor.addRow(new String[] {contextPropertyId, contextPropertyJson});
+    }
+    private final Map<Uri, Cursor> expectedResults = ImmutableMap.<Uri, Cursor>builder()
+            .put(contextPropertyUri, contextPropertyCursor)
+            .build();
+
+    //mocks
+    private MockContentResolver mockContentResolver = new MockContentResolver();
+    private MockContentProvider mockContentProvider = new MockContentProviderWithMappedUris(expectedResults);
+    private ContextPropertySerialization<GenericContextProperty> contextPropertySerializationMock;
+
+    private Context context;
 
     @Override
     public void setUp() {
-        ContextStorage<String> contextStorage = new PersistenceContextStorage(getContext()
-                .getSharedPreferences(TEST_CONTEXT_PREFERENCES, android.content.Context.MODE_PRIVATE));
-        ContextPropertySerialization<GenericContextProperty> contextPropertySerialization =
-                new ContextPropertySerialization<>(GenericContextProperty.class);
-        contextStorage.setContextProperty(TEST_CONTEXT_PROPERTY_ID_1, contextPropertySerialization.CONTEXT_SERIALIZER
-                .apply(TEST_CONTEXT_PROPERTY_1));
-        contextStorage.setContextProperty(TEST_CONTEXT_PROPERTY_ID_2, contextPropertySerialization.CONTEXT_SERIALIZER
-                .apply(TEST_CONTEXT_PROPERTY_2));
+        System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
+        mockContentResolver.addProvider(ContextContract.AUTHORITY, mockContentProvider);
+        contextPropertySerializationMock = mock(ContextPropertySerialization.class);
+        context = new Context(mockContentResolver, contextPropertySerializationMock);
     }
 
-    @Override
-    public void tearDown() {
-        getContext().getSharedPreferences(
-                TEST_CONTEXT_PREFERENCES, android.content.Context.MODE_PRIVATE)
-                .edit()
-                .clear()
-                .apply();
-    }
-
-    public void testGettingContextProperty() {
+    public void testSuccessfulGetOfContextProperty() {
         //given
-        Context context = new Context(getContext().getContentResolver(),
-                new ContextPropertySerialization<>(GenericContextProperty.class));
+        given(contextPropertySerializationMock.deserialize(contextPropertyJson)).willReturn(expectedContextProperty);
 
         //when
-        GenericContextProperty contextProperty = context.getContextProperty(TEST_CONTEXT_PROPERTY_ID_1);
+        GenericContextProperty contextProperty = context.getContextProperty(contextPropertyId);
 
         //then
-        assertEquals(contextProperty, TEST_CONTEXT_PROPERTY_1);
+        assertSame(contextProperty, expectedContextProperty);
+    }
 
+    private class MockContentProviderWithMappedUris extends MockContentProvider {
+        private final Map<Uri, Cursor> expectedResults;
+
+        private MockContentProviderWithMappedUris(Map<Uri, Cursor> expectedResults) {
+            this.expectedResults = expectedResults;
+        }
+
+        @Override
+        public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+            return expectedResults.get(uri);
+        }
     }
 }
