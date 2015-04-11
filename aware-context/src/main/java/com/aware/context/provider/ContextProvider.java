@@ -101,16 +101,26 @@ public class ContextProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        switch (URI_MATCHER.match(uri)) {
+            case CONTEXT:
+                String contextPropertyId = values.getAsString(ContextContract.Properties._ID);
+                String contextPropertyJson = values.getAsString(ContextContract.Properties._CONTEXT_PROPERTY);
+                contextStorage.setContextProperty(contextPropertyId, contextPropertyJson);
+                Uri contextPropertyUri = Uri.withAppendedPath(uri, contextPropertyId);
+                getContext().getContentResolver().notifyChange(contextPropertyUri, null);
+                return contextPropertyUri;
+            default:
+                throw new IllegalArgumentException("Unsupported URI for insertion: " + uri);
+        }
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        throw new UnsupportedOperationException("Delete operation isn't supported for Context.");
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        throw new UnsupportedOperationException("Update operation isn't supported for Context.");
     }
 }
