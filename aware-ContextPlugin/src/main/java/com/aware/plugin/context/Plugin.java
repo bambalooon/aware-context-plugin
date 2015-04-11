@@ -1,7 +1,6 @@
 package com.aware.plugin.context;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -10,14 +9,15 @@ import android.os.HandlerThread;
 import android.util.Log;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
-import com.aware.context.application.ContextApplication;
-import com.aware.context.management.ContextManagement;
 import com.aware.context.observer.ContextPropertyCreator;
 import com.aware.context.observer.ContextPropertyMapping;
 import com.aware.context.observer.ContextPropertyObserver;
 import com.aware.context.positioner.NewRecordsCursorPositioner;
 import com.aware.context.processor.ContextPropertyProcessor;
 import com.aware.context.property.GenericContextProperty;
+import com.aware.context.provider.Context;
+import com.aware.context.storage.ContextStorage;
+import com.aware.context.transform.ContextPropertySerialization;
 import com.aware.utils.Aware_Plugin;
 
 import java.util.ArrayList;
@@ -30,12 +30,12 @@ public class Plugin extends Aware_Plugin {
     public static final String ACTION_AWARE_PLUGIN_CONTEXT = "ACTION_AWARE_PLUGIN_CONTEXT";
     private HandlerThread handlerThread;
     private List<ContentObserver> contentObservers;
-    private ContextManagement contextManagement;
+    private ContextStorage<GenericContextProperty> contextStorage;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Context applicationContext = getApplicationContext();
+        android.content.Context applicationContext = getApplicationContext();
 
         //Initialize plugin settings
         if( DEBUG ) Log.d(TAG, "Context plugin running");
@@ -55,8 +55,8 @@ public class Plugin extends Aware_Plugin {
         handlerThread.start();
         Handler contextPropertyChangeHandler = new Handler(handlerThread.getLooper());
 
-        contextManagement = ContextApplication.getInstance().getContextManagement();
         ContentResolver contentResolver = getContentResolver();
+        contextStorage = new Context(contentResolver, new ContextPropertySerialization<>(GenericContextProperty.class));
         contentObservers = new ArrayList<>();
         for (Uri contextPropertyUri : ContextPropertyMapping.getDefaultInstance().getContextPropertyUriList()) {
             ContentObserver contextPropertyObserver = new ContextPropertyObserver<>(
@@ -68,7 +68,7 @@ public class Plugin extends Aware_Plugin {
                         @Override
                         public void process(GenericContextProperty contextProperty) {
                             Log.d(TAG, contextProperty.toString());
-                            contextManagement.setContextProperty(contextProperty);
+                            contextStorage.setContextProperty(contextProperty.getId(), contextProperty);
                             CONTEXT_PRODUCER.onContext();
                         }
                     });
