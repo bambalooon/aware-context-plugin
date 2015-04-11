@@ -10,6 +10,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "0.1"
+        testApplicationId "test.com.aware.plugin.context" //to disable aware framework plugin detection of tests
     }
 
     compileOptions {
