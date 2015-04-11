@@ -1,9 +1,6 @@
 package com.aware.context.storage;
 
-import com.aware.context.Context;
-import com.aware.context.property.ContextProperty;
-
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Name: ContextStorage
@@ -11,11 +8,10 @@ import java.util.Collection;
  * Date: 2015-03-22
  * Created by BamBalooon
  *
- * @param <CP> ContextProperty type
+ * @param <CP> ContextProperty type (could also be serialized String)
  */
-public interface ContextStorage<CP extends ContextProperty>  {
+public interface ContextStorage<CP>  {
     CP getContextProperty(String contextPropertyId);
-    void setContextProperty(CP contextProperty);
-    Collection<CP> getContextProperties();
-    Context<CP> getContext();
+    void setContextProperty(String contextPropertyId, CP contextProperty);
+    Map<String, CP> getContextProperties();
 }
