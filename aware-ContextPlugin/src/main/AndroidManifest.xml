@@ -40,7 +40,6 @@
             android:allowBackup="true"
             android:label="@string/app_name"
             android:icon="@drawable/ic_action"
-            android:name="com.aware.context.application.ContextApplication"
             tools:node="replace">
 
         <service
@@ -65,7 +64,7 @@
 
         <provider
             android:authorities="com.aware.context.provider.current_context"
-            android:name="com.aware.context.provider.CurrentContextProvider"
+            android:name="com.aware.context.provider.ContextProvider"
             android:exported="true"
             android:label="CurrentContextProvider"
             android:readPermission="com.aware.context.provider.current_context.READ"
