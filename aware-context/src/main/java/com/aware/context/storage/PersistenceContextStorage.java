@@ -1,54 +1,43 @@
 package com.aware.context.storage;
 
 import android.content.SharedPreferences;
-import com.aware.context.property.ContextProperty;
-import com.aware.context.transform.ContextPropertySerialization;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Name: PersistenceContextStorage
- * Description: PersistenceContextStorage stores Context in SharedPreferences
+ * Description: PersistenceContextStorage stores ContextProperties in SharedPreferences
  * Date: 2015-03-22
  * Created by BamBalooon
  */
-public class PersistenceContextStorage<CP extends ContextProperty>
-        extends AbstractContextStorage<CP> implements ContextStorage<CP> {
-
+public class PersistenceContextStorage implements ContextStorage<String> {
     public static final String CONTEXT_PREFERENCES = "CONTEXT_PREFERENCES";
 
     private final SharedPreferences sharedPreferences;
-    private final ContextPropertySerialization<CP> contextPropertySerialization;
 
-    public PersistenceContextStorage(SharedPreferences sharedPreferences,
-                                     ContextPropertySerialization<CP> contextPropertySerialization) {
+    public PersistenceContextStorage(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-        this.contextPropertySerialization = contextPropertySerialization;
+    }
+
+    //TODO: handle multithreaded read and write
+    @Override
+    public String getContextProperty(String contextPropertyId) {
+        return sharedPreferences.getString(contextPropertyId, null);
     }
 
     @Override
-    public CP getContextProperty(String contextPropertyId) {
-        String contextJson = sharedPreferences.getString(contextPropertyId, null);
-        return contextPropertySerialization.CONTEXT_DESERIALIZER.apply(contextJson);
-    }
-
-    @Override
-    public void setContextProperty(CP contextProperty) {
+    public void setContextProperty(String contextPropertyId, String contextPropertyJson) {
         sharedPreferences.edit()
-                .putString(
-                        contextProperty.getId(),
-                        contextPropertySerialization.CONTEXT_SERIALIZER.apply(contextProperty))
+                .putString(contextPropertyId, contextPropertyJson)
                 .apply();
     }
 
     @Override
-    public Collection<CP> getContextProperties() {
-        Collection<CP> contextProperties = Lists.newLinkedList();
-        for (Object contextPropertyJson : sharedPreferences.getAll().values()) {
-            contextProperties.add(
-                    contextPropertySerialization.CONTEXT_DESERIALIZER.apply((String) contextPropertyJson)
-            );
+    public Map<String, String> getContextProperties() {
+        Map<String, String> contextProperties = Maps.newHashMap();
+        for (Map.Entry<String, ?> contextPropertyEntry : sharedPreferences.getAll().entrySet()) {
+            contextProperties.put(contextPropertyEntry.getKey(), (String) contextPropertyEntry.getValue());
         }
         return contextProperties;
     }
