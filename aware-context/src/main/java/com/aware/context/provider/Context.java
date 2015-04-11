@@ -39,14 +39,14 @@ public class Context implements ContextStorage<GenericContextProperty> {
         int contextPropertyColumnIndex = contextPropertyCursor
                 .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
         String contextPropertyJson = contextPropertyCursor.getString(contextPropertyColumnIndex);
-        return contextPropertySerialization.CONTEXT_DESERIALIZER.apply(contextPropertyJson);
+        return contextPropertySerialization.deserialize(contextPropertyJson);
     }
 
     @Override
     public void setContextProperty(String contextPropertyId, GenericContextProperty contextProperty) {
         Preconditions.checkArgument(contextPropertyId.equals(contextProperty.getId()),
                 "Given ContextProperty ID must be equal to ContextProperty's ID.");
-        String contextPropertyJson = contextPropertySerialization.CONTEXT_SERIALIZER.apply(contextProperty);
+        String contextPropertyJson = contextPropertySerialization.serialize(contextProperty);
         ContentValues contentValues = new ContentValues();
         contentValues.put(ContextContract.Properties._ID, contextPropertyId);
         contentValues.put(ContextContract.Properties._CONTEXT_PROPERTY, contextPropertyJson);
@@ -67,8 +67,7 @@ public class Context implements ContextStorage<GenericContextProperty> {
         do {
             String contextPropertyId = contextPropertiesCursor.getString(contextPropertyIdColumnIndex);
             String contextPropertyJson = contextPropertiesCursor.getString(contextPropertyJsonColumnIndex);
-            GenericContextProperty contextProperty = contextPropertySerialization.CONTEXT_DESERIALIZER
-                    .apply(contextPropertyJson);
+            GenericContextProperty contextProperty = contextPropertySerialization.deserialize(contextPropertyJson);
             contextProperties.put(contextPropertyId, contextProperty);
         } while (contextPropertiesCursor.moveToNext());
         return contextProperties;
