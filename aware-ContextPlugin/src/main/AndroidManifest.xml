@@ -63,10 +63,10 @@
             />
 
         <provider
-            android:authorities="com.aware.context.provider.current_context"
+            android:authorities="com.aware.context.provider.context"
             android:name="com.aware.context.provider.ContextProvider"
             android:exported="true"
-            android:label="CurrentContextProvider"
+            android:label="@string/context_provider_label"
             android:readPermission="com.aware.context.provider.current_context.READ"
             android:writePermission="com.aware.context.provider.current_context.WRITE"
             />
