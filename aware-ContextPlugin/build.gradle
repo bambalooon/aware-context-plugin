@@ -26,4 +26,11 @@ android {
 
 dependencies {
     compile project(':aware-context')
+    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
+    androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.0') {
+        exclude group: 'org.hamcrest'
+        exclude group: 'org.objenesis'
+        exclude group: 'org.mockito'
+    }
 }
