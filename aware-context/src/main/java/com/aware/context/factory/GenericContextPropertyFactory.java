@@ -26,6 +26,7 @@ public class GenericContextPropertyFactory implements ContextPropertyFactory<Gen
         for (Map.Entry<String, Class<?>> propertyColumn : propertyColumns.entrySet()) {
             String columnName = propertyColumn.getKey();
             int columnIndex = cursor.getColumnIndex(columnName);
+            //FIXME: change to work with cursor.getType()
             Object columnValue = cellValueRetriever.retrieveValue(cursor, columnIndex, propertyColumn.getValue());
             propertyValuesBuilder.put(columnName, columnValue);
         }
