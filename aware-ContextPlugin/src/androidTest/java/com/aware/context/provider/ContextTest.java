@@ -24,6 +24,8 @@ public class ContextTest extends TestCase {
     private final String contextPropertyId1 = "ContextPropertyId1";
     private final String contextPropertyId2 = "ContextPropertyId2";
     private final String contextPropertyId3 = "ContextPropertyId3";
+    private final String noContextPropertyId = "noContextPropertyId";
+
     private final GenericContextProperty contextProperty1 = new GenericContextProperty(
             contextPropertyId1, Collections.<String, Object>emptyMap());
     private final GenericContextProperty contextProperty2 = new GenericContextProperty(
@@ -39,6 +41,11 @@ public class ContextTest extends TestCase {
 
     //context properties uri - for querying all properties and inserting new one
     private final Uri contextPropertiesUri = ContextContract.Properties.CONTENT_URI;
+
+    //cursors used in Context - to check cursors closing
+    private MatrixCursor contextProperty1Cursor;
+    private MatrixCursor contextPropertiesCursor;
+    private MatrixCursor noContextPropertyCursor;
 
     //mocks
     private ContextPropertySerialization<GenericContextProperty> contextPropertySerializationMock;
@@ -59,15 +66,26 @@ public class ContextTest extends TestCase {
 
         //then
         assertSame(contextProperty, contextProperty1);
+        assertTrue(contextProperty1Cursor.isClosed());
         verify(contextPropertySerializationMock).deserialize(anyString());
     }
 
-    public void testGettingNonExistingContextProperty() {
+    public void testGettingNonExistingContextPropertyCursorNull() {
         //when
         GenericContextProperty contextProperty = context.getContextProperty("wrong context property ID");
 
         //then
         assertNull(contextProperty);
+        verifyZeroInteractions(contextPropertySerializationMock);
+    }
+
+    public void testGettingNonExistingContextPropertyCursorNotNull() {
+        //when
+        GenericContextProperty contextProperty = context.getContextProperty(noContextPropertyId);
+
+        //then
+        assertNull(contextProperty);
+        assertTrue(noContextPropertyCursor.isClosed());
         verifyZeroInteractions(contextPropertySerializationMock);
     }
 
@@ -112,6 +130,7 @@ public class ContextTest extends TestCase {
 
         //then
         assertEquals(contextProperties, expectedContextProperties);
+        assertTrue(contextPropertiesCursor.isClosed());
         verify(contextPropertySerializationMock, times(3)).deserialize(anyString());
     }
 
@@ -199,16 +218,19 @@ public class ContextTest extends TestCase {
         Uri contextPropertyUri1 = Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, contextPropertyId1);
         Uri contextPropertyUri2 = Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, contextPropertyId2);
         Uri contextPropertyUri3 = Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, contextPropertyId3);
+        Uri noContextPropertyUri = Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, noContextPropertyId);
 
         //cursors holding context properties
-        MatrixCursor contextProperty1Cursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 1);
+        contextProperty1Cursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 1);
         contextProperty1Cursor.addRow(new String[] {contextPropertyId1, contextPropertyJson1});
         MatrixCursor contextProperty2Cursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 1);
         contextProperty2Cursor.addRow(new String[] {contextPropertyId2, contextPropertyJson2});
         MatrixCursor contextProperty3Cursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 1);
         contextProperty3Cursor.addRow(new String[] {contextPropertyId3, contextPropertyJson3});
 
-        MatrixCursor contextPropertiesCursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 3);
+        noContextPropertyCursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 0);
+
+        contextPropertiesCursor = new MatrixCursor(ContextContract.Properties.PROJECTION_ALL, 3);
         contextPropertiesCursor.addRow(new String[] {contextPropertyId1, contextPropertyJson1});
         contextPropertiesCursor.addRow(new String[] {contextPropertyId2, contextPropertyJson2});
         contextPropertiesCursor.addRow(new String[] {contextPropertyId3, contextPropertyJson3});
@@ -218,6 +240,7 @@ public class ContextTest extends TestCase {
                 .put(contextPropertyUri1, contextProperty1Cursor)
                 .put(contextPropertyUri2, contextProperty2Cursor)
                 .put(contextPropertyUri3, contextProperty3Cursor)
+                .put(noContextPropertyUri, noContextPropertyCursor)
                 .put(contextPropertiesUri, contextPropertiesCursor)
                 .build();
 
