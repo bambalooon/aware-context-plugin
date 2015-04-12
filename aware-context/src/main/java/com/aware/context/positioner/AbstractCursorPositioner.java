@@ -24,11 +24,18 @@ public abstract class AbstractCursorPositioner implements CursorPositioner {
         cursor = contentResolver.query(contentUri, null, null, null, null);
     }
 
-    /**
-     * Closes cursor and assigns null to it
-     */
-    protected void terminate() {
+    @Override
+    public final Cursor moveToNext() {
+        if (cursor == null || moveCursorToNextItem()) {
+            return cursor;
+        }
         cursor.close();
-        cursor = null;
+        return null;
     }
+
+    /**
+     * Moves cursor to next item
+     * @return boolean value representing if cursor was moved or not
+     */
+    protected abstract boolean moveCursorToNextItem();
 }
