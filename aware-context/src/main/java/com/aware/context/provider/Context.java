@@ -34,13 +34,19 @@ public class Context implements ContextStorage<GenericContextProperty> {
         Cursor contextPropertyCursor = contentResolver.query(
                 Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, contextPropertyId),
                 null, null, null, null);
-        if (contextPropertyCursor == null || !contextPropertyCursor.moveToFirst()) {
-            return null;
+        try {
+            if (contextPropertyCursor == null || !contextPropertyCursor.moveToFirst()) {
+                return null;
+            }
+            int contextPropertyColumnIndex = contextPropertyCursor
+                    .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
+            String contextPropertyJson = contextPropertyCursor.getString(contextPropertyColumnIndex);
+            return contextPropertySerialization.deserialize(contextPropertyJson);
+        } finally {
+            if (contextPropertyCursor != null) {
+                contextPropertyCursor.close();
+            }
         }
-        int contextPropertyColumnIndex = contextPropertyCursor
-                .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
-        String contextPropertyJson = contextPropertyCursor.getString(contextPropertyColumnIndex);
-        return contextPropertySerialization.deserialize(contextPropertyJson);
     }
 
     @Override
@@ -61,18 +67,24 @@ public class Context implements ContextStorage<GenericContextProperty> {
         Map<String, GenericContextProperty> contextProperties = Maps.newHashMap();
         Cursor contextPropertiesCursor = contentResolver
                 .query(ContextContract.Properties.CONTENT_URI, null, null, null, null);
-        if (contextPropertiesCursor == null || !contextPropertiesCursor.moveToFirst()) {
+        try {
+            if (contextPropertiesCursor == null || !contextPropertiesCursor.moveToFirst()) {
+                return contextProperties;
+            }
+            int contextPropertyIdColumnIndex = contextPropertiesCursor.getColumnIndex(ContextContract.Properties._ID);
+            int contextPropertyJsonColumnIndex = contextPropertiesCursor
+                    .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
+            do {
+                String contextPropertyId = contextPropertiesCursor.getString(contextPropertyIdColumnIndex);
+                String contextPropertyJson = contextPropertiesCursor.getString(contextPropertyJsonColumnIndex);
+                GenericContextProperty contextProperty = contextPropertySerialization.deserialize(contextPropertyJson);
+                contextProperties.put(contextPropertyId, contextProperty);
+            } while (contextPropertiesCursor.moveToNext());
             return contextProperties;
+        } finally {
+            if (contextPropertiesCursor != null) {
+                contextPropertiesCursor.close();
+            }
         }
-        int contextPropertyIdColumnIndex = contextPropertiesCursor.getColumnIndex(ContextContract.Properties._ID);
-        int contextPropertyJsonColumnIndex = contextPropertiesCursor
-                .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
-        do {
-            String contextPropertyId = contextPropertiesCursor.getString(contextPropertyIdColumnIndex);
-            String contextPropertyJson = contextPropertiesCursor.getString(contextPropertyJsonColumnIndex);
-            GenericContextProperty contextProperty = contextPropertySerialization.deserialize(contextPropertyJson);
-            contextProperties.put(contextPropertyId, contextProperty);
-        } while (contextPropertiesCursor.moveToNext());
-        return contextProperties;
     }
 }
