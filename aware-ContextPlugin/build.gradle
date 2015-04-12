@@ -11,7 +11,7 @@ android {
         versionCode 1
         versionName "0.1"
         testApplicationId "test.com.aware.plugin.context" //to disable aware framework plugin detection of tests
-        testInstrumentationRunner "com.aware.context.InstrumentationTestRunnerWithMocks" //to allow working with mocks
+        testInstrumentationRunner "com.aware.context.test.InstrumentationTestRunnerWithMocks" //to work with mocks
     }
 
     compileOptions {

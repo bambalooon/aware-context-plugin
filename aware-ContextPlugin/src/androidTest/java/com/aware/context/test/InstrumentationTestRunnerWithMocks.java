@@ -1,4 +1,4 @@
-package com.aware.context;
+package com.aware.context.test;
 
 import android.os.Bundle;
 import android.test.InstrumentationTestRunner;
