@@ -30,6 +30,7 @@ public class Context implements ContextStorage<GenericContextProperty> {
 
     @Override
     public GenericContextProperty getContextProperty(String contextPropertyId) {
+        Preconditions.checkNotNull(contextPropertyId, "Given ContextProperty ID cannot be null.");
         Cursor contextPropertyCursor = contentResolver.query(
                 Uri.withAppendedPath(ContextContract.Properties.CONTENT_URI, contextPropertyId),
                 null, null, null, null);
@@ -44,6 +45,8 @@ public class Context implements ContextStorage<GenericContextProperty> {
 
     @Override
     public void setContextProperty(String contextPropertyId, GenericContextProperty contextProperty) {
+        Preconditions.checkNotNull(contextPropertyId, "Given ContextProperty ID cannot be null.");
+        Preconditions.checkNotNull(contextProperty, "Given ContextProperty cannot be null.");
         Preconditions.checkArgument(contextPropertyId.equals(contextProperty.getId()),
                 "Given ContextProperty ID must be equal to ContextProperty's ID.");
         String contextPropertyJson = contextPropertySerialization.serialize(contextProperty);
@@ -55,15 +58,15 @@ public class Context implements ContextStorage<GenericContextProperty> {
 
     @Override
     public Map<String, GenericContextProperty> getContextProperties() {
+        Map<String, GenericContextProperty> contextProperties = Maps.newHashMap();
         Cursor contextPropertiesCursor = contentResolver
                 .query(ContextContract.Properties.CONTENT_URI, null, null, null, null);
         if (contextPropertiesCursor == null || !contextPropertiesCursor.moveToFirst()) {
-            return null;
+            return contextProperties;
         }
         int contextPropertyIdColumnIndex = contextPropertiesCursor.getColumnIndex(ContextContract.Properties._ID);
         int contextPropertyJsonColumnIndex = contextPropertiesCursor
                 .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
-        Map<String, GenericContextProperty> contextProperties = Maps.newHashMap();
         do {
             String contextPropertyId = contextPropertiesCursor.getString(contextPropertyIdColumnIndex);
             String contextPropertyJson = contextPropertiesCursor.getString(contextPropertyJsonColumnIndex);
