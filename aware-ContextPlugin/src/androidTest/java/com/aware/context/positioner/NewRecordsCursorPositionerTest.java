@@ -168,6 +168,55 @@ public class NewRecordsCursorPositionerTest extends TestCase {
         assertNull(mockContentProvider.getLastQueriedCursor());
     }
 
+    //FIXME: should it behave like that?
+    public void testGettingNewRecordsWhenCursorIsClosedWithCursorPositionerAtStart() {
+        //when
+        cursorPositionerAtStart.initialize();
+        mockContentProvider.getLastQueriedCursor().close();
+
+        //then
+        int rowIndex = 0;
+        Cursor positionedCursor;
+        while ((positionedCursor = cursorPositionerAtStart.moveToNext()) != null) {
+            assertTrue(positionedCursor.isClosed());
+            assertEquals(positionedCursor.getString(0), cursorData[rowIndex][0]);
+            assertEquals(positionedCursor.getInt(1), cursorData[rowIndex][1]);
+            rowIndex++;
+        }
+        assertEquals(rowIndex, cursorData.length);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
+    //FIXME: should it behave like that?
+    public void testGettingNewRecordsAfterCursorDataUpdateWhenCursorIsClosedWithCursorPositionerAtEnd() {
+        //given
+        int oldRowsCount = cursorData.length;
+        Object[][] updatedCursorData = new Object[][] {
+                new Object[] {"firstRow", 1},
+                new Object[] {"secondRow", 2},
+                new Object[] {"thirdRow", 3},
+                new Object[] {"fourthRow", 4},
+                new Object[] {"fifthRow", 5}
+        };
+        mockContentProvider.setCursorData(updatedCursorData);
+
+        //when
+        cursorPositionerAtEnd.initialize();
+        mockContentProvider.getLastQueriedCursor().close();
+
+        //then
+        int rowIndex = 0;
+        Cursor positionedCursor;
+        while ((positionedCursor = cursorPositionerAtEnd.moveToNext()) != null) {
+            assertTrue(positionedCursor.isClosed());
+            assertEquals(positionedCursor.getString(0), updatedCursorData[oldRowsCount + rowIndex][0]);
+            assertEquals(positionedCursor.getInt(1), updatedCursorData[oldRowsCount + rowIndex][1]);
+            rowIndex++;
+        }
+        assertEquals(rowIndex, updatedCursorData.length - oldRowsCount);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
     private class MockContentProvider extends android.test.mock.MockContentProvider {
         private static final String AUTHORITY = "authority";
         private final String[] cursorColumns;
