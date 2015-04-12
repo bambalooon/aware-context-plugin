@@ -8,12 +8,16 @@ import android.net.Uri;
  * Created by Krzysztof Balon on 2015-02-22.
  */
 public class NewRecordsCursorPositioner extends AbstractCursorPositioner {
+    //FIXME: after restart of positioner it will be positioned at start, it might be bad idea to offer this method
     public static NewRecordsCursorPositioner createInstancePositionedAtStart(Uri contentUri, ContentResolver contentResolver) {
         return new NewRecordsCursorPositioner(contentUri, contentResolver);
     }
 
     public static NewRecordsCursorPositioner createInstancePositionedAtEnd(Uri contentUri, ContentResolver contentResolver) {
         Cursor cursor = contentResolver.query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            return createInstancePositionedAtStart(contentUri, contentResolver);
+        }
         int lastRecordPosition = cursor.getCount() - 1;
         cursor.close();
         return new NewRecordsCursorPositioner(contentUri, contentResolver, lastRecordPosition);
@@ -33,16 +37,17 @@ public class NewRecordsCursorPositioner extends AbstractCursorPositioner {
     @Override
     public void initialize() {
         super.initialize();
-        cursor.moveToPosition(cursorPosition);
+        if (cursor != null) {
+            cursor.moveToPosition(cursorPosition);
+        }
     }
 
     @Override
-    public Cursor moveToNext() {
+    protected boolean moveCursorToNextItem() {
         if (cursor.moveToNext()) {
             cursorPosition = cursor.getPosition();
-        } else {
-            super.terminate();
+            return true;
         }
-        return cursor;
+        return false;
     }
 }
