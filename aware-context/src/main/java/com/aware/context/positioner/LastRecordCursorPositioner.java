@@ -1,7 +1,6 @@
 package com.aware.context.positioner;
 
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 
 /**
@@ -15,12 +14,11 @@ public class LastRecordCursorPositioner extends AbstractCursorPositioner {
     }
 
     @Override
-    public Cursor moveToNext() {
+    protected boolean moveCursorToNextItem() {
         if (cursor.moveToLast() && cursor.getPosition() > cursorPosition) {
             cursorPosition = cursor.getPosition();
-        } else {
-            super.terminate();
+            return true;
         }
-        return cursor;
+        return false;
     }
 }
