@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 
 public class NewRecordsCursorPositionerTest extends TestCase {
     private MockContentProvider mockContentProvider = new MockContentProvider(new String[]{"col1", "col2"});
+    private MockContentResolver mockContentResolver = new MockContentResolver();
     private CursorPositioner cursorPositionerAtStart;
     private CursorPositioner cursorPositionerAtEnd;
 
@@ -20,8 +21,6 @@ public class NewRecordsCursorPositionerTest extends TestCase {
     @Override
     public void setUp() {
         mockContentProvider.setCursorData(cursorData);
-
-        MockContentResolver mockContentResolver = new MockContentResolver();
         mockContentResolver.addProvider(MockContentProvider.AUTHORITY, mockContentProvider);
 
         cursorPositionerAtStart = NewRecordsCursorPositioner.createInstancePositionedAtStart(Uri
@@ -168,6 +167,83 @@ public class NewRecordsCursorPositionerTest extends TestCase {
         assertNull(mockContentProvider.getLastQueriedCursor());
     }
 
+    public void testGettingNewRecordsWhenCursorPositionerAtStartWasNotInitialized() {
+        //when
+        Cursor positionedCursor = cursorPositionerAtStart.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+    }
+
+    public void testGettingNewRecordsAfterCursorDataUpdateWhenCursorPositionerAtEndWasNotInitialized() {
+        //given
+        Object[][] updatedCursorData = new Object[][] {
+                new Object[] {"firstRow", 1},
+                new Object[] {"secondRow", 2},
+                new Object[] {"thirdRow", 3},
+                new Object[] {"fourthRow", 4},
+                new Object[] {"fifthRow", 5}
+        };
+        mockContentProvider.setCursorData(updatedCursorData);
+
+        //when
+        Cursor positionedCursor = cursorPositionerAtEnd.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+    }
+
+    public void testGettingNewRecordsWhenCursorPositionerAtEndCreatedFromNullCursor() {
+        //given
+        mockContentProvider.enableReturnNullCursor();
+        CursorPositioner cursorPositionerAtEndFromNullCursor = NewRecordsCursorPositioner
+                .createInstancePositionedAtEnd(
+                        Uri.parse("content://" + MockContentProvider.AUTHORITY),
+                        mockContentResolver);
+        mockContentProvider.disableReturnNullCursor();
+
+        //when
+        cursorPositionerAtEndFromNullCursor.initialize();
+
+        //then cursorPositionerAtEnd acts as cursorPositionerAtStart
+        int rowIndex = 0;
+        Cursor positionedCursor;
+        while ((positionedCursor = cursorPositionerAtEndFromNullCursor.moveToNext()) != null) {
+            assertFalse(positionedCursor.isClosed());
+            assertEquals(positionedCursor.getString(0), cursorData[rowIndex][0]);
+            assertEquals(positionedCursor.getInt(1), cursorData[rowIndex][1]);
+            rowIndex++;
+        }
+        assertEquals(rowIndex, cursorData.length);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
+    public void testGettingNewRecordsWhenCursorPositionerAtEndCreatedFromEmptyCursor() {
+        //given
+        Object[][] noCursorData = new Object[][] {};
+        mockContentProvider.setCursorData(noCursorData);
+        CursorPositioner cursorPositionerAtEndFromNullCursor = NewRecordsCursorPositioner
+                .createInstancePositionedAtEnd(
+                        Uri.parse("content://" + MockContentProvider.AUTHORITY),
+                        mockContentResolver);
+        mockContentProvider.setCursorData(cursorData);
+
+        //when
+        cursorPositionerAtEndFromNullCursor.initialize();
+
+        //then cursorPositionerAtEnd acts as cursorPositionerAtStart
+        int rowIndex = 0;
+        Cursor positionedCursor;
+        while ((positionedCursor = cursorPositionerAtEndFromNullCursor.moveToNext()) != null) {
+            assertFalse(positionedCursor.isClosed());
+            assertEquals(positionedCursor.getString(0), cursorData[rowIndex][0]);
+            assertEquals(positionedCursor.getInt(1), cursorData[rowIndex][1]);
+            rowIndex++;
+        }
+        assertEquals(rowIndex, cursorData.length);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
     //FIXME: should it behave like that?
     public void testGettingNewRecordsWhenCursorIsClosedWithCursorPositionerAtStart() {
         //when
@@ -238,6 +314,10 @@ public class NewRecordsCursorPositionerTest extends TestCase {
 
         public void enableReturnNullCursor() {
             this.returnNullCursor = true;
+        }
+
+        public void disableReturnNullCursor() {
+            this.returnNullCursor = false;
         }
 
         @Override
