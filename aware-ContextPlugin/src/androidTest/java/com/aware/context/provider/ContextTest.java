@@ -3,21 +3,20 @@ package com.aware.context.provider;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.test.InstrumentationTestCase;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.context.transform.ContextPropertySerialization;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import junit.framework.TestCase;
 
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-//TODO: (mocks) add custom InstrumentationTestRunner that sets dexmaker path to cache (http://stackoverflow.com/questions/12267572/mockito-dexmaker-on-android)
-public class ContextTest extends InstrumentationTestCase {
+public class ContextTest extends TestCase {
     private final String contextPropertyId = "ContextPropertyId";
     private final String contextPropertyJson = "ContextPropertyJson";
     private final GenericContextProperty expectedContextProperty = new GenericContextProperty(
@@ -41,7 +40,6 @@ public class ContextTest extends InstrumentationTestCase {
 
     @Override
     public void setUp() {
-        System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
         mockContentResolver.addProvider(ContextContract.AUTHORITY, mockContentProvider);
         contextPropertySerializationMock = mock(ContextPropertySerialization.class);
         context = new Context(mockContentResolver, contextPropertySerializationMock);
