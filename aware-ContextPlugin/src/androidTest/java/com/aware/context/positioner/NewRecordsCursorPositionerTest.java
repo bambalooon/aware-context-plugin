@@ -114,11 +114,66 @@ public class NewRecordsCursorPositionerTest extends TestCase {
         assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
     }
 
+    public void testGettingNoNewRecordsWhenEmptyCursorWithCursorPositionerAtStart() {
+        //given
+        Object[][] noCursorData = new Object[][] {};
+        mockContentProvider.setCursorData(noCursorData);
+
+        //when
+        cursorPositionerAtStart.initialize();
+        Cursor positionedCursor = cursorPositionerAtStart.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
+    public void testGettingNoNewRecordsWhenEmptyCursorWithCursorPositionerAtEnd() {
+        //given
+        Object[][] noCursorData = new Object[][] {};
+        mockContentProvider.setCursorData(noCursorData);
+
+        //when
+        cursorPositionerAtEnd.initialize();
+        Cursor positionedCursor = cursorPositionerAtEnd.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+    }
+
+    public void testGettingNoNewRecordsWhenNullCursorWithCursorPositionerAtStart() {
+        //given
+        mockContentProvider.enableReturnNullCursor();
+
+        //when
+        cursorPositionerAtStart.initialize();
+        Cursor positionedCursor = cursorPositionerAtStart.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+        assertNull(mockContentProvider.getLastQueriedCursor());
+    }
+
+    public void testGettingNoNewRecordsWhenNullCursorWithCursorPositionerAtEnd() {
+        //given
+        mockContentProvider.enableReturnNullCursor();
+
+        //when
+        cursorPositionerAtEnd.initialize();
+        Cursor positionedCursor = cursorPositionerAtEnd.moveToNext();
+
+        //then
+        assertNull(positionedCursor);
+        assertNull(mockContentProvider.getLastQueriedCursor());
+    }
+
     private class MockContentProvider extends android.test.mock.MockContentProvider {
         private static final String AUTHORITY = "authority";
         private final String[] cursorColumns;
         private Object[][] cursorData;
         private MatrixCursor lastQueriedCursor;
+        private boolean returnNullCursor = false;
 
         public MockContentProvider(String[] cursorColumns) {
             this.cursorColumns = cursorColumns;
@@ -132,8 +187,16 @@ public class NewRecordsCursorPositionerTest extends TestCase {
             return lastQueriedCursor;
         }
 
+        public void enableReturnNullCursor() {
+            this.returnNullCursor = true;
+        }
+
         @Override
         public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+            if (returnNullCursor) {
+                lastQueriedCursor = null;
+                return null;
+            }
             lastQueriedCursor = new MatrixCursor(cursorColumns, cursorData.length);
             for (Object[] cursorRow : cursorData) {
                 lastQueriedCursor.addRow(cursorRow);
