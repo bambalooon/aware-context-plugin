@@ -24,6 +24,7 @@ public abstract class AbstractCursorPositioner implements CursorPositioner {
         cursor = contentResolver.query(contentUri, null, null, null, null);
     }
 
+    //FIXME: add checking if CursorPositioner was initialized before usage
     @Override
     public final Cursor moveToNext() {
         if (cursor == null || moveCursorToNextItem()) {

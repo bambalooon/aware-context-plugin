@@ -13,6 +13,7 @@ public interface CursorPositioner {
     void initialize();
 
     /**
+     * Correct way to use CursorPositioner is to always traverse through all new rows
      * @return Cursor located at one of records or null if there is none anymore (cursor closed when null returned)
      */
     Cursor moveToNext();
