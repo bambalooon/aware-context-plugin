@@ -2,7 +2,6 @@ package com.aware.context.provider;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.provider.BaseColumns;
 
 /**
  * Name: ContextContract
@@ -14,7 +13,7 @@ public final class ContextContract {
     public static final String AUTHORITY = "com.aware.context.provider.context";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
-    public static final class Properties implements BaseColumns {
+    public static final class Properties {
         /**
          * Content URI for Properties table.
          */
@@ -33,7 +32,14 @@ public final class ContextContract {
                 + "/vnd.com.aware.context.provider.context_properties";
 
         /**
+         * The unique ID for a row.
+         * <P>Type: STRING (String)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
          * The context property column.
+         * <P>Type: STRING (String)</P>
          */
         public static final String _CONTEXT_PROPERTY = "context_property";
 
