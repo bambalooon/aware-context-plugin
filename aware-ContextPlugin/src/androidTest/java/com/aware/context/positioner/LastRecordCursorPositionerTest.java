@@ -4,26 +4,28 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.test.mock.MockContentResolver;
+import com.aware.context.test.ExceptionCatcher;
+import com.aware.context.test.MockContentProvider;
 import junit.framework.TestCase;
 
 public class LastRecordCursorPositionerTest extends TestCase {
-    private MockContentProvider mockContentProvider = new MockContentProvider();
+    private MockContentProvider mockContentProvider = new MockContentProvider(new String[]{"col1", "col2"});
+    private MockContentResolver mockContentResolver = new MockContentResolver();
     private CursorPositioner cursorPositioner;
-    private MatrixCursor providedCursor;
+
+    private Object[][] cursorData = {
+            new Object[] {"firstRow", 1},
+            new Object[] {"secondRow", 2},
+            new Object[] {"thirdRow", 3}
+    };
 
     @Override
     public void setUp() {
-        MockContentResolver mockContentResolver = new MockContentResolver();
+        mockContentProvider.setCursorData(cursorData);
         mockContentResolver.addProvider(MockContentProvider.AUTHORITY, mockContentProvider);
+
         cursorPositioner = new LastRecordCursorPositioner(Uri
                 .parse("content://" + MockContentProvider.AUTHORITY), mockContentResolver);
-
-        //setup initial providedCursor returned by provider
-        providedCursor = new MatrixCursor(new String[]{"col1", "col2"}, 3);
-        providedCursor.addRow(new Object[]{"firstRow", 1});
-        providedCursor.addRow(new Object[]{"secondRow", 2});
-        providedCursor.addRow(new Object[]{"thirdRow", 3});
-        mockContentProvider.willReturn(providedCursor);
     }
 
     public void testGettingLastRecordFromCursor() {
@@ -32,7 +34,7 @@ public class LastRecordCursorPositionerTest extends TestCase {
         Cursor positionedCursor = cursorPositioner.moveToNext();
 
         //then
-        assertFalse(providedCursor.isClosed());
+        assertFalse(mockContentProvider.getLastQueriedCursor().isClosed());
         assertFalse(positionedCursor.isClosed());
         assertEquals(positionedCursor.getString(0), "thirdRow");
         assertEquals(positionedCursor.getInt(1), 3);
@@ -42,23 +44,29 @@ public class LastRecordCursorPositionerTest extends TestCase {
 
         //then
         assertNull(cursorMovedSecondTime);
-        assertTrue(providedCursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
         assertTrue(positionedCursor.isClosed());
     }
 
     public void testGettingLastRecordFromCursorWithoutInitialization() {
         //when
-        Cursor positionedCursor = cursorPositioner.moveToNext();
+        Exception caughtException = new ExceptionCatcher() {
+            @Override
+            protected void invoke() throws Exception {
+                cursorPositioner.moveToNext();
+            }
+        }.catchException();
 
         //then
-        assertNull(positionedCursor);
-        assertFalse(providedCursor.isClosed());
+        assertTrue(caughtException instanceof IllegalStateException);
+        assertEquals(caughtException.getMessage(),
+                "CursorPositioner's method moveToNext invoked without initialization.");
     }
 
     public void testGettingLastRecordFromEmptyCursor() {
         //given
-        MatrixCursor cursor = new MatrixCursor(new String[]{"col1", "col2"}, 0);
-        mockContentProvider.willReturn(cursor);
+        Object[][] noCursorData = new Object[][] {};
+        mockContentProvider.setCursorData(noCursorData);
 
         //when
         cursorPositioner.initialize();
@@ -66,7 +74,7 @@ public class LastRecordCursorPositionerTest extends TestCase {
 
         //then
         assertNull(positionedCursor);
-        assertTrue(cursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
     }
 
     public void testGettingLastRecordAgainWithoutCursorUpdate() {
@@ -75,67 +83,92 @@ public class LastRecordCursorPositionerTest extends TestCase {
         cursorPositioner.moveToNext();
         cursorPositioner.moveToNext();
 
-        //given created equal cursor with same row count
-        providedCursor = new MatrixCursor(new String[]{"col1", "col2"}, 3);
-        providedCursor.addRow(new Object[]{"firstRow", 1});
-        providedCursor.addRow(new Object[]{"secondRow", 2});
-        providedCursor.addRow(new Object[]{"thirdRow", 3});
-        mockContentProvider.willReturn(providedCursor);
-
-        //when
+        //when data in db didn't change - same row count
         cursorPositioner.initialize();
         Cursor positionedCursor = cursorPositioner.moveToNext();
 
         //then
         assertNull(positionedCursor);
-        assertTrue(providedCursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
     }
 
     public void testGettingLastRecordAgainAfterCursorUpdate() {
-        //when providedCursor is moved to last position and closed
+        //when firstCursor is moved to last position and closed
         cursorPositioner.initialize();
         cursorPositioner.moveToNext();
         cursorPositioner.moveToNext();
+        Cursor firstCursor = mockContentProvider.getLastQueriedCursor();
 
-        //given provided cursor was updated to newCursor with additional row
-        MatrixCursor newCursor = new MatrixCursor(new String[]{"col1", "col2"}, 4);
-        newCursor.addRow(new Object[]{"firstRow", 1});
-        newCursor.addRow(new Object[]{"secondRow", 2});
-        newCursor.addRow(new Object[]{"thirdRow", 3});
-        newCursor.addRow(new Object[]{"newRow", 4});
-        mockContentProvider.willReturn(newCursor);
+        //given 2 additional rows where added to db
+        Object[][] newCursorData = new Object[][] {
+                {"firstRow", 1},
+                {"secondRow", 2},
+                {"thirdRow", 3},
+                {"newRow", 4},
+                {"lastNewRow", 5}
+        };
+        mockContentProvider.setCursorData(newCursorData);
 
         //when cursor is initialized and traversed for 2nd time
         cursorPositioner.initialize();
         Cursor positionedCursor = cursorPositioner.moveToNext();
 
         //then
-        assertTrue(providedCursor.isClosed());
-        assertFalse(newCursor.isClosed());
+        assertTrue(firstCursor.isClosed());
+        assertFalse(mockContentProvider.getLastQueriedCursor().isClosed());
         assertFalse(positionedCursor.isClosed());
-        assertEquals(positionedCursor.getString(0), "newRow");
-        assertEquals(positionedCursor.getInt(1), 4);
+        assertEquals(positionedCursor.getString(0), "lastNewRow");
+        assertEquals(positionedCursor.getInt(1), 5);
 
         //when trying to move cursor 2nd time (without cursor change)
         Cursor cursorMovedSecondTime = cursorPositioner.moveToNext();
 
         //then
         assertNull(cursorMovedSecondTime);
-        assertTrue(newCursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
+        assertTrue(positionedCursor.isClosed());
+    }
+
+    public void testGettingLastRecordAgainWhenDataUpdatedBetweenMoveToNextCalls() {
+        //when firstCursor is moved to last position
+        cursorPositioner.initialize();
+        cursorPositioner.moveToNext();
+        MatrixCursor firstCursor = mockContentProvider.getLastQueriedCursor();
+
+        //given 2 additional rows where added to cursor
+        firstCursor.addRow(new Object[]{"newRow", 4});
+        firstCursor.addRow(new Object[]{"lastNewRow", 5});
+
+        //when cursor is traversed for 2nd time
+        Cursor positionedCursor = cursorPositioner.moveToNext();
+
+        //then
+        assertSame(firstCursor, mockContentProvider.getLastQueriedCursor());
+        assertFalse(firstCursor.isClosed());
+        assertFalse(positionedCursor.isClosed());
+        assertEquals(positionedCursor.getString(0), "lastNewRow");
+        assertEquals(positionedCursor.getInt(1), 5);
+
+        //when trying to move cursor 2nd time (without cursor change)
+        Cursor cursorMovedSecondTime = cursorPositioner.moveToNext();
+
+        //then
+        assertNull(cursorMovedSecondTime);
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
         assertTrue(positionedCursor.isClosed());
     }
 
     //FIXME: should it behave like that?
     public void testGettingLastRecordFromClosedCursor() {
         //given
-        providedCursor.close();
+        cursorPositioner.initialize();
+        mockContentProvider.getLastQueriedCursor().close();
 
         //when
-        cursorPositioner.initialize();
         Cursor positionedCursor = cursorPositioner.moveToNext();
 
         //then
-        assertTrue(providedCursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
         assertTrue(positionedCursor.isClosed());
         assertEquals(positionedCursor.getString(0), "thirdRow");
         assertEquals(positionedCursor.getInt(1), 3);
@@ -145,21 +178,7 @@ public class LastRecordCursorPositionerTest extends TestCase {
 
         //then
         assertNull(cursorMovedSecondTime);
-        assertTrue(providedCursor.isClosed());
+        assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
         assertTrue(positionedCursor.isClosed());
-    }
-
-    private class MockContentProvider extends android.test.mock.MockContentProvider {
-        private static final String AUTHORITY = "authority";
-        private Cursor returnedCursor;
-
-        public void willReturn(Cursor cursor) {
-            this.returnedCursor = cursor;
-        }
-
-        @Override
-        public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-            return returnedCursor;
-        }
     }
 }

@@ -1,9 +1,10 @@
 package com.aware.context.positioner;
 
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.net.Uri;
 import android.test.mock.MockContentResolver;
+import com.aware.context.test.ExceptionCatcher;
+import com.aware.context.test.MockContentProvider;
 import junit.framework.TestCase;
 
 public class NewRecordsCursorPositionerTest extends TestCase {
@@ -169,28 +170,32 @@ public class NewRecordsCursorPositionerTest extends TestCase {
 
     public void testGettingNewRecordsWhenCursorPositionerAtStartWasNotInitialized() {
         //when
-        Cursor positionedCursor = cursorPositionerAtStart.moveToNext();
+        Exception caughtException = new ExceptionCatcher() {
+            @Override
+            protected void invoke() throws Exception {
+                cursorPositionerAtStart.moveToNext();
+            }
+        }.catchException();
 
         //then
-        assertNull(positionedCursor);
+        assertTrue(caughtException instanceof IllegalStateException);
+        assertEquals(caughtException.getMessage(),
+                "CursorPositioner's method moveToNext invoked without initialization.");
     }
 
-    public void testGettingNewRecordsAfterCursorDataUpdateWhenCursorPositionerAtEndWasNotInitialized() {
-        //given
-        Object[][] updatedCursorData = new Object[][] {
-                new Object[] {"firstRow", 1},
-                new Object[] {"secondRow", 2},
-                new Object[] {"thirdRow", 3},
-                new Object[] {"fourthRow", 4},
-                new Object[] {"fifthRow", 5}
-        };
-        mockContentProvider.setCursorData(updatedCursorData);
-
+    public void testGettingNewRecordsWhenCursorPositionerAtEndWasNotInitialized() {
         //when
-        Cursor positionedCursor = cursorPositionerAtEnd.moveToNext();
+        Exception caughtException = new ExceptionCatcher() {
+            @Override
+            protected void invoke() throws Exception {
+                cursorPositionerAtEnd.moveToNext();
+            }
+        }.catchException();
 
         //then
-        assertNull(positionedCursor);
+        assertTrue(caughtException instanceof IllegalStateException);
+        assertEquals(caughtException.getMessage(),
+                "CursorPositioner's method moveToNext invoked without initialization.");
     }
 
     public void testGettingNewRecordsWhenCursorPositionerAtEndCreatedFromNullCursor() {
@@ -291,46 +296,5 @@ public class NewRecordsCursorPositionerTest extends TestCase {
         }
         assertEquals(rowIndex, updatedCursorData.length - oldRowsCount);
         assertTrue(mockContentProvider.getLastQueriedCursor().isClosed());
-    }
-
-    private class MockContentProvider extends android.test.mock.MockContentProvider {
-        private static final String AUTHORITY = "authority";
-        private final String[] cursorColumns;
-        private Object[][] cursorData;
-        private MatrixCursor lastQueriedCursor;
-        private boolean returnNullCursor = false;
-
-        public MockContentProvider(String[] cursorColumns) {
-            this.cursorColumns = cursorColumns;
-        }
-
-        public void setCursorData(Object[][] cursorData) {
-            this.cursorData = cursorData;
-        }
-
-        public Cursor getLastQueriedCursor() {
-            return lastQueriedCursor;
-        }
-
-        public void enableReturnNullCursor() {
-            this.returnNullCursor = true;
-        }
-
-        public void disableReturnNullCursor() {
-            this.returnNullCursor = false;
-        }
-
-        @Override
-        public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-            if (returnNullCursor) {
-                lastQueriedCursor = null;
-                return null;
-            }
-            lastQueriedCursor = new MatrixCursor(cursorColumns, cursorData.length);
-            for (Object[] cursorRow : cursorData) {
-                lastQueriedCursor.addRow(cursorRow);
-            }
-            return lastQueriedCursor;
-        }
     }
 }
