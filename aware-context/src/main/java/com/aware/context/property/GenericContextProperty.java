@@ -32,8 +32,7 @@ public class GenericContextProperty implements ContextProperty {
 
     @Override
     public String toString() {
-        return "GenericContextProperty{" +
-                "id='" + id + "', " +
+        return id + '{' +
                 FluentIterable.from(attributes.entrySet())
                         .transform(new Function<Map.Entry<String, Object>, String>() {
                             @Override
