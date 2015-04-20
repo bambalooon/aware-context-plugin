@@ -41,13 +41,13 @@ public final class ContextContract {
          * The context property column.
          * <P>Type: STRING (String)</P>
          */
-        public static final String _CONTEXT_PROPERTY = "context_property";
+        public static final String CONTEXT_PROPERTY = "context_property";
 
         /**
          * A projection of all columns in ContextProperties table.
          */
         public static final String[] PROJECTION_ALL = {
-            _ID, _CONTEXT_PROPERTY
+            _ID, CONTEXT_PROPERTY
         };
     }
 

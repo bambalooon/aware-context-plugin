@@ -272,10 +272,10 @@ public class ContextTest extends TestCase {
             if (uri.equals(contextPropertiesUri)) {
                 //check if required values exist
                 assertTrue(values.containsKey(ContextContract.Properties._ID));
-                assertTrue(values.containsKey(ContextContract.Properties._CONTEXT_PROPERTY));
+                assertTrue(values.containsKey(ContextContract.Properties.CONTEXT_PROPERTY));
 
                 String contextPropertyId = values.getAsString(ContextContract.Properties._ID);
-                String contextPropertyJson = values.getAsString(ContextContract.Properties._CONTEXT_PROPERTY);
+                String contextPropertyJson = values.getAsString(ContextContract.Properties.CONTEXT_PROPERTY);
 
                 //check if required values have expected value
                 assertEquals(contextPropertyId, newContextPropertyId);

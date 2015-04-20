@@ -67,7 +67,7 @@ public class ContextProvider extends ContentProvider {
                     for (String column : projection) {
                         if (ContextContract.Properties._ID.equals(column)) {
                             values[i++] = contextPropertyEntry.getKey();
-                        } else if (ContextContract.Properties._CONTEXT_PROPERTY.equals(column)) {
+                        } else if (ContextContract.Properties.CONTEXT_PROPERTY.equals(column)) {
                             values[i++] = contextPropertyEntry.getValue();
                         }
                     }
@@ -87,7 +87,7 @@ public class ContextProvider extends ContentProvider {
                 for (String column : projection) {
                     if (ContextContract.Properties._ID.equals(column)) {
                         values[i++] = contextPropertyIdFromUri;
-                    } else if (ContextContract.Properties._CONTEXT_PROPERTY.equals(column)) {
+                    } else if (ContextContract.Properties.CONTEXT_PROPERTY.equals(column)) {
                         values[i++] = contextPropertyJson;
                     }
                 }
@@ -104,7 +104,7 @@ public class ContextProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case CONTEXT:
                 String contextPropertyId = values.getAsString(ContextContract.Properties._ID);
-                String contextPropertyJson = values.getAsString(ContextContract.Properties._CONTEXT_PROPERTY);
+                String contextPropertyJson = values.getAsString(ContextContract.Properties.CONTEXT_PROPERTY);
                 contextStorage.setContextProperty(contextPropertyId, contextPropertyJson);
                 Uri contextPropertyUri = Uri.withAppendedPath(uri, contextPropertyId);
                 getContext().getContentResolver().notifyChange(contextPropertyUri, null);

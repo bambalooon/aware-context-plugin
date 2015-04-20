@@ -39,7 +39,7 @@ public class Context implements ContextStorage<GenericContextProperty> {
                 return null;
             }
             int contextPropertyColumnIndex = contextPropertyCursor
-                    .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
+                    .getColumnIndex(ContextContract.Properties.CONTEXT_PROPERTY);
             String contextPropertyJson = contextPropertyCursor.getString(contextPropertyColumnIndex);
             return contextPropertySerialization.deserialize(contextPropertyJson);
         } finally {
@@ -58,7 +58,7 @@ public class Context implements ContextStorage<GenericContextProperty> {
         String contextPropertyJson = contextPropertySerialization.serialize(contextProperty);
         ContentValues contentValues = new ContentValues();
         contentValues.put(ContextContract.Properties._ID, contextPropertyId);
-        contentValues.put(ContextContract.Properties._CONTEXT_PROPERTY, contextPropertyJson);
+        contentValues.put(ContextContract.Properties.CONTEXT_PROPERTY, contextPropertyJson);
         contentResolver.insert(ContextContract.Properties.CONTENT_URI, contentValues);
     }
 
@@ -73,7 +73,7 @@ public class Context implements ContextStorage<GenericContextProperty> {
             }
             int contextPropertyIdColumnIndex = contextPropertiesCursor.getColumnIndex(ContextContract.Properties._ID);
             int contextPropertyJsonColumnIndex = contextPropertiesCursor
-                    .getColumnIndex(ContextContract.Properties._CONTEXT_PROPERTY);
+                    .getColumnIndex(ContextContract.Properties.CONTEXT_PROPERTY);
             do {
                 String contextPropertyId = contextPropertiesCursor.getString(contextPropertyIdColumnIndex);
                 String contextPropertyJson = contextPropertiesCursor.getString(contextPropertyJsonColumnIndex);
