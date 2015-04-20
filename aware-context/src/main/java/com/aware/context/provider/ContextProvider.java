@@ -23,13 +23,13 @@ public class ContextProvider extends ContentProvider {
     private static final int CONTEXT_PROPERTY = 2;
     private static final UriMatcher URI_MATCHER;
 
-    private ContextStorage<String> contextStorage;
-
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        URI_MATCHER.addURI(ContextContract.AUTHORITY, "properties", CONTEXT);
-        URI_MATCHER.addURI(ContextContract.AUTHORITY, "properties/*", CONTEXT_PROPERTY);
+        URI_MATCHER.addURI(ContextContract.AUTHORITY, ContextContract.Properties.TABLE_NAME, CONTEXT);
+        URI_MATCHER.addURI(ContextContract.AUTHORITY, ContextContract.Properties.TABLE_NAME + "/*", CONTEXT_PROPERTY);
     }
+
+    private ContextStorage<String> contextStorage;
 
     @Override
     public boolean onCreate() {

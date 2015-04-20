@@ -15,9 +15,13 @@ public final class ContextContract {
 
     public static final class Properties {
         /**
+         * Properties table name
+         */
+        public static final String TABLE_NAME = "properties";
+        /**
          * Content URI for Properties table.
          */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ContextContract.CONTENT_URI, "properties");
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ContextContract.CONTENT_URI, TABLE_NAME);
 
         /**
          * The mime type of a directory of items.
