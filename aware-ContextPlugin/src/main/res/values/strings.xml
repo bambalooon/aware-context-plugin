@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Context</string>
     <string name="context_provider_label">ContextProvider</string>
+    <string name="context_history_provider_label">ContextHistoryProvider</string>
     <string name="manage_context_data_permission_description">Allow manage access to context data in ContextPlugin</string>
     <string name="manage_context_data_permission_label">Manage ContextPlugin\'s context</string>
     <string name="read_current_context_data_permission_description">Allow read access to current context data in ContextPlugin</string>

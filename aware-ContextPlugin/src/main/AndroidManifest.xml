@@ -71,6 +71,15 @@
             android:writePermission="com.aware.context.provider.context.WRITE"
             />
 
+        <provider
+            android:authorities="com.aware.context.provider.context_history"
+            android:name="com.aware.context.provider.ContextHistoryProvider"
+            android:exported="true"
+            android:label="@string/context_history_provider_label"
+            android:readPermission="com.aware.context.provider.context.READ"
+            android:writePermission="com.aware.context.provider.context.WRITE"
+            />
+
     </application>
 
 </manifest>
