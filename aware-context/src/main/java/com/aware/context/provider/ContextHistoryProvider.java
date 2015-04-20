@@ -23,7 +23,7 @@ public class ContextHistoryProvider extends ContentProvider {
     /**
      * Database current version
      */
-    public static final int DATABASE_VERSION = 0;
+    public static final int DATABASE_VERSION = 1;
 
     private static final int CONTEXT_LIST = 1;
     private static final int CONTEXT = 2;
