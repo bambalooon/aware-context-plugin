@@ -1,4 +1,20 @@
-<manifest package="com.aware.context">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.aware.context">
+
+    <permission
+        android:name="com.aware.context.provider.context.READ"
+        android:description="@string/read_context_data_permission_description"
+        android:icon="@drawable/ic_context"
+        android:label="@string/read_context_data_permission_label"
+        android:protectionLevel="dangerous"
+        />
+
+    <permission
+        android:name="com.aware.context.provider.context.WRITE"
+        android:description="@string/write_context_data_permission_description"
+        android:icon="@drawable/ic_context"
+        android:label="@string/write_context_data_permission_label"
+        android:protectionLevel="signature"
+        />
 
     <application/>
 
