@@ -11,7 +11,6 @@ import android.util.Log;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.context.observer.ContextPropertyCreator;
-import com.aware.context.observer.ContextPropertyMapping;
 import com.aware.context.observer.ContextPropertyObserver;
 import com.aware.context.positioner.NewRecordsCursorPositioner;
 import com.aware.context.processor.ContextPropertyProcessor;
@@ -19,6 +18,7 @@ import com.aware.context.property.GenericContextProperty;
 import com.aware.context.provider.Context;
 import com.aware.context.storage.ContextStorage;
 import com.aware.context.transform.ContextPropertySerialization;
+import com.aware.plugin.poirecommender.application.PoiRecommenderApplication;
 import com.aware.utils.Aware_Plugin;
 
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ public class Plugin extends Aware_Plugin {
     public void onCreate() {
         super.onCreate();
         android.content.Context applicationContext = getApplicationContext();
+        PoiRecommenderApplication application = PoiRecommenderApplication.getInstance();
 
         //Initialize plugin settings
         if( DEBUG ) Log.d(TAG, "PoiRecommender plugin running");
@@ -62,12 +63,13 @@ public class Plugin extends Aware_Plugin {
         ContentResolver contentResolver = getContentResolver();
         contextStorage = new Context(contentResolver, new ContextPropertySerialization<>(GenericContextProperty.class));
         contentObservers = new ArrayList<>();
-        for (Uri contextPropertyUri : ContextPropertyMapping.getDefaultInstance().getContextPropertyUriList()) {
+        ContextPropertyCreator<GenericContextProperty> contextPropertyCreator = application.getContextPropertyCreator();
+        for (Uri contextPropertyUri : application.getContextPropertyMapping().getContextPropertyUriList()) {
             ContentObserver contextPropertyObserver = new ContextPropertyObserver<>(
                     contextPropertyChangeHandler,
                     contextPropertyUri,
                     NewRecordsCursorPositioner.createInstancePositionedAtEnd(contextPropertyUri, contentResolver),
-                    ContextPropertyCreator.getDefaultInstance(),
+                    contextPropertyCreator,
                     new ContextPropertyProcessor<GenericContextProperty>() {
                         @Override
                         public void process(GenericContextProperty contextProperty) {
