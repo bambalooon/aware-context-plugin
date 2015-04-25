@@ -2,6 +2,7 @@ package com.aware.plugin.poirecommender.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.context.provider.Context;
 import com.aware.context.transform.ContextPropertySerialization;
@@ -25,6 +26,7 @@ public class PoiRecommenderService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         switch (intent.getAction()) {
             case ACTION_STORE_POI_WITH_CONTEXT:
+                Log.d(TAG, "Storing current context in database...");
                 //FIXME: get sent POI
                 Context context = new Context(getContentResolver(), new ContextPropertySerialization<>(GenericContextProperty.class));
                 new PoiRecommenderData(getContentResolver()).setContext(context.getContextProperties().values());
