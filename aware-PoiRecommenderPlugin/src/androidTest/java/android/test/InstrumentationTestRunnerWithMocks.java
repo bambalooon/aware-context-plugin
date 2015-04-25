@@ -1,7 +1,6 @@
-package com.aware.context.test;
+package android.test;
 
 import android.os.Bundle;
-import android.test.InstrumentationTestRunner;
 
 /**
  * Name: InstrumentationTestRunnerWithMocks

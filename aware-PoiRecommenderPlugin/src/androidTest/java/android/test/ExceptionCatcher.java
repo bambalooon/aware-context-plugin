@@ -1,4 +1,4 @@
-package com.aware.context.test;
+package android.test;
 
 /**
  * Name: ExceptionCatcher

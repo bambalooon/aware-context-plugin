@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.test.mock.MockContentProvider;
 import android.test.mock.MockContentResolver;
 import com.aware.context.property.GenericContextProperty;
-import com.aware.context.test.ExceptionCatcher;
+import android.test.ExceptionCatcher;
 import com.aware.context.transform.ContextPropertySerialization;
 import com.google.common.collect.ImmutableMap;
 import junit.framework.TestCase;

@@ -4,8 +4,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.test.mock.MockContentResolver;
-import com.aware.context.test.ExceptionCatcher;
-import com.aware.context.test.MockContentProvider;
+import android.test.ExceptionCatcher;
+import android.test.MockContentProvider;
 import junit.framework.TestCase;
 
 public class LastRecordCursorPositionerTest extends TestCase {
