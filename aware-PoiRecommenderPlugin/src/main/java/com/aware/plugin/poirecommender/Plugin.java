@@ -1,9 +1,10 @@
-package com.aware.plugin.context;
+package com.aware.plugin.poirecommender;
 
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
@@ -24,10 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Krzysztof Balon on 2015-02-20.
+ * Name: Plugin
+ * Description: Plugin
+ * Date: 2015-02-20
+ * Created by BamBalooon
  */
 public class Plugin extends Aware_Plugin {
-    public static final String ACTION_AWARE_PLUGIN_CONTEXT = "ACTION_AWARE_PLUGIN_CONTEXT";
+    public static final String ACTION_AWARE_PLUGIN_POIRECOMMENDER = "ACTION_AWARE_PLUGIN_POIRECOMMENDER";
     private HandlerThread handlerThread;
     private List<ContentObserver> contentObservers;
     private ContextStorage<GenericContextProperty> contextStorage;
@@ -38,15 +42,15 @@ public class Plugin extends Aware_Plugin {
         android.content.Context applicationContext = getApplicationContext();
 
         //Initialize plugin settings
-        if( DEBUG ) Log.d(TAG, "Context plugin running");
-        if( Aware.getSetting(applicationContext, Settings.STATUS_PLUGIN_CONTEXT).length() == 0 ) {
-            Aware.setSetting(applicationContext, Settings.STATUS_PLUGIN_CONTEXT, true);
+        if( DEBUG ) Log.d(TAG, "PoiRecommender plugin running");
+        if( Aware.getSetting(applicationContext, Settings.STATUS_PLUGIN_POIRECOMMENDER).length() == 0 ) {
+            Aware.setSetting(applicationContext, Settings.STATUS_PLUGIN_POIRECOMMENDER, true);
         }
 
         CONTEXT_PRODUCER = new ContextProducer() {
             @Override
             public void onContext() {
-                Intent broadcast = new Intent(ACTION_AWARE_PLUGIN_CONTEXT);
+                Intent broadcast = new Intent(ACTION_AWARE_PLUGIN_POIRECOMMENDER);
                 sendBroadcast(broadcast);
             }
         };
@@ -96,8 +100,14 @@ public class Plugin extends Aware_Plugin {
         }
         contentObservers = null;
 
-        if( DEBUG ) Log.d(TAG, "Context plugin terminated");
-        Aware.setSetting(getApplicationContext(), Settings.STATUS_PLUGIN_CONTEXT, false);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            handlerThread.quitSafely();
+        } else {
+            handlerThread.quit();
+        }
+
+        if( DEBUG ) Log.d(TAG, "PoiRecommender plugin terminated");
+        Aware.setSetting(getApplicationContext(), Settings.STATUS_PLUGIN_POIRECOMMENDER, false);
 
         //Apply AWARE settings
         Intent refresh = new Intent(Aware.ACTION_AWARE_REFRESH);
