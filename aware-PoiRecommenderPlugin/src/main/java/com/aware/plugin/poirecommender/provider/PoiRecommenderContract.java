@@ -4,13 +4,13 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 /**
- * Name: ContextHistoryContract
- * Description: ContextHistoryContract
+ * Name: PoiRecommenderContract
+ * Description: PoiRecommenderContract
  * Date: 2015-04-20
  * Created by BamBalooon
  */
-public class ContextHistoryContract {
-    public static final String AUTHORITY = "com.aware.context.provider.context_history";
+public class PoiRecommenderContract {
+    public static final String AUTHORITY = "com.aware.plugin.poirecommender.provider.poirecommender";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     public static final class Contexts {
@@ -22,29 +22,29 @@ public class ContextHistoryContract {
         /**
          * Content URI for Contexts table.
          */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(ContextHistoryContract.CONTENT_URI, TABLE_NAME);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(PoiRecommenderContract.CONTENT_URI, TABLE_NAME);
 
         /**
          * The mime type of a directory of items.
          */
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-                + "/vnd.com.aware.context.provider.context_history_contexts";
+                + "/vnd.com.aware.plugin.poirecommender.provider.poirecommender_contexts";
 
         /**
          * The mime type of a single item.
          */
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-                + "/vnd.com.aware.context.provider.context_history_contexts";
+                + "/vnd.com.aware.plugin.poirecommender.provider.poirecommender_contexts";
 
         /**
          * The unique ID for a row.
-         * <P>Type: INTEGER (String)</P>
+         * <P>Type: INTEGER (Integer)</P>
          */
         public static final String _ID = "_id";
 
         /**
          * The timestamp column.
-         * <P>Type: LONG (String)</P>
+         * <P>Type: LONG (Long)</P>
          */
         public static final String TIMESTAMP = "timestamp";
         /**
