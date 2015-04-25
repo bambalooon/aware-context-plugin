@@ -1,1 +1,1 @@
-include ':aware-ContextPlugin', ':aware-context'
+include ':aware-PoiRecommenderPlugin', ':aware-context'
