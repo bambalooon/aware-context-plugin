@@ -1,4 +1,4 @@
-package com.aware.context.provider;
+package com.aware.plugin.poirecommender.provider;
 
 import android.content.ContentResolver;
 import android.net.Uri;
