@@ -28,6 +28,7 @@ android {
 
 dependencies {
     compile project(':aware-context')
+    compile project(':aware-poirecommender')
     androidTestCompile 'org.mockito:mockito-all:1.9.5'
     androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
     androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.0') {
