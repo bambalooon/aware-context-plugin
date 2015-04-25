@@ -1,4 +1,4 @@
-package com.aware.plugin.context;
+package com.aware.plugin.poirecommender;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,14 +10,17 @@ import android.preference.PreferenceManager;
 import com.aware.Aware;
 
 /**
- * Created by Krzysztof Balon on 2015-02-23.
+ * Name: Settings
+ * Description: Settings
+ * Date: 2015-02-23
+ * Created by BamBalooon
  */
 public class Settings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     /**
-     * State of Context plugin
+     * State of PoiRecommender plugin
      */
-    public static final String STATUS_PLUGIN_CONTEXT = "status_plugin_context";
+    public static final String STATUS_PLUGIN_POIRECOMMENDER = "status_plugin_poirecommender";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
     }
 
     private void syncSettings() {
-        CheckBoxPreference check = (CheckBoxPreference) findPreference(STATUS_PLUGIN_CONTEXT);
-        check.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_CONTEXT).equals("true"));
+        CheckBoxPreference check = (CheckBoxPreference) findPreference(STATUS_PLUGIN_POIRECOMMENDER);
+        check.setChecked(Aware.getSetting(getApplicationContext(), STATUS_PLUGIN_POIRECOMMENDER).equals("true"));
     }
 
     @Override
@@ -42,7 +45,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
-        if (preference.getKey().equals(STATUS_PLUGIN_CONTEXT)) {
+        if (preference.getKey().equals(STATUS_PLUGIN_POIRECOMMENDER)) {
             boolean isActive = sharedPreferences.getBoolean(key, false);
             Context applicationContext = getApplicationContext();
             Aware.setSetting(applicationContext, key, isActive);
