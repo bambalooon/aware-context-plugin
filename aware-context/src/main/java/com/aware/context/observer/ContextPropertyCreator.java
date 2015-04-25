@@ -4,21 +4,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import com.aware.context.factory.ContextPropertyFactory;
 import com.aware.context.property.ContextProperty;
-import com.aware.context.property.GenericContextProperty;
 
 /**
- * Created by Krzysztof Balon on 2015-02-21.
+ * Name: ContextPropertyCreator
+ * Description: ContextPropertyCreator
+ * Date: 2015-02-21
+ * Created by BamBalooon
  * @param <CP> created ContextProperty type
  */
 public class ContextPropertyCreator<CP extends ContextProperty> {
-    //FIXME: should it be moved to ContextApplication?
-    private static ContextPropertyCreator<GenericContextProperty> DEFAULT_INSTANCE;
-    public static ContextPropertyCreator<GenericContextProperty> getDefaultInstance() {
-        if (DEFAULT_INSTANCE == null) {
-            DEFAULT_INSTANCE = new ContextPropertyCreator<>(ContextPropertyMapping.getDefaultInstance());
-        }
-        return DEFAULT_INSTANCE;
-    }
     private final ContextPropertyMapping<CP> contextPropertyMapping;
 
     public ContextPropertyCreator(ContextPropertyMapping<CP> contextPropertyMapping) {
