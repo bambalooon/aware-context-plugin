@@ -1,0 +1,7 @@
+<resources>
+    <string name="context_provider_label">ContextProvider</string>
+    <string name="read_context_data_permission_description">Allow read access to context data</string>
+    <string name="read_context_data_permission_label">Context - read access</string>
+    <string name="write_context_data_permission_description">Allow write access to context data</string>
+    <string name="write_context_data_permission_label">Context - write access</string>
+</resources>
