@@ -1,28 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-        package="com.aware.plugin.context">
+        package="com.aware.plugin.poirecommender">
 
     <permission
-        android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA"
-        android:description="@string/manage_context_data_permission_description"
-        android:icon="@drawable/ic_action"
-        android:label="@string/manage_context_data_permission_label"
+        android:name="com.aware.plugin.poirecommender.MANAGE_POIRECOMMENDER_DATA"
+        android:description="@string/manage_poirecommender_data_permission_description"
+        android:icon="@drawable/ic_context"
+        android:label="@string/manage_poirecommender_data_permission_label"
         android:protectionLevel="dangerous"
-        />
-
-    <permission
-        android:name="com.aware.context.provider.context.READ"
-        android:description="@string/read_current_context_data_permission_description"
-        android:icon="@drawable/ic_action"
-        android:label="@string/read_current_context_data_permission_label"
-        android:protectionLevel="dangerous"
-        />
-
-    <permission
-        android:name="com.aware.context.provider.context.WRITE"
-        android:description="@string/write_current_context_data_permission_description"
-        android:icon="@drawable/ic_action"
-        android:label="@string/write_current_context_data_permission_label"
-        android:protectionLevel="signature"
         />
 
     <!--suppress AndroidDomInspection -->
@@ -30,7 +14,7 @@
     <uses-permission android:name="com.aware.WRITE_CONTEXT_DATA"/>
     <uses-permission android:name="com.aware.READ_CONTEXT_DATA"/>
 
-    <uses-permission android:name="com.aware.plugin.context.MANAGE_CONTEXT_DATA"/>
+    <uses-permission android:name="com.aware.plugin.poirecommender.MANAGE_POIRECOMMENDER_DATA"/>
     <uses-permission android:name="com.aware.context.provider.context.READ"/>
     <uses-permission android:name="com.aware.context.provider.context.WRITE"/>
 
@@ -39,7 +23,7 @@
     <application
             android:allowBackup="true"
             android:label="@string/app_name"
-            android:icon="@drawable/ic_action"
+            android:icon="@drawable/ic_context"
             tools:node="replace">
 
         <service
@@ -49,7 +33,7 @@
             />
 
         <activity
-            android:name="com.aware.plugin.context.Settings"
+            android:name=".Settings"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:label="@string/app_name"
@@ -59,7 +43,7 @@
             android:name="com.aware.context.service.ContextService"
             android:exported="true"
             android:label="@string/app_name"
-            android:permission="com.aware.plugin.context.MANAGE_CONTEXT_DATA"
+            android:permission="com.aware.plugin.poirecommender.MANAGE_POIRECOMMENDER_DATA"
             />
 
         <provider
@@ -72,12 +56,10 @@
             />
 
         <provider
-            android:authorities="com.aware.context.provider.context_history"
+            android:authorities="com.aware.plugin.poirecommender.provider.poirecommender"
             android:name="com.aware.context.provider.ContextHistoryProvider"
-            android:exported="true"
-            android:label="@string/context_history_provider_label"
-            android:readPermission="com.aware.context.provider.context.READ"
-            android:writePermission="com.aware.context.provider.context.WRITE"
+            android:exported="false"
+            android:label="@string/poirecommender_provider_label"
             />
 
     </application>
