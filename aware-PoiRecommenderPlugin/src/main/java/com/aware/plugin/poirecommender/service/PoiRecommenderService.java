@@ -1,4 +1,4 @@
-package com.aware.context.service;
+package com.aware.plugin.poirecommender.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import android.content.Intent;
  * Date: 2015-03-21
  * Created by BamBalooon
  */
-public class ContextService extends IntentService {
-    private static final String TAG = "ContextService";
+public class PoiRecommenderService extends IntentService {
+    private static final String TAG = "PoiRecommenderService";
 
-    public ContextService() {
+    public PoiRecommenderService() {
         super(TAG);
     }
 
