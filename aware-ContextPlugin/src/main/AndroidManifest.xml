@@ -6,7 +6,7 @@
         android:description="@string/manage_context_data_permission_description"
         android:icon="@drawable/ic_action"
         android:label="@string/manage_context_data_permission_label"
-        android:protectionLevel="normal"
+        android:protectionLevel="dangerous"
         />
 
     <permission
@@ -14,7 +14,7 @@
         android:description="@string/read_current_context_data_permission_description"
         android:icon="@drawable/ic_action"
         android:label="@string/read_current_context_data_permission_label"
-        android:protectionLevel="normal"
+        android:protectionLevel="dangerous"
         />
 
     <permission
