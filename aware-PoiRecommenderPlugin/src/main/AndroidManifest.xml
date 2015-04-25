@@ -33,7 +33,7 @@
             />
 
         <service
-            android:name=".service.PoiRecommenderService"
+            android:name="com.aware.poirecommender.service.PoiRecommenderService"
             android:exported="true"
             android:label="@string/app_name"
             android:permission="com.aware.poirecommender.MANAGE_POIRECOMMENDER_DATA"
@@ -49,8 +49,8 @@
             />
 
         <provider
-            android:authorities="com.aware.plugin.poirecommender.provider.poirecommender"
-            android:name=".provider.PoiRecommenderProvider"
+            android:authorities="com.aware.poirecommender.provider.poirecommender"
+            android:name="com.aware.poirecommender.provider.PoiRecommenderProvider"
             android:exported="false"
             android:label="@string/poirecommender_provider_label"
             />

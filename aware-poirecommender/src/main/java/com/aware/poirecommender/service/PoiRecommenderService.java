@@ -1,4 +1,4 @@
-package com.aware.plugin.poirecommender.service;
+package com.aware.poirecommender.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.util.Log;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.context.provider.Context;
 import com.aware.context.transform.ContextPropertySerialization;
-import com.aware.plugin.poirecommender.provider.PoiRecommenderData;
+import com.aware.poirecommender.provider.PoiRecommenderData;
 
 /**
  * Name: PoiRecommenderService

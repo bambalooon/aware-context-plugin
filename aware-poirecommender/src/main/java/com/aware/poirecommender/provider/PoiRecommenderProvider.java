@@ -1,4 +1,4 @@
-package com.aware.plugin.poirecommender.provider;
+package com.aware.poirecommender.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

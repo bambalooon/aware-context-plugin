@@ -9,7 +9,7 @@ import com.aware.context.observer.ContextPropertyMapping;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
 import com.aware.plugin.openweather.Provider;
-import com.aware.plugin.poirecommender.provider.PoiRecommenderContract;
+import com.aware.poirecommender.provider.PoiRecommenderContract;
 import com.aware.providers.Locations_Provider;
 import com.google.common.collect.ImmutableMap;
 

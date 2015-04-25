@@ -1,4 +1,4 @@
-package com.aware.plugin.poirecommender.provider;
+package com.aware.poirecommender.provider;
 
 import android.content.ContentResolver;
 import android.net.Uri;
@@ -10,7 +10,7 @@ import android.net.Uri;
  * Created by BamBalooon
  */
 public class PoiRecommenderContract {
-    public static final String AUTHORITY = "com.aware.plugin.poirecommender.provider.poirecommender";
+    public static final String AUTHORITY = "com.aware.poirecommender.provider.poirecommender";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     public static final class Contexts {
@@ -28,13 +28,13 @@ public class PoiRecommenderContract {
          * The mime type of a directory of items.
          */
         public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-                + "/vnd.com.aware.plugin.poirecommender.provider.poirecommender_contexts";
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_contexts";
 
         /**
          * The mime type of a single item.
          */
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-                + "/vnd.com.aware.plugin.poirecommender.provider.poirecommender_contexts";
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_contexts";
 
         /**
          * The unique ID for a row.
