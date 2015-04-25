@@ -4,8 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 
 /**
- * Name: ContextService
- * Description: ContextService
+ * Name: PoiRecommenderService
+ * Description: PoiRecommenderService
  * Date: 2015-03-21
  * Created by BamBalooon
  */
