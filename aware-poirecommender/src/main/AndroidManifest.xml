@@ -1,4 +1,12 @@
-<manifest package="com.aware.plugin.poirecommender">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.aware.plugin.poirecommender">
+
+    <permission
+        android:name="com.aware.plugin.poirecommender.MANAGE_POIRECOMMENDER_DATA"
+        android:description="@string/manage_poirecommender_data_permission_description"
+        android:icon="@drawable/ic_poirecommender"
+        android:label="@string/manage_poirecommender_data_permission_label"
+        android:protectionLevel="dangerous"
+        />
 
     <application/>
 
