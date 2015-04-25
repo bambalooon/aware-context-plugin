@@ -5,12 +5,12 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.aware.plugin.context"
+        applicationId "com.aware.plugin.poirecommender"
         minSdkVersion 10
         targetSdkVersion 22
         versionCode 1
         versionName "0.1"
-        testApplicationId "test.com.aware.plugin.context" //to disable aware framework plugin detection of tests
+        testApplicationId "test.com.aware.plugin.poirecommender" //to disable aware framework plugin detection of tests
         testInstrumentationRunner "android.test.InstrumentationTestRunnerWithMocks" //to work with mocks
     }
 
