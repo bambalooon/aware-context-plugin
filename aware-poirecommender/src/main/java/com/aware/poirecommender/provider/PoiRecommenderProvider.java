@@ -44,9 +44,9 @@ public class PoiRecommenderProvider extends ContentProvider {
     private static final String DATABASE_NAME = Environment.getExternalStorageDirectory()
             + "/AWARE/plugin_poirecommender.db";
 
-    private static final String[] DATABASE_TABLES = { PoiRecommenderContract.Contexts.TABLE_NAME };
+    public static final String[] DATABASE_TABLES = { PoiRecommenderContract.Contexts.TABLE_NAME };
 
-    private static final String[] TABLES_FIELDS = {
+    public static final String[] TABLES_FIELDS = {
             //Contexts
             PoiRecommenderContract.Contexts._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.Contexts.TIMESTAMP + " real default 0,"

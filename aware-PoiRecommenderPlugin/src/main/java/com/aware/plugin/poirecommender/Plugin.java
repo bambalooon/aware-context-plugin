@@ -19,6 +19,8 @@ import com.aware.context.provider.Context;
 import com.aware.context.storage.ContextStorage;
 import com.aware.context.transform.ContextPropertySerialization;
 import com.aware.plugin.poirecommender.application.PoiRecommenderApplication;
+import com.aware.poirecommender.provider.PoiRecommenderContract;
+import com.aware.poirecommender.provider.PoiRecommenderProvider;
 import com.aware.utils.Aware_Plugin;
 
 import java.util.ArrayList;
@@ -55,6 +57,10 @@ public class Plugin extends Aware_Plugin {
                 sendBroadcast(broadcast);
             }
         };
+
+        DATABASE_TABLES = PoiRecommenderProvider.DATABASE_TABLES;
+        TABLES_FIELDS = PoiRecommenderProvider.TABLES_FIELDS;
+        CONTEXT_URIS = new Uri[] {PoiRecommenderContract.Contexts.CONTENT_URI};
 
         handlerThread = new HandlerThread(TAG);
         handlerThread.start();
