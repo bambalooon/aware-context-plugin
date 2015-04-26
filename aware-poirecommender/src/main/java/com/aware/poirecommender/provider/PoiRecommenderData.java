@@ -8,7 +8,6 @@ import com.aware.Aware_Preferences;
 import com.aware.context.property.GenericContextProperty;
 
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Name: PoiRecommenderData
@@ -28,7 +27,7 @@ public class PoiRecommenderData {
 
     public void setContext(Collection<GenericContextProperty> contextProperties) {
         ContentValues values = new ContentValues();
-        values.put(PoiRecommenderContract.Contexts.TIMESTAMP, new Date().getTime());
+        values.put(PoiRecommenderContract.Contexts.TIMESTAMP, System.currentTimeMillis());
         values.put(PoiRecommenderContract.Contexts.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
         for (GenericContextProperty contextProperty : contextProperties) {
             Double contextPropertyIdAttribute = (Double) contextProperty.getAttributes()
