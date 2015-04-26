@@ -15,7 +15,8 @@ import com.aware.poirecommender.provider.PoiRecommenderData;
  * Created by BamBalooon
  */
 public class PoiRecommenderService extends IntentService {
-    public static final String ACTION_STORE_POI_WITH_CONTEXT = "ACTION_STORE_POI_WITH_CONTEXT";
+    public static final String ACTION_STORE_POI_WITH_CONTEXT =
+            "com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_POI_WITH_CONTEXT";
     private static final String TAG = "PoiRecommenderService";
 
     public PoiRecommenderService() {
@@ -29,7 +30,7 @@ public class PoiRecommenderService extends IntentService {
                 Log.d(TAG, "Storing current context in database...");
                 //FIXME: get sent POI
                 Context context = new Context(getContentResolver(), new ContextPropertySerialization<>(GenericContextProperty.class));
-                new PoiRecommenderData(getContentResolver()).setContext(context.getContextProperties().values());
+                new PoiRecommenderData(getApplicationContext()).setContext(context.getContextProperties().values());
                 break;
             default:
                 throw new IllegalArgumentException(
