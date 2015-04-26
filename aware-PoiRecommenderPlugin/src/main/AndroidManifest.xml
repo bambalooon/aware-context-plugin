@@ -3,6 +3,7 @@
 
     <!--suppress AndroidDomInspection -->
     <uses-permission tools:node="removeAll"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.aware.WRITE_CONTEXT_DATA"/>
     <uses-permission android:name="com.aware.READ_CONTEXT_DATA"/>
 
@@ -36,8 +37,11 @@
             android:name="com.aware.poirecommender.service.PoiRecommenderService"
             android:exported="true"
             android:label="@string/app_name"
-            android:permission="com.aware.poirecommender.MANAGE_POIRECOMMENDER_DATA"
-            />
+            android:permission="com.aware.poirecommender.MANAGE_POIRECOMMENDER_DATA">
+            <intent-filter>
+                <action android:name="com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_POI_WITH_CONTEXT"/>
+            </intent-filter>
+        </service>
 
         <provider
             android:authorities="com.aware.context.provider.context"
