@@ -95,7 +95,7 @@ public class PoiRecommenderContract {
         public static final String WIFI_ID = "wf_id";
 
         /**
-         * A projection of all columns in ContextProperties table.
+         * A projection of all columns in Contexts table.
          */
         public static final String[] PROJECTION_ALL = {
                 _ID, TIMESTAMP, DEVICE_ID,
@@ -126,6 +126,107 @@ public class PoiRecommenderContract {
                 TEMPERATURE_ID,
                 TIMEZONE_ID,
                 WIFI_ID
+        };
+
+        /**
+         * The default sort order.
+         */
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
+
+    public static final class Pois {
+        /**
+         * POIs table name
+         */
+        public static final String TABLE_NAME = "pois";
+
+        /**
+         * Content URI for POIs table.
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(PoiRecommenderContract.CONTENT_URI, TABLE_NAME);
+
+        /**
+         * The mime type of a directory of items.
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_pois";
+
+        /**
+         * The mime type of a single item.
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_pois";
+
+        /**
+         * The unique ID for a row.
+         * <P>Type: LONG (Long)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
+         * The timestamp column.
+         * <P>Type: LONG (Long)</P>
+         */
+        public static final String TIMESTAMP = "timestamp";
+        /**
+         * The device ID column.
+         * <P>Type: STRING (String)</P>
+         */
+        public static final String DEVICE_ID = "device_id";
+
+        /**
+         * Unique ID of POI
+         * <P> Type: LONG (Long)</P>
+         */
+        public static final String POI_ID = "poi_id";
+
+        /**
+         * Type of element
+         * <P> Type: STRING (String)</P>
+         */
+        public static final String TYPE = "type";
+
+        /**
+         * Latitude o element
+         * <P> Type: DOUBLE (Double)</P>
+         */
+        public static final String LATITUDE = "lat";
+
+        /**
+         * Longitude o element
+         * <P> Type: DOUBLE (Double)</P>
+         */
+        public static final String LONGITUDE = "lon";
+
+        public static final String NAME = "name";
+
+        public static final String LAYER = "layer";
+        public static final String OPENING_HOURS = "opn_hrs";
+        public static final String PHONE = "phn";
+        public static final String WEBSITE = "webst";
+        public static final String OPERATOR = "oprtr";
+
+        public static final String AMENITY = "amnt";
+        public static final String TOURISM = "trsm";
+        public static final String SHOP = "shop";
+
+        public static final String CITY = "city";
+        public static final String COUNTRY = "cntr";
+        public static final String STREET = "strt";
+        public static final String HOUSE_NUMBER = "hs_nmbr";
+        public static final String HOUSE_NAME = "hs_nm";
+        public static final String POST_CODE = "pst_cd";
+
+        /**
+         * A projection of all columns in POIs table.
+         */
+        public static final String[] PROJECTION_ALL = {
+                _ID, TIMESTAMP, DEVICE_ID,
+                POI_ID, TYPE, LATITUDE, LONGITUDE,
+                NAME,
+                LAYER, OPENING_HOURS, PHONE, WEBSITE, OPERATOR,
+                AMENITY, TOURISM, SHOP,
+                CITY, COUNTRY, STREET, HOUSE_NUMBER, HOUSE_NAME, POST_CODE
         };
 
         /**
