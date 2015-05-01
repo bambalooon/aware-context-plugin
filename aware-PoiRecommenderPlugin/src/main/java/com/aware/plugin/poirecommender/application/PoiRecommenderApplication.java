@@ -51,7 +51,7 @@ public class PoiRecommenderApplication extends Application {
                 .put(
                         Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI,
                         new GenericContextPropertyFactory(
-                                PoiRecommenderContract.Contexts.PLUGIN_GOOGLE_ACTIVITY_RECOGNITION_ID,
+                                PoiRecommenderContract.Contexts.PLUGIN_GOOGLE_ACTIVITY_RECOGNITION_TIMESTAMP,
                                 ImmutableMap.<String, Class<?>>builder()
                                         .put(Google_AR_Provider.Google_Activity_Recognition_Data._ID, Integer.class)
                                         .put(Google_AR_Provider.Google_Activity_Recognition_Data.TIMESTAMP, Long.class)
@@ -64,7 +64,7 @@ public class PoiRecommenderApplication extends Application {
                 .put(
                         Locations_Provider.Locations_Data.CONTENT_URI,
                         new GenericContextPropertyFactory(
-                                PoiRecommenderContract.Contexts.LOCATION_ID,
+                                PoiRecommenderContract.Contexts.LOCATION_TIMESTAMP,
                                 ImmutableMap.<String, Class<?>>builder()
                                         .put(Locations_Provider.Locations_Data._ID, Integer.class)
                                         .put(Locations_Provider.Locations_Data.TIMESTAMP, Long.class)
@@ -81,7 +81,7 @@ public class PoiRecommenderApplication extends Application {
                 .put(
                         Provider.OpenWeather_Data.CONTENT_URI,
                         new GenericContextPropertyFactory(
-                                PoiRecommenderContract.Contexts.PLUGIN_OPENWEATHER_ID,
+                                PoiRecommenderContract.Contexts.PLUGIN_OPENWEATHER_TIMESTAMP,
                                 ImmutableMap.<String, Class<?>>builder()
                                         .put(Provider.OpenWeather_Data._ID, Integer.class)
                                         .put(Provider.OpenWeather_Data.TIMESTAMP, Long.class)
