@@ -18,7 +18,7 @@ import java.util.Collection;
  * Created by BamBalooon
  */
 public class PoiRecommenderData {
-    public static final String CONTEXT_PROPERTY_ID_ATTRIBUTE = "_id";
+    public static final String CONTEXT_PROPERTY_TIMESTAMP_ATTRIBUTE = "timestamp";
     private final Context context;
     private final ContentResolver contentResolver;
 
@@ -32,9 +32,9 @@ public class PoiRecommenderData {
         values.put(PoiRecommenderContract.Contexts.TIMESTAMP, System.currentTimeMillis());
         values.put(PoiRecommenderContract.Contexts.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
         for (GenericContextProperty contextProperty : contextProperties) {
-            Double contextPropertyIdAttribute = (Double) contextProperty.getAttributes()
-                    .get(CONTEXT_PROPERTY_ID_ATTRIBUTE);
-            values.put(contextProperty.getId(), contextPropertyIdAttribute.intValue());
+            Long contextPropertyIdAttribute = Long
+                    .parseLong((String) contextProperty.getAttributes().get(CONTEXT_PROPERTY_TIMESTAMP_ATTRIBUTE));
+            values.put(contextProperty.getId(), contextPropertyIdAttribute);
         }
         contentResolver.insert(PoiRecommenderContract.Contexts.CONTENT_URI, values);
     }
