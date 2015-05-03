@@ -3,6 +3,7 @@ package com.aware.poirecommender.provider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.context.property.GenericContextProperty;
@@ -27,7 +28,17 @@ public class PoiRecommenderData {
         this.contentResolver = context.getContentResolver();
     }
 
-    public void addContext(Collection<GenericContextProperty> contextProperties) {
+    public void addContextAndElement(Collection<GenericContextProperty> contextProperties, Element element) {
+        if (!elementExists(element)) {
+            contentResolver.insert(PoiRecommenderContract.Pois.CONTENT_URI, generateElementValues(element));
+        }
+
+        ContentValues contextValues = generateContextValues(contextProperties);
+        contextValues.put(PoiRecommenderContract.Contexts.POI_ID, element.getId());
+        contentResolver.insert(PoiRecommenderContract.Contexts.CONTENT_URI, contextValues);
+    }
+
+    private ContentValues generateContextValues(Collection<GenericContextProperty> contextProperties) {
         ContentValues values = new ContentValues();
         values.put(PoiRecommenderContract.Contexts.TIMESTAMP, System.currentTimeMillis());
         values.put(PoiRecommenderContract.Contexts.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
@@ -36,10 +47,10 @@ public class PoiRecommenderData {
                     .parseLong((String) contextProperty.getAttributes().get(CONTEXT_PROPERTY_TIMESTAMP_ATTRIBUTE));
             values.put(contextProperty.getId(), contextPropertyIdAttribute);
         }
-        contentResolver.insert(PoiRecommenderContract.Contexts.CONTENT_URI, values);
+        return values;
     }
 
-    public void addElement(Element element) {
+    private ContentValues generateElementValues(Element element) {
         ContentValues values = new ContentValues();
         values.put(PoiRecommenderContract.Contexts.TIMESTAMP, System.currentTimeMillis());
         values.put(PoiRecommenderContract.Contexts.DEVICE_ID, Aware.getSetting(context, Aware_Preferences.DEVICE_ID));
@@ -65,6 +76,20 @@ public class PoiRecommenderData {
             values.put(PoiRecommenderContract.Pois.HOUSE_NAME, tags.getHouseName());
             values.put(PoiRecommenderContract.Pois.POST_CODE, tags.getPostCode());
         }
-        contentResolver.insert(PoiRecommenderContract.Pois.CONTENT_URI, values);
+        return values;
+    }
+
+    private boolean elementExists(Element element) {
+        Cursor cursor = contentResolver.query(
+                PoiRecommenderContract.Pois.CONTENT_URI,
+                new String[]{PoiRecommenderContract.Pois._ID},
+                PoiRecommenderContract.Pois.POI_ID + "=?",
+                new String[]{Long.toString(element.getId())},
+                null);
+        try {
+            return cursor.moveToFirst();
+        } finally {
+            cursor.close();
+        }
     }
 }
