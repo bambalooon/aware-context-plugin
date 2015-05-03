@@ -47,11 +47,18 @@ public class PoiRecommenderContract {
          * <P>Type: DOUBLE (Double)</P>
          */
         public static final String TIMESTAMP = "timestamp";
+
         /**
          * The device ID column.
          * <P>Type: STRING (String)</P>
          */
         public static final String DEVICE_ID = "device_id";
+
+        /**
+         * The POI ID column.
+         * <P>Type: DOUBLE (Double)</P>
+         */
+        public static final String POI_ID = "double_poi_id";
 
         /**
          * Columns with Aware tables Timestamps.
@@ -99,6 +106,7 @@ public class PoiRecommenderContract {
          */
         public static final String[] PROJECTION_ALL = {
                 _ID, TIMESTAMP, DEVICE_ID,
+                POI_ID,
                 ACCELEROMETER_TIMESTAMP,
                 APPLICATION_FOREGROUND_TIMESTAMP, APPLICATIONS_HISTORY_TIMESTAMP,
                 APPLICATIONS_NOTIFICATION_TIMESTAMP, APPLICATION_CRASH_TIMESTAMP,
@@ -160,13 +168,13 @@ public class PoiRecommenderContract {
 
         /**
          * The unique ID for a row.
-         * <P>Type: LONG (Long)</P>
+         * <P>Type: INTEGER (Integer)</P>
          */
         public static final String _ID = "_id";
 
         /**
          * The timestamp column.
-         * <P>Type: LONG (Long)</P>
+         * <P>Type: DOUBLE (Double)</P>
          */
         public static final String TIMESTAMP = "timestamp";
         /**
@@ -177,7 +185,7 @@ public class PoiRecommenderContract {
 
         /**
          * Unique ID of POI
-         * <P> Type: LONG (Long)</P>
+         * <P> Type: DOUBLE (Double)</P>
          */
         public static final String POI_ID = "double_poi_id";
 
