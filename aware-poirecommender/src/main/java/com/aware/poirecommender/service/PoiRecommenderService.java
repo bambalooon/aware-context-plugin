@@ -17,10 +17,10 @@ import com.aware.poirecommender.transform.Serializer;
  * Created by BamBalooon
  */
 public class PoiRecommenderService extends IntentService {
+    private static final String TAG = PoiRecommenderService.class.getSimpleName();
     public static final String ACTION_STORE_POI_WITH_CONTEXT =
             "com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_POI_WITH_CONTEXT";
     public static final String POI_EXTRA = "POI_EXTRA";
-    private static final String TAG = "PoiRecommenderService";
 
     public PoiRecommenderService() {
         super(TAG);
@@ -32,13 +32,12 @@ public class PoiRecommenderService extends IntentService {
             case ACTION_STORE_POI_WITH_CONTEXT:
                 Log.d(TAG, "Storing current context in database...");
                 String poiJson = intent.getStringExtra(POI_EXTRA);
-                PoiRecommenderData poiRecommenderData = new PoiRecommenderData(getApplicationContext());
-                Serializer<Element> elementSerializer = new Serializer<>(Element.class);
                 if (poiJson != null) {
-                    poiRecommenderData.addElement(elementSerializer.deserialize(poiJson));
                     Context context = new Context(getContentResolver(),
                             new ContextPropertySerialization<>(GenericContextProperty.class));
-                    poiRecommenderData.addContext(context.getContextProperties().values());
+                    new PoiRecommenderData(getApplicationContext()).addContextAndElement(
+                            context.getContextProperties().values(),
+                            new Serializer<>(Element.class).deserialize(poiJson));
                 }
                 break;
             default:
