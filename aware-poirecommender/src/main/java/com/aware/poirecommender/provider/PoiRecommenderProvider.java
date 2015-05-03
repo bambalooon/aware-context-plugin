@@ -1,9 +1,6 @@
 package com.aware.poirecommender.provider;
 
-import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.UriMatcher;
+import android.content.*;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +9,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
 import com.aware.utils.DatabaseHelper;
+
+import java.util.ArrayList;
 
 /**
  * Name: PoiRecommenderProvider
@@ -64,6 +63,7 @@ public class PoiRecommenderProvider extends ContentProvider {
             PoiRecommenderContract.Contexts._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.Contexts.TIMESTAMP + " real not null,"
                     + PoiRecommenderContract.Contexts.DEVICE_ID + " text not null,"
+                    + PoiRecommenderContract.Contexts.POI_ID + " real not null,"
                     + PoiRecommenderContract.Contexts.ACCELEROMETER_TIMESTAMP + " real,"
                     + PoiRecommenderContract.Contexts.APPLICATION_FOREGROUND_TIMESTAMP + " real,"
                     + PoiRecommenderContract.Contexts.APPLICATIONS_HISTORY_TIMESTAMP + " real,"
@@ -107,7 +107,7 @@ public class PoiRecommenderProvider extends ContentProvider {
             PoiRecommenderContract.Pois._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.Pois.TIMESTAMP + " real not null,"
                     + PoiRecommenderContract.Pois.DEVICE_ID + " text not null,"
-                    + PoiRecommenderContract.Pois.POI_ID + " integer,"
+                    + PoiRecommenderContract.Pois.POI_ID + " real not null,"
                     + PoiRecommenderContract.Pois.TYPE + " text not null,"
                     + PoiRecommenderContract.Pois.LATITUDE + " real not null,"
                     + PoiRecommenderContract.Pois.LONGITUDE + " real not null,"
@@ -132,11 +132,12 @@ public class PoiRecommenderProvider extends ContentProvider {
                     + PoiRecommenderContract.Contexts.DEVICE_ID + ")"
     };
 
-    private DatabaseHelper databaseHelper;
+    private final ThreadLocal<Boolean> mIsInBatchMode = new ThreadLocal<>();
+    private DatabaseHelper mDatabaseHelper;
 
     @Override
     public boolean onCreate() {
-        databaseHelper = new DatabaseHelper(
+        mDatabaseHelper = new DatabaseHelper(
                 getContext(), DATABASE_NAME, null, DATABASE_VERSION, DATABASE_TABLES, TABLES_FIELDS);
         return true;
     }
@@ -158,27 +159,44 @@ public class PoiRecommenderProvider extends ContentProvider {
     }
 
     @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
+            throws OperationApplicationException {
+
+        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+        mIsInBatchMode.set(true);
+        // Works because SQLite Database uses a thread local SQLiteSession object for all manipulations
+        db.beginTransaction();
+        try {
+            final ContentProviderResult[] results = super.applyBatch(operations);
+            db.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(PoiRecommenderContract.CONTENT_URI, null);
+            return results;
+        } finally {
+            mIsInBatchMode.remove();
+            db.endTransaction();
+        }
+    }
+
+    @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
         long id;
         switch (URI_MATCHER.match(uri)) {
             case CONTEXT_LIST:
                 id = db.insert(PoiRecommenderContract.Contexts.TABLE_NAME, null, values);
                 break;
             case POI_LIST:
-                id = db.insertWithOnConflict(PoiRecommenderContract.Pois.TABLE_NAME, null, values,
-                        SQLiteDatabase.CONFLICT_REPLACE);
+                id = db.insert(PoiRecommenderContract.Pois.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported uri for insert operation: " + uri);
         }
         return getUriForId(id, uri);
-
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         switch (URI_MATCHER.match(uri)) {
             case CONTEXT_LIST:
@@ -211,7 +229,7 @@ public class PoiRecommenderProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
         int updateCount;
         String where;
         switch (URI_MATCHER.match(uri)) {
@@ -238,7 +256,7 @@ public class PoiRecommenderProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unsupported URI for update operation: " + uri);
         }
-        if (updateCount > 0) {
+        if (updateCount > 0 && !isInBatchMode()) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return updateCount;
@@ -246,7 +264,7 @@ public class PoiRecommenderProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
         int deleteCount;
         String where;
         switch (URI_MATCHER.match(uri)) {
@@ -273,7 +291,7 @@ public class PoiRecommenderProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unsupported URI for delete operation: " + uri);
         }
-        if (deleteCount > 0) {
+        if (deleteCount > 0 && !isInBatchMode()) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return deleteCount;
@@ -282,9 +300,15 @@ public class PoiRecommenderProvider extends ContentProvider {
     private Uri getUriForId(long id, Uri uri) {
         if (id > 0) {
             Uri newItemUri = ContentUris.withAppendedId(uri, id);
-            getContext().getContentResolver().notifyChange(newItemUri, null);
+            if (!isInBatchMode()) {
+                getContext().getContentResolver().notifyChange(newItemUri, null);
+            }
             return newItemUri;
         }
         throw new SQLException("Problem while inserting into uri: " + uri);
+    }
+
+    private boolean isInBatchMode() {
+        return mIsInBatchMode.get() != null && mIsInBatchMode.get();
     }
 }
