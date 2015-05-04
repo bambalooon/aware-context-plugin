@@ -8,9 +8,9 @@ import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.poirecommender.openstreetmap.model.response.Element;
-import com.aware.poirecommender.openstreetmap.model.response.Tags;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Name: PoiRecommenderData
@@ -58,23 +58,25 @@ public class PoiRecommenderData {
         values.put(PoiRecommenderContract.Pois.TYPE, element.getType());
         values.put(PoiRecommenderContract.Pois.LATITUDE, element.getLat());
         values.put(PoiRecommenderContract.Pois.LONGITUDE, element.getLon());
-        Tags tags = element.getTags();
+        Map<String, String> tags = element.getTags();
         if (tags != null) {
-            values.put(PoiRecommenderContract.Pois.NAME, tags.getName());
-            values.put(PoiRecommenderContract.Pois.LAYER, tags.getLayer());
-            values.put(PoiRecommenderContract.Pois.OPENING_HOURS, tags.getOpeningHours());
-            values.put(PoiRecommenderContract.Pois.PHONE, tags.getPhone());
-            values.put(PoiRecommenderContract.Pois.WEBSITE, tags.getWebsite());
-            values.put(PoiRecommenderContract.Pois.OPERATOR, tags.getOperator());
-            values.put(PoiRecommenderContract.Pois.AMENITY, tags.getAmenity());
-            values.put(PoiRecommenderContract.Pois.TOURISM, tags.getTourism());
-            values.put(PoiRecommenderContract.Pois.SHOP, tags.getShop());
-            values.put(PoiRecommenderContract.Pois.CITY, tags.getCity());
-            values.put(PoiRecommenderContract.Pois.COUNTRY, tags.getCountry());
-            values.put(PoiRecommenderContract.Pois.STREET, tags.getStreet());
-            values.put(PoiRecommenderContract.Pois.HOUSE_NUMBER, tags.getHouseNumber());
-            values.put(PoiRecommenderContract.Pois.HOUSE_NAME, tags.getHouseName());
-            values.put(PoiRecommenderContract.Pois.POST_CODE, tags.getPostCode());
+            //TODO: change to new Tags table
+            values.put(PoiRecommenderContract.Pois.NAME, tags.get(Element.ELEMENT_NAME_TAG));
+//            values.put(PoiRecommenderContract.Pois.NAME, tags.getName());
+//            values.put(PoiRecommenderContract.Pois.LAYER, tags.getLayer());
+//            values.put(PoiRecommenderContract.Pois.OPENING_HOURS, tags.getOpeningHours());
+//            values.put(PoiRecommenderContract.Pois.PHONE, tags.getPhone());
+//            values.put(PoiRecommenderContract.Pois.WEBSITE, tags.getWebsite());
+//            values.put(PoiRecommenderContract.Pois.OPERATOR, tags.getOperator());
+//            values.put(PoiRecommenderContract.Pois.AMENITY, tags.getAmenity());
+//            values.put(PoiRecommenderContract.Pois.TOURISM, tags.getTourism());
+//            values.put(PoiRecommenderContract.Pois.SHOP, tags.getShop());
+//            values.put(PoiRecommenderContract.Pois.CITY, tags.getCity());
+//            values.put(PoiRecommenderContract.Pois.COUNTRY, tags.getCountry());
+//            values.put(PoiRecommenderContract.Pois.STREET, tags.getStreet());
+//            values.put(PoiRecommenderContract.Pois.HOUSE_NUMBER, tags.getHouseNumber());
+//            values.put(PoiRecommenderContract.Pois.HOUSE_NAME, tags.getHouseName());
+//            values.put(PoiRecommenderContract.Pois.POST_CODE, tags.getPostCode());
         }
         return values;
     }
