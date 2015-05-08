@@ -62,7 +62,8 @@ public class Plugin extends Aware_Plugin {
         TABLES_FIELDS = PoiRecommenderProvider.TABLES_FIELDS;
         CONTEXT_URIS = new Uri[] {
                 PoiRecommenderContract.Contexts.CONTENT_URI,
-                PoiRecommenderContract.Pois.CONTENT_URI
+                PoiRecommenderContract.Pois.CONTENT_URI,
+                PoiRecommenderContract.PoiTags.CONTENT_URI
         };
 
         handlerThread = new HandlerThread(TAG);
