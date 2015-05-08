@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import com.aware.utils.DatabaseHelper;
 
@@ -28,6 +29,8 @@ public class PoiRecommenderProvider extends ContentProvider {
     private static final int CONTEXT = 2;
     private static final int POI_LIST = 3;
     private static final int POI = 4;
+    private static final int POI_TAG_LIST = 5;
+    private static final int POI_TAG = 6;
     private static final UriMatcher URI_MATCHER;
 
     static {
@@ -48,6 +51,14 @@ public class PoiRecommenderProvider extends ContentProvider {
                 PoiRecommenderContract.AUTHORITY,
                 PoiRecommenderContract.Pois.TABLE_NAME + "/#",
                 POI);
+        URI_MATCHER.addURI(
+                PoiRecommenderContract.AUTHORITY,
+                PoiRecommenderContract.PoiTags.TABLE_NAME,
+                POI_TAG_LIST);
+        URI_MATCHER.addURI(
+                PoiRecommenderContract.AUTHORITY,
+                PoiRecommenderContract.PoiTags.TABLE_NAME + "/#",
+                POI_TAG);
     }
 
     private static final String DATABASE_NAME = Environment.getExternalStorageDirectory()
@@ -55,7 +66,8 @@ public class PoiRecommenderProvider extends ContentProvider {
 
     public static final String[] DATABASE_TABLES = {
             PoiRecommenderContract.Contexts.TABLE_NAME,
-            PoiRecommenderContract.Pois.TABLE_NAME
+            PoiRecommenderContract.Pois.TABLE_NAME,
+            PoiRecommenderContract.PoiTags.TABLE_NAME
     };
 
     public static final String[] TABLES_FIELDS = {
@@ -110,26 +122,21 @@ public class PoiRecommenderProvider extends ContentProvider {
                     + PoiRecommenderContract.Pois.POI_ID + " real not null,"
                     + PoiRecommenderContract.Pois.TYPE + " text not null,"
                     + PoiRecommenderContract.Pois.LATITUDE + " real not null,"
-                    + PoiRecommenderContract.Pois.LONGITUDE + " real not null,"
-                    + PoiRecommenderContract.Pois.NAME + " text,"
-                    + PoiRecommenderContract.Pois.LAYER + " text,"
-                    + PoiRecommenderContract.Pois.OPENING_HOURS + " text,"
-                    + PoiRecommenderContract.Pois.PHONE + " text,"
-                    + PoiRecommenderContract.Pois.WEBSITE + " text,"
-                    + PoiRecommenderContract.Pois.OPERATOR + " text,"
-                    + PoiRecommenderContract.Pois.AMENITY + " text,"
-                    + PoiRecommenderContract.Pois.TOURISM + " text,"
-                    + PoiRecommenderContract.Pois.SHOP + " text,"
-                    + PoiRecommenderContract.Pois.CITY + " text,"
-                    + PoiRecommenderContract.Pois.COUNTRY + " text,"
-                    + PoiRecommenderContract.Pois.STREET + " text,"
-                    + PoiRecommenderContract.Pois.HOUSE_NUMBER + " text,"
-                    + PoiRecommenderContract.Pois.HOUSE_NAME + " text,"
-                    + PoiRecommenderContract.Pois.POST_CODE + " text," + "UNIQUE ("
-                    + PoiRecommenderContract.Contexts.TIMESTAMP + ", "
-                    + PoiRecommenderContract.Contexts.DEVICE_ID + ")," + "UNIQUE ("
+                    + PoiRecommenderContract.Pois.LONGITUDE + " real not null," + "UNIQUE ("
+                    + PoiRecommenderContract.Pois.TIMESTAMP + ", "
+                    + PoiRecommenderContract.Pois.DEVICE_ID + ")," + "UNIQUE ("
                     + PoiRecommenderContract.Pois.POI_ID + ", "
-                    + PoiRecommenderContract.Contexts.DEVICE_ID + ")"
+                    + PoiRecommenderContract.Pois.DEVICE_ID + ")",
+            //POI tags
+            PoiRecommenderContract.PoiTags._ID + " integer primary key autoincrement,"
+                    + PoiRecommenderContract.PoiTags.TIMESTAMP + " real not null,"
+                    + PoiRecommenderContract.PoiTags.DEVICE_ID + " text not null,"
+                    + PoiRecommenderContract.PoiTags.POI_ID + " real not null,"
+                    + PoiRecommenderContract.PoiTags.KEY + " text not null,"
+                    + PoiRecommenderContract.PoiTags.VALUE + " text," + "UNIQUE ("
+                    + PoiRecommenderContract.PoiTags.TIMESTAMP + ", "
+                    + PoiRecommenderContract.PoiTags.DEVICE_ID + ")"
+            //FIXME: add foreign key info to db?
     };
 
     private final ThreadLocal<Boolean> mIsInBatchMode = new ThreadLocal<>();
@@ -153,13 +160,17 @@ public class PoiRecommenderProvider extends ContentProvider {
                 return PoiRecommenderContract.Pois.CONTENT_TYPE;
             case POI:
                 return PoiRecommenderContract.Pois.CONTENT_ITEM_TYPE;
+            case POI_TAG_LIST:
+                return PoiRecommenderContract.PoiTags.CONTENT_TYPE;
+            case POI_TAG:
+                return PoiRecommenderContract.PoiTags.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
+    public ContentProviderResult[] applyBatch(@NonNull ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
 
         SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -187,6 +198,9 @@ public class PoiRecommenderProvider extends ContentProvider {
                 break;
             case POI_LIST:
                 id = db.insert(PoiRecommenderContract.Pois.TABLE_NAME, null, values);
+                break;
+            case POI_TAG_LIST:
+                id = db.insert(PoiRecommenderContract.PoiTags.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported uri for insert operation: " + uri);
@@ -218,6 +232,16 @@ public class PoiRecommenderProvider extends ContentProvider {
             case POI:
                 queryBuilder.setTables(PoiRecommenderContract.Pois.TABLE_NAME);
                 queryBuilder.appendWhere(PoiRecommenderContract.Pois._ID + " = " + uri.getLastPathSegment());
+                break;
+            case POI_TAG_LIST:
+                queryBuilder.setTables(PoiRecommenderContract.PoiTags.TABLE_NAME);
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = PoiRecommenderContract.PoiTags.SORT_ORDER_DEFAULT;
+                }
+                break;
+            case POI_TAG:
+                queryBuilder.setTables(PoiRecommenderContract.PoiTags.TABLE_NAME);
+                queryBuilder.appendWhere(PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment());
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI for query operation: " + uri);
@@ -253,6 +277,16 @@ public class PoiRecommenderProvider extends ContentProvider {
                 }
                 updateCount = db.update(PoiRecommenderContract.Pois.TABLE_NAME, values, where, selectionArgs);
                 break;
+            case POI_TAG_LIST:
+                updateCount = db.update(PoiRecommenderContract.PoiTags.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case POI_TAG:
+                where = PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment();
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                updateCount = db.update(PoiRecommenderContract.PoiTags.TABLE_NAME, values, where, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI for update operation: " + uri);
         }
@@ -287,6 +321,16 @@ public class PoiRecommenderProvider extends ContentProvider {
                     where += " AND " + selection;
                 }
                 deleteCount = db.delete(PoiRecommenderContract.Pois.TABLE_NAME, where, selectionArgs);
+                break;
+            case POI_TAG_LIST:
+                deleteCount = db.delete(PoiRecommenderContract.PoiTags.TABLE_NAME, selection, selectionArgs);
+                break;
+            case POI_TAG:
+                where = PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment();
+                if (!TextUtils.isEmpty(selection)) {
+                    where += " AND " + selection;
+                }
+                deleteCount = db.delete(PoiRecommenderContract.PoiTags.TABLE_NAME, where, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI for delete operation: " + uri);
