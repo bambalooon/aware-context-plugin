@@ -2,6 +2,8 @@ package com.aware.poirecommender.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.OperationApplicationException;
+import android.os.RemoteException;
 import android.util.Log;
 import com.aware.context.property.GenericContextProperty;
 import com.aware.context.provider.Context;
@@ -35,9 +37,13 @@ public class PoiRecommenderService extends IntentService {
                 if (poiJson != null) {
                     Context context = new Context(getContentResolver(),
                             new ContextPropertySerialization<>(GenericContextProperty.class));
-                    new PoiRecommenderData(getApplicationContext()).addContextAndElement(
-                            context.getContextProperties().values(),
-                            new Serializer<>(Element.class).deserialize(poiJson));
+                    Element poiElement = new Serializer<>(Element.class).deserialize(poiJson);
+                    try {
+                        new PoiRecommenderData(getApplicationContext())
+                                .addContextAndElement(context.getContextProperties().values(), poiElement);
+                    } catch (RemoteException | OperationApplicationException e) {
+                        Log.e(TAG, "Exception thrown while inserting context and element to database.", e);
+                    }
                 }
                 break;
             default:
