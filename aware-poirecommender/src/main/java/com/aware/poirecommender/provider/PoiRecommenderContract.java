@@ -207,35 +207,75 @@ public class PoiRecommenderContract {
          */
         public static final String LONGITUDE = "double_lon";
 
-        public static final String NAME = "name";
+        /**
+         * A projection of all columns in POIs table.
+         */
+        public static final String[] PROJECTION_ALL = {
+                _ID, TIMESTAMP, DEVICE_ID,
+                POI_ID, TYPE, LATITUDE, LONGITUDE
+        };
 
-        public static final String LAYER = "layer";
-        public static final String OPENING_HOURS = "opn_hrs";
-        public static final String PHONE = "phn";
-        public static final String WEBSITE = "webst";
-        public static final String OPERATOR = "oprtr";
+        /**
+         * The default sort order.
+         */
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
 
-        public static final String AMENITY = "amnt";
-        public static final String TOURISM = "trsm";
-        public static final String SHOP = "shop";
+    public static final class PoiTags {
+        /**
+         * POIs table name
+         */
+        public static final String TABLE_NAME = "poi_tags";
 
-        public static final String CITY = "city";
-        public static final String COUNTRY = "cntr";
-        public static final String STREET = "strt";
-        public static final String HOUSE_NUMBER = "hs_nmbr";
-        public static final String HOUSE_NAME = "hs_nm";
-        public static final String POST_CODE = "pst_cd";
+        /**
+         * Content URI for POIs table.
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(PoiRecommenderContract.CONTENT_URI, TABLE_NAME);
+
+        /**
+         * The mime type of a directory of items.
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_poi_tags";
+
+        /**
+         * The mime type of a single item.
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_poi_tags";
+
+        /**
+         * The unique ID for a row.
+         * <P>Type: INTEGER (Integer)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
+         * The timestamp column.
+         * <P>Type: DOUBLE (Double)</P>
+         */
+        public static final String TIMESTAMP = "timestamp";
+        /**
+         * The device ID column.
+         * <P>Type: STRING (String)</P>
+         */
+        public static final String DEVICE_ID = "device_id";
+
+        /**
+         * Unique ID of POI
+         * <P> Type: DOUBLE (Double)</P>
+         */
+        public static final String POI_ID = "double_poi_id";
+
+        public static final String KEY = "key";
+        public static final String VALUE = "value";
 
         /**
          * A projection of all columns in POIs table.
          */
         public static final String[] PROJECTION_ALL = {
                 _ID, TIMESTAMP, DEVICE_ID,
-                POI_ID, TYPE, LATITUDE, LONGITUDE,
-                NAME,
-                LAYER, OPENING_HOURS, PHONE, WEBSITE, OPERATOR,
-                AMENITY, TOURISM, SHOP,
-                CITY, COUNTRY, STREET, HOUSE_NUMBER, HOUSE_NAME, POST_CODE
+                POI_ID, KEY, VALUE
         };
 
         /**
