@@ -42,7 +42,7 @@
             android:label="@string/app_name"
             android:permission="com.aware.poirecommender.MANAGE_POIRECOMMENDER_DATA">
             <intent-filter>
-                <action android:name="com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_POI_WITH_CONTEXT"/>
+                <action android:name="com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_AND_RATE_POI_WITH_CONTEXT"/>
             </intent-filter>
         </service>
 
