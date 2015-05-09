@@ -283,4 +283,70 @@ public class PoiRecommenderContract {
          */
         public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
     }
+
+    public static final class PoisRating {
+        /**
+         * POIs Rating table name
+         */
+        public static final String TABLE_NAME = "pois_rating";
+
+        /**
+         * Content URI for POIs Rating table.
+         */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(PoiRecommenderContract.CONTENT_URI, TABLE_NAME);
+
+        /**
+         * The mime type of a directory of items.
+         */
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_pois_rating";
+
+        /**
+         * The mime type of a single item.
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+                + "/vnd.com.aware.poirecommender.provider.poirecommender_pois_rating";
+
+        /**
+         * The unique ID for a row.
+         * <P>Type: INTEGER (Integer)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
+         * The timestamp column.
+         * <P>Type: DOUBLE (Double)</P>
+         */
+        public static final String TIMESTAMP = "timestamp";
+        /**
+         * The device ID column.
+         * <P>Type: STRING (String)</P>
+         */
+        public static final String DEVICE_ID = "device_id";
+
+        /**
+         * Unique ID of POI
+         * <P> Type: DOUBLE (Double)</P>
+         */
+        public static final String POI_ID = "double_poi_id";
+
+        /**
+         * Longitude o element
+         * <P> Type: DOUBLE (Double)</P>
+         */
+        public static final String POI_RATING = "double_poi_rating";
+
+        /**
+         * A projection of all columns in POIs table.
+         */
+        public static final String[] PROJECTION_ALL = {
+                _ID, TIMESTAMP, DEVICE_ID,
+                POI_ID, POI_RATING
+        };
+
+        /**
+         * The default sort order.
+         */
+        public static final String SORT_ORDER_DEFAULT = _ID + " ASC";
+    }
 }
