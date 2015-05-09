@@ -28,7 +28,7 @@ public class PoiRecommenderData {
         this.contentResolver = context.getContentResolver();
     }
 
-    public void addContextAndElement(Collection<GenericContextProperty> contextProperties, Element element)
+    public void storeAndRate(Collection<GenericContextProperty> contextProperties, Element element, double poiRating)
             throws RemoteException, OperationApplicationException {
 
         String deviceId = Aware.getSetting(context, Aware_Preferences.DEVICE_ID);
@@ -40,8 +40,29 @@ public class PoiRecommenderData {
             operations.addAll(generatePoiTagsInsertOperations(element.getTags(), deviceId, poiId));
         }
 
+        operations.add(generatePoiRatingsDeleteOperation(poiId));
+        operations.add(generatePoiRatingInsertOperation(deviceId, poiId, poiRating));
         operations.add(generateContextInsertOperation(contextProperties, deviceId, poiId));
         contentResolver.applyBatch(PoiRecommenderContract.AUTHORITY, operations);
+    }
+
+    private ContentProviderOperation generatePoiRatingsDeleteOperation(long poiId) {
+        return ContentProviderOperation
+                .newDelete(PoiRecommenderContract.PoisRating.CONTENT_URI)
+                .withSelection(PoiRecommenderContract.PoisRating.POI_ID + "=?", new String[]{Long.toString(poiId)})
+                .build();
+    }
+
+    private ContentProviderOperation generatePoiRatingInsertOperation(String deviceId, long poiId, double poiRating) {
+        ContentValues values = new ContentValues();
+        values.put(PoiRecommenderContract.PoisRating.TIMESTAMP, System.currentTimeMillis());
+        values.put(PoiRecommenderContract.PoisRating.DEVICE_ID, deviceId);
+        values.put(PoiRecommenderContract.PoisRating.POI_ID, poiId);
+        values.put(PoiRecommenderContract.PoisRating.POI_RATING, poiRating);
+        return ContentProviderOperation
+                .newInsert(PoiRecommenderContract.PoisRating.CONTENT_URI)
+                .withValues(values)
+                .build();
     }
 
     private ContentProviderOperation generateContextInsertOperation(
