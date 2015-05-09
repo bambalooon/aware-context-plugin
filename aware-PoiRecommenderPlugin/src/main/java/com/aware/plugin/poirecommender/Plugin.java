@@ -63,7 +63,8 @@ public class Plugin extends Aware_Plugin {
         CONTEXT_URIS = new Uri[] {
                 PoiRecommenderContract.Contexts.CONTENT_URI,
                 PoiRecommenderContract.Pois.CONTENT_URI,
-                PoiRecommenderContract.PoiTags.CONTENT_URI
+                PoiRecommenderContract.PoiTags.CONTENT_URI,
+                PoiRecommenderContract.PoisRating.CONTENT_URI
         };
 
         handlerThread = new HandlerThread(TAG);
