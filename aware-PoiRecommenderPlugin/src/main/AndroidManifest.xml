@@ -13,6 +13,8 @@
     <uses-permission android:name="com.aware.context.provider.context.READ"/>
     <uses-permission android:name="com.aware.context.provider.context.WRITE"/>
     <uses-permission android:name="com.aware.poirecommender.MANAGE_POIRECOMMENDER_DATA"/>
+    <uses-permission android:name="com.aware.poirecommender.provider.poirecommender.READ"/>
+    <uses-permission android:name="com.aware.poirecommender.provider.poirecommender.WRITE"/>
 
     <uses-feature tools:node="removeAll"/>
 
@@ -58,8 +60,10 @@
         <provider
             android:authorities="com.aware.poirecommender.provider.poirecommender"
             android:name="com.aware.poirecommender.provider.PoiRecommenderProvider"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/poirecommender_provider_label"
+            android:readPermission="com.aware.poirecommender.provider.poirecommender.READ"
+            android:writePermission="com.aware.poirecommender.provider.poirecommender.WRITE"
             />
 
         <!-- AWARE -->
