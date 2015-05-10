@@ -3,4 +3,9 @@
     <string name="poirecommender_provider_label">PoiRecommenderProvider</string>
     <string name="manage_poirecommender_data_permission_description">Allow manage access to data in PoiRecommenderPlugin</string>
     <string name="manage_poirecommender_data_permission_label">Manage PoiRecommenderPlugin\'s data</string>
+
+    <string name="read_poirecommender_data_permission_description">Allow read access to PoiRecommender data</string>
+    <string name="read_poirecommender_data_permission_label">PoiRecommender - read access</string>
+    <string name="write_poirecommender_data_permission_description">Allow write access to PoiRecommender data</string>
+    <string name="write_poirecommender_data_permission_label">PoiRecommender - write access</string>
 </resources>

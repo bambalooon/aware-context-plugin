@@ -8,6 +8,22 @@
         android:protectionLevel="dangerous"
         />
 
+    <permission
+        android:name="com.aware.poirecommender.provider.poirecommender.READ"
+        android:description="@string/read_poirecommender_data_permission_description"
+        android:icon="@drawable/ic_poirecommender"
+        android:label="@string/read_poirecommender_data_permission_label"
+        android:protectionLevel="dangerous"
+        />
+
+    <permission
+        android:name="com.aware.poirecommender.provider.poirecommender.WRITE"
+        android:description="@string/write_poirecommender_data_permission_description"
+        android:icon="@drawable/ic_poirecommender"
+        android:label="@string/write_poirecommender_data_permission_label"
+        android:protectionLevel="signature"
+        />
+
     <application/>
 
 </manifest>
