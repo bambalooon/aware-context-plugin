@@ -9,7 +9,6 @@ import android.os.RemoteException;
 import com.aware.Aware;
 import com.aware.Aware_Preferences;
 import com.aware.context.property.GenericContextProperty;
-import com.aware.poirecommender.openstreetmap.model.response.Element;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -31,11 +30,10 @@ public class PoiRecommenderData {
         this.contentResolver = context.getContentResolver();
     }
 
-    public void storeAndRate(Collection<GenericContextProperty> contextProperties, Element element, double poiRating)
+    public void storeAndRate(Collection<GenericContextProperty> contextProperties, long poiId, double poiRating)
             throws RemoteException, OperationApplicationException {
 
         String deviceId = Aware.getSetting(context, Aware_Preferences.DEVICE_ID);
-        long poiId = element.getId();
 
         ArrayList<ContentProviderOperation> operations = Lists.newArrayList(
                 generatePoiRatingsDeleteOperation(poiId),
