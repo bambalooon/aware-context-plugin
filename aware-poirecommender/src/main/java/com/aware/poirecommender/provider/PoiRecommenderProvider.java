@@ -1,6 +1,12 @@
 package com.aware.poirecommender.provider;
 
-import android.content.*;
+import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.OperationApplicationException;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,12 +33,8 @@ public class PoiRecommenderProvider extends ContentProvider {
 
     private static final int CONTEXT_LIST = 1;
     private static final int CONTEXT = 2;
-    private static final int POI_LIST = 3;
-    private static final int POI = 4;
-    private static final int POI_TAG_LIST = 5;
-    private static final int POI_TAG = 6;
-    private static final int POI_RATING_LIST = 7;
-    private static final int POI_RATING = 8;
+    private static final int POI_RATING_LIST = 3;
+    private static final int POI_RATING = 4;
     private static final UriMatcher URI_MATCHER;
 
     static {
@@ -45,22 +47,6 @@ public class PoiRecommenderProvider extends ContentProvider {
                 PoiRecommenderContract.AUTHORITY,
                 PoiRecommenderContract.Contexts.TABLE_NAME + "/#",
                 CONTEXT);
-        URI_MATCHER.addURI(
-                PoiRecommenderContract.AUTHORITY,
-                PoiRecommenderContract.Pois.TABLE_NAME,
-                POI_LIST);
-        URI_MATCHER.addURI(
-                PoiRecommenderContract.AUTHORITY,
-                PoiRecommenderContract.Pois.TABLE_NAME + "/#",
-                POI);
-        URI_MATCHER.addURI(
-                PoiRecommenderContract.AUTHORITY,
-                PoiRecommenderContract.PoiTags.TABLE_NAME,
-                POI_TAG_LIST);
-        URI_MATCHER.addURI(
-                PoiRecommenderContract.AUTHORITY,
-                PoiRecommenderContract.PoiTags.TABLE_NAME + "/#",
-                POI_TAG);
         URI_MATCHER.addURI(
                 PoiRecommenderContract.AUTHORITY,
                 PoiRecommenderContract.PoisRating.TABLE_NAME,
@@ -76,8 +62,6 @@ public class PoiRecommenderProvider extends ContentProvider {
 
     public static final String[] DATABASE_TABLES = {
             PoiRecommenderContract.Contexts.TABLE_NAME,
-            PoiRecommenderContract.Pois.TABLE_NAME,
-            PoiRecommenderContract.PoiTags.TABLE_NAME,
             PoiRecommenderContract.PoisRating.TABLE_NAME
     };
 
@@ -126,27 +110,6 @@ public class PoiRecommenderProvider extends ContentProvider {
                     + PoiRecommenderContract.Contexts.WIFI_TIMESTAMP + " real," + "UNIQUE ("
                     + PoiRecommenderContract.Contexts.TIMESTAMP + ", "
                     + PoiRecommenderContract.Contexts.DEVICE_ID + ")",
-            //POIs
-            PoiRecommenderContract.Pois._ID + " integer primary key autoincrement,"
-                    + PoiRecommenderContract.Pois.TIMESTAMP + " real not null,"
-                    + PoiRecommenderContract.Pois.DEVICE_ID + " text not null,"
-                    + PoiRecommenderContract.Pois.POI_ID + " real not null,"
-                    + PoiRecommenderContract.Pois.TYPE + " text not null,"
-                    + PoiRecommenderContract.Pois.LATITUDE + " real not null,"
-                    + PoiRecommenderContract.Pois.LONGITUDE + " real not null," + "UNIQUE ("
-                    + PoiRecommenderContract.Pois.TIMESTAMP + ", "
-                    + PoiRecommenderContract.Pois.DEVICE_ID + ")," + "UNIQUE ("
-                    + PoiRecommenderContract.Pois.POI_ID + ", "
-                    + PoiRecommenderContract.Pois.DEVICE_ID + ")",
-            //POI tags FIXME: add foreign key info to db?
-            PoiRecommenderContract.PoiTags._ID + " integer primary key autoincrement,"
-                    + PoiRecommenderContract.PoiTags.TIMESTAMP + " real not null,"
-                    + PoiRecommenderContract.PoiTags.DEVICE_ID + " text not null,"
-                    + PoiRecommenderContract.PoiTags.POI_ID + " real not null,"
-                    + PoiRecommenderContract.PoiTags.KEY + " text not null,"
-                    + PoiRecommenderContract.PoiTags.VALUE + " text," + "UNIQUE ("
-                    + PoiRecommenderContract.PoiTags.TIMESTAMP + ", "
-                    + PoiRecommenderContract.PoiTags.DEVICE_ID + ")",
             //POIs rating
             PoiRecommenderContract.PoisRating._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.PoisRating.TIMESTAMP + " real not null,"
@@ -174,14 +137,6 @@ public class PoiRecommenderProvider extends ContentProvider {
                 return PoiRecommenderContract.Contexts.CONTENT_TYPE;
             case CONTEXT:
                 return PoiRecommenderContract.Contexts.CONTENT_ITEM_TYPE;
-            case POI_LIST:
-                return PoiRecommenderContract.Pois.CONTENT_TYPE;
-            case POI:
-                return PoiRecommenderContract.Pois.CONTENT_ITEM_TYPE;
-            case POI_TAG_LIST:
-                return PoiRecommenderContract.PoiTags.CONTENT_TYPE;
-            case POI_TAG:
-                return PoiRecommenderContract.PoiTags.CONTENT_ITEM_TYPE;
             case POI_RATING_LIST:
                 return PoiRecommenderContract.PoisRating.CONTENT_TYPE;
             case POI_RATING:
@@ -218,12 +173,6 @@ public class PoiRecommenderProvider extends ContentProvider {
             case CONTEXT_LIST:
                 id = db.insert(PoiRecommenderContract.Contexts.TABLE_NAME, null, values);
                 break;
-            case POI_LIST:
-                id = db.insert(PoiRecommenderContract.Pois.TABLE_NAME, null, values);
-                break;
-            case POI_TAG_LIST:
-                id = db.insert(PoiRecommenderContract.PoiTags.TABLE_NAME, null, values);
-                break;
             case POI_RATING_LIST:
                 id = db.insert(PoiRecommenderContract.PoisRating.TABLE_NAME, null, values);
                 break;
@@ -247,26 +196,6 @@ public class PoiRecommenderProvider extends ContentProvider {
             case CONTEXT:
                 queryBuilder.setTables(PoiRecommenderContract.Contexts.TABLE_NAME);
                 queryBuilder.appendWhere(PoiRecommenderContract.Contexts._ID + " = " + uri.getLastPathSegment());
-                break;
-            case POI_LIST:
-                queryBuilder.setTables(PoiRecommenderContract.Pois.TABLE_NAME);
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = PoiRecommenderContract.Pois.SORT_ORDER_DEFAULT;
-                }
-                break;
-            case POI:
-                queryBuilder.setTables(PoiRecommenderContract.Pois.TABLE_NAME);
-                queryBuilder.appendWhere(PoiRecommenderContract.Pois._ID + " = " + uri.getLastPathSegment());
-                break;
-            case POI_TAG_LIST:
-                queryBuilder.setTables(PoiRecommenderContract.PoiTags.TABLE_NAME);
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = PoiRecommenderContract.PoiTags.SORT_ORDER_DEFAULT;
-                }
-                break;
-            case POI_TAG:
-                queryBuilder.setTables(PoiRecommenderContract.PoiTags.TABLE_NAME);
-                queryBuilder.appendWhere(PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment());
                 break;
             case POI_RATING_LIST:
                 queryBuilder.setTables(PoiRecommenderContract.PoisRating.TABLE_NAME);
@@ -302,26 +231,6 @@ public class PoiRecommenderProvider extends ContentProvider {
                 }
                 updateCount = db.update(PoiRecommenderContract.Contexts.TABLE_NAME, values, where, selectionArgs);
                 break;
-            case POI_LIST:
-                updateCount = db.update(PoiRecommenderContract.Pois.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            case POI:
-                where = PoiRecommenderContract.Pois._ID + " = " + uri.getLastPathSegment();
-                if (!TextUtils.isEmpty(selection)) {
-                    where += " AND " + selection;
-                }
-                updateCount = db.update(PoiRecommenderContract.Pois.TABLE_NAME, values, where, selectionArgs);
-                break;
-            case POI_TAG_LIST:
-                updateCount = db.update(PoiRecommenderContract.PoiTags.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            case POI_TAG:
-                where = PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment();
-                if (!TextUtils.isEmpty(selection)) {
-                    where += " AND " + selection;
-                }
-                updateCount = db.update(PoiRecommenderContract.PoiTags.TABLE_NAME, values, where, selectionArgs);
-                break;
             case POI_RATING_LIST:
                 updateCount = db.update(PoiRecommenderContract.PoisRating.TABLE_NAME, values, selection, selectionArgs);
                 break;
@@ -356,26 +265,6 @@ public class PoiRecommenderProvider extends ContentProvider {
                     where += " AND " + selection;
                 }
                 deleteCount = db.delete(PoiRecommenderContract.Contexts.TABLE_NAME, where, selectionArgs);
-                break;
-            case POI_LIST:
-                deleteCount = db.delete(PoiRecommenderContract.Pois.TABLE_NAME, selection, selectionArgs);
-                break;
-            case POI:
-                where = PoiRecommenderContract.Pois._ID + " = " + uri.getLastPathSegment();
-                if (!TextUtils.isEmpty(selection)) {
-                    where += " AND " + selection;
-                }
-                deleteCount = db.delete(PoiRecommenderContract.Pois.TABLE_NAME, where, selectionArgs);
-                break;
-            case POI_TAG_LIST:
-                deleteCount = db.delete(PoiRecommenderContract.PoiTags.TABLE_NAME, selection, selectionArgs);
-                break;
-            case POI_TAG:
-                where = PoiRecommenderContract.PoiTags._ID + " = " + uri.getLastPathSegment();
-                if (!TextUtils.isEmpty(selection)) {
-                    where += " AND " + selection;
-                }
-                deleteCount = db.delete(PoiRecommenderContract.PoiTags.TABLE_NAME, where, selectionArgs);
                 break;
             case POI_RATING_LIST:
                 deleteCount = db.delete(PoiRecommenderContract.PoisRating.TABLE_NAME, selection, selectionArgs);
