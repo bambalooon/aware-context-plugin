@@ -18,8 +18,10 @@ import com.aware.poirecommender.provider.PoiRecommenderData;
  */
 public class PoiRecommenderService extends IntentService {
     private static final String TAG = PoiRecommenderService.class.getSimpleName();
-    public static final String ACTION_STORE_AND_RATE_POI_WITH_CONTEXT =
-            "com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_AND_RATE_POI_WITH_CONTEXT";
+    public static final String ACTION_RATE_POI =
+            "com.aware.poirecommender.service.PoiRecommenderService.ACTION_RATE_POI";
+    public static final String ACTION_STORE_CONTEXT =
+            "com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_CONTEXT";
     public static final String POI_ID_EXTRA = "POI_ID_EXTRA";
     public static final String RATING_EXTRA = "RATING_EXTRA";
 
@@ -29,21 +31,28 @@ public class PoiRecommenderService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        long poiId = intent.getLongExtra(POI_ID_EXTRA, -1);
+        if (poiId == -1) {
+            return;
+        }
         switch (intent.getAction()) {
-            case ACTION_STORE_AND_RATE_POI_WITH_CONTEXT:
-                long poiId = intent.getLongExtra(POI_ID_EXTRA, -1);
+            case ACTION_RATE_POI:
                 double poiRating = intent.getDoubleExtra(RATING_EXTRA, -1);
-                if (poiId != -1 && poiRating != -1) {
-                    Log.d(TAG, "Storing current context in database...");
-                    Context context = new Context(getContentResolver(),
-                            new ContextPropertySerialization<>(GenericContextProperty.class));
+                if (poiRating != -1) {
+                    Log.d(TAG, "Storing POI rating in database...");
                     try {
-                        new PoiRecommenderData(getApplicationContext())
-                                .storeAndRate(context.getContextProperties().values(), poiId, poiRating);
+                        new PoiRecommenderData(getApplicationContext()).ratePoi(poiId, poiRating);
                     } catch (RemoteException | OperationApplicationException e) {
                         Log.e(TAG, "Exception thrown while inserting context and element to database.", e);
                     }
                 }
+                break;
+            case ACTION_STORE_CONTEXT:
+                Log.d(TAG, "Storing current context in database...");
+                Context context = new Context(getContentResolver(),
+                        new ContextPropertySerialization<>(GenericContextProperty.class));
+                new PoiRecommenderData(getApplicationContext())
+                        .storeContext(context.getContextProperties().values(), poiId);
                 break;
             default:
                 throw new IllegalArgumentException(

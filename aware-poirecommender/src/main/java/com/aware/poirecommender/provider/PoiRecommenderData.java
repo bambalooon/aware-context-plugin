@@ -30,18 +30,24 @@ public class PoiRecommenderData {
         this.contentResolver = context.getContentResolver();
     }
 
-    public void storeAndRate(Collection<GenericContextProperty> contextProperties, long poiId, double poiRating)
-            throws RemoteException, OperationApplicationException {
-
+    public void ratePoi(long poiId, double poiRating) throws RemoteException, OperationApplicationException {
         String deviceId = Aware.getSetting(context, Aware_Preferences.DEVICE_ID);
 
         ArrayList<ContentProviderOperation> operations = Lists.newArrayList(
                 generatePoiRatingsDeleteOperation(poiId),
-                generatePoiRatingInsertOperation(deviceId, poiId, poiRating),
-                generateContextInsertOperation(contextProperties, deviceId, poiId)
+                generatePoiRatingInsertOperation(deviceId, poiId, poiRating)
         );
 
         contentResolver.applyBatch(PoiRecommenderContract.AUTHORITY, operations);
+    }
+
+    public void storeContext(Collection<GenericContextProperty> contextProperties, long poiId) {
+        String deviceId = Aware.getSetting(context, Aware_Preferences.DEVICE_ID);
+
+        contentResolver.insert(
+                PoiRecommenderContract.Contexts.CONTENT_URI,
+                generateContextInsertValues(contextProperties, deviceId, poiId)
+        );
     }
 
     private ContentProviderOperation generatePoiRatingsDeleteOperation(long poiId) {
@@ -63,8 +69,9 @@ public class PoiRecommenderData {
                 .build();
     }
 
-    private ContentProviderOperation generateContextInsertOperation(
-            Collection<GenericContextProperty> contextProperties, String deviceId, long poiId) {
+    private ContentValues generateContextInsertValues(Collection<GenericContextProperty> contextProperties,
+                                                      String deviceId,
+                                                      long poiId) {
         ContentValues values = new ContentValues();
         values.put(PoiRecommenderContract.Contexts.TIMESTAMP, System.currentTimeMillis());
         values.put(PoiRecommenderContract.Contexts.DEVICE_ID, deviceId);
@@ -74,9 +81,6 @@ public class PoiRecommenderData {
                     .parseLong((String) contextProperty.getAttributes().get(CONTEXT_PROPERTY_TIMESTAMP_ATTRIBUTE));
             values.put(contextProperty.getId(), contextPropertyIdAttribute);
         }
-        return ContentProviderOperation
-                .newInsert(PoiRecommenderContract.Contexts.CONTENT_URI)
-                .withValues(values)
-                .build();
+        return values;
     }
 }
