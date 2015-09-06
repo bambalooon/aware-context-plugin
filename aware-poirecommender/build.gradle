@@ -29,6 +29,6 @@ android {
 
 dependencies {
     compile project(':aware-context')
-    compile 'com.awareframework:aware-core:3.3.4@aar'
+    compile 'com.awareframework:aware-core:3.5.6@aar'
     compile 'com.android.support:appcompat-v7:22.0.0'
 }
