@@ -7,8 +7,6 @@ import com.aware.context.factory.GenericContextPropertyFactory;
 import com.aware.context.observer.ContextPropertyCreator;
 import com.aware.context.observer.ContextPropertyMapping;
 import com.aware.context.property.GenericContextProperty;
-import com.aware.plugin.google.activity_recognition.Google_AR_Provider;
-import com.aware.plugin.openweather.Provider;
 import com.aware.poirecommender.provider.PoiRecommenderContract;
 import com.aware.providers.Locations_Provider;
 import com.google.common.collect.ImmutableMap;
@@ -49,17 +47,17 @@ public class PoiRecommenderApplication extends Application {
     private void initializeApplication() {
         contextPropertyMapping = new ContextPropertyMapping<>(ImmutableMap.<Uri, ContextPropertyFactory<GenericContextProperty>>builder()
                 .put(
-                        Google_AR_Provider.Google_Activity_Recognition_Data.CONTENT_URI,
+                        Uri.parse("content://com.aware.plugin.google.activity_recognition.provider/plugin_google_activity_recognition"),
                         new GenericContextPropertyFactory(
                                 PoiRecommenderContract.Contexts.PLUGIN_GOOGLE_ACTIVITY_RECOGNITION_TIMESTAMP,
                                 ImmutableMap.<String, Class<?>>builder()
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data._ID, Integer.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.TIMESTAMP, Long.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.DEVICE_ID, String.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.ACTIVITY_NAME, String.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.ACTIVITY_TYPE, Integer.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.CONFIDENCE, Integer.class)
-                                        .put(Google_AR_Provider.Google_Activity_Recognition_Data.ACTIVITIES, String.class)
+                                        .put("_id", Integer.class)
+                                        .put("timestamp", Long.class)
+                                        .put("device_id", String.class)
+                                        .put("activity_name", String.class)
+                                        .put("activity_type", Integer.class)
+                                        .put("confidence", Integer.class)
+                                        .put("activities", String.class)
                                         .build()))
                 .put(
                         Locations_Provider.Locations_Data.CONTENT_URI,
@@ -79,29 +77,29 @@ public class PoiRecommenderApplication extends Application {
                                         .put(Locations_Provider.Locations_Data.LABEL, String.class)
                                         .build()))
                 .put(
-                        Provider.OpenWeather_Data.CONTENT_URI,
+                        Uri.parse("content://com.aware.plugin.openweather.provider.openweather/plugin_openweather"),
                         new GenericContextPropertyFactory(
                                 PoiRecommenderContract.Contexts.PLUGIN_OPENWEATHER_TIMESTAMP,
                                 ImmutableMap.<String, Class<?>>builder()
-                                        .put(Provider.OpenWeather_Data._ID, Integer.class)
-                                        .put(Provider.OpenWeather_Data.TIMESTAMP, Long.class)
-                                        .put(Provider.OpenWeather_Data.DEVICE_ID, String.class)
-                                        .put(Provider.OpenWeather_Data.CITY, String.class)
-                                        .put(Provider.OpenWeather_Data.TEMPERATURE, Double.class)
-                                        .put(Provider.OpenWeather_Data.TEMPERATURE_MAX, Double.class)
-                                        .put(Provider.OpenWeather_Data.TEMPERATURE_MIN, Double.class)
-                                        .put(Provider.OpenWeather_Data.UNITS, String.class)
-                                        .put(Provider.OpenWeather_Data.HUMIDITY, Double.class)
-                                        .put(Provider.OpenWeather_Data.PRESSURE, Double.class)
-                                        .put(Provider.OpenWeather_Data.WIND_SPEED, Double.class)
-                                        .put(Provider.OpenWeather_Data.WIND_DEGREES, Double.class)
-                                        .put(Provider.OpenWeather_Data.CLOUDINESS, Double.class)
-                                        .put(Provider.OpenWeather_Data.RAIN, Double.class)
-                                        .put(Provider.OpenWeather_Data.SNOW, Double.class)
-                                        .put(Provider.OpenWeather_Data.SUNRISE, Long.class)
-                                        .put(Provider.OpenWeather_Data.SUNSET, Long.class)
-                                        .put(Provider.OpenWeather_Data.WEATHER_ICON_ID, Integer.class)
-                                        .put(Provider.OpenWeather_Data.WEATHER_DESCRIPTION, String.class)
+                                        .put("_id", Integer.class)
+                                        .put("timestamp", Long.class)
+                                        .put("device_id", String.class)
+                                        .put("city", String.class)
+                                        .put("temperature", Double.class)
+                                        .put("temperature_max", Double.class)
+                                        .put("temperature_min", Double.class)
+                                        .put("unit", String.class)
+                                        .put("humidity", Double.class)
+                                        .put("pressure", Double.class)
+                                        .put("wind_speed", Double.class)
+                                        .put("wind_degrees", Double.class)
+                                        .put("cloudiness", Double.class)
+                                        .put("rain", Double.class)
+                                        .put("snow", Double.class)
+                                        .put("sunrise", Long.class)
+                                        .put("sunset", Long.class)
+                                        .put("weather_icon_id", Integer.class)
+                                        .put("weather_description", String.class)
                                         .build()))
                 .build());
 
