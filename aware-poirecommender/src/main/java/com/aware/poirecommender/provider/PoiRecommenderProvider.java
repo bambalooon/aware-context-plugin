@@ -29,7 +29,7 @@ public class PoiRecommenderProvider extends ContentProvider {
     /**
      * Database current version
      */
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     private static final int CONTEXT_LIST = 1;
     private static final int CONTEXT = 2;
@@ -113,11 +113,11 @@ public class PoiRecommenderProvider extends ContentProvider {
             //POIs rating
             PoiRecommenderContract.PoisRating._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.PoisRating.TIMESTAMP + " real not null,"
-                    + PoiRecommenderContract.PoisRating.DEVICE_ID + " text not null,"
+                    + PoiRecommenderContract.PoisRating.USER_ID + " text not null,"
                     + PoiRecommenderContract.PoisRating.POI_ID + " real not null,"
                     + PoiRecommenderContract.PoisRating.POI_RATING + " real not null," + "UNIQUE ("
                     + PoiRecommenderContract.PoisRating.TIMESTAMP + ", "
-                    + PoiRecommenderContract.PoisRating.DEVICE_ID + ")"
+                    + PoiRecommenderContract.PoisRating.USER_ID + ")"
     };
 
     private final ThreadLocal<Boolean> mIsInBatchMode = new ThreadLocal<>();

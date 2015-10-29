@@ -23,6 +23,7 @@ public class PoiRecommenderService extends IntentService {
     public static final String ACTION_STORE_CONTEXT =
             "com.aware.poirecommender.service.PoiRecommenderService.ACTION_STORE_CONTEXT";
     public static final String POI_ID_EXTRA = "POI_ID_EXTRA";
+    public static final String USER_ID_EXTRA = "USER_ID_EXTRA";
     public static final String RATING_EXTRA = "RATING_EXTRA";
 
     public PoiRecommenderService() {
@@ -37,11 +38,12 @@ public class PoiRecommenderService extends IntentService {
         }
         switch (intent.getAction()) {
             case ACTION_RATE_POI:
+                String userId = intent.getStringExtra(USER_ID_EXTRA);
                 double poiRating = intent.getDoubleExtra(RATING_EXTRA, -1);
-                if (poiRating != -1) {
+                if (userId != null && poiRating != -1) {
                     Log.d(TAG, "Storing POI rating in database...");
                     try {
-                        new PoiRecommenderData(getApplicationContext()).ratePoi(poiId, poiRating);
+                        new PoiRecommenderData(getApplicationContext()).ratePoi(userId, poiId, poiRating);
                     } catch (RemoteException | OperationApplicationException e) {
                         Log.e(TAG, "Exception thrown while inserting context and element to database.", e);
                     }

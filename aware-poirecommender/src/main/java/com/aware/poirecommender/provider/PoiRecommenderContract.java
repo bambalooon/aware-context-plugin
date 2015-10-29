@@ -178,10 +178,10 @@ public class PoiRecommenderContract {
          */
         public static final String TIMESTAMP = "timestamp";
         /**
-         * The device ID column.
+         * The user ID column.
          * <P>Type: STRING (String)</P>
          */
-        public static final String DEVICE_ID = "device_id";
+        public static final String USER_ID = "user_id";
 
         /**
          * Unique ID of POI
@@ -199,7 +199,7 @@ public class PoiRecommenderContract {
          * A projection of all columns in POIs table.
          */
         public static final String[] PROJECTION_ALL = {
-                _ID, TIMESTAMP, DEVICE_ID,
+                _ID, TIMESTAMP, USER_ID,
                 POI_ID, POI_RATING
         };
 
