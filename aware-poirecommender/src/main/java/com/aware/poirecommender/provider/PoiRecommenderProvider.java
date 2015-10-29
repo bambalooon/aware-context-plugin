@@ -113,11 +113,12 @@ public class PoiRecommenderProvider extends ContentProvider {
             //POIs rating
             PoiRecommenderContract.PoisRating._ID + " integer primary key autoincrement,"
                     + PoiRecommenderContract.PoisRating.TIMESTAMP + " real not null,"
+                    + PoiRecommenderContract.PoisRating.DEVICE_ID + " text not null,"
                     + PoiRecommenderContract.PoisRating.USER_ID + " text not null,"
                     + PoiRecommenderContract.PoisRating.POI_ID + " real not null,"
                     + PoiRecommenderContract.PoisRating.POI_RATING + " real not null," + "UNIQUE ("
                     + PoiRecommenderContract.PoisRating.TIMESTAMP + ", "
-                    + PoiRecommenderContract.PoisRating.USER_ID + ")"
+                    + PoiRecommenderContract.PoisRating.DEVICE_ID + ")"
     };
 
     private final ThreadLocal<Boolean> mIsInBatchMode = new ThreadLocal<>();

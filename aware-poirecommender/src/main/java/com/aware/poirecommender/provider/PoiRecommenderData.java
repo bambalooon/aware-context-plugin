@@ -31,9 +31,11 @@ public class PoiRecommenderData {
     }
 
     public void ratePoi(String userId, long poiId, double poiRating) throws RemoteException, OperationApplicationException {
+        String deviceId = Aware.getSetting(context, Aware_Preferences.DEVICE_ID);
+
         ArrayList<ContentProviderOperation> operations = Lists.newArrayList(
                 generatePoiRatingsDeleteOperation(poiId),
-                generatePoiRatingInsertOperation(userId, poiId, poiRating)
+                generatePoiRatingInsertOperation(deviceId, userId, poiId, poiRating)
         );
 
         contentResolver.applyBatch(PoiRecommenderContract.AUTHORITY, operations);
@@ -55,9 +57,10 @@ public class PoiRecommenderData {
                 .build();
     }
 
-    private ContentProviderOperation generatePoiRatingInsertOperation(String userId, long poiId, double poiRating) {
+    private ContentProviderOperation generatePoiRatingInsertOperation(String deviceId, String userId, long poiId, double poiRating) {
         ContentValues values = new ContentValues();
         values.put(PoiRecommenderContract.PoisRating.TIMESTAMP, System.currentTimeMillis());
+        values.put(PoiRecommenderContract.PoisRating.DEVICE_ID, deviceId);
         values.put(PoiRecommenderContract.PoisRating.USER_ID, userId);
         values.put(PoiRecommenderContract.PoisRating.POI_ID, poiId);
         values.put(PoiRecommenderContract.PoisRating.POI_RATING, poiRating);
