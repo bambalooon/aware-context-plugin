@@ -1,5 +1,6 @@
 package com.aware.plugin.poirecommender;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.ContentObserver;
@@ -58,6 +59,10 @@ public class Plugin extends Aware_Plugin {
             }
         };
 
+        REQUIRED_PERMISSIONS.add(Manifest.permission.ACCESS_NETWORK_STATE);
+        REQUIRED_PERMISSIONS.add(Manifest.permission.INTERNET);
+        REQUIRED_PERMISSIONS.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
         DATABASE_TABLES = PoiRecommenderProvider.DATABASE_TABLES;
         TABLES_FIELDS = PoiRecommenderProvider.TABLES_FIELDS;
         CONTEXT_URIS = new Uri[] {
@@ -90,9 +95,8 @@ public class Plugin extends Aware_Plugin {
             contentResolver.registerContentObserver(contextPropertyUri, true, contextPropertyObserver);
             contentObservers.add(contextPropertyObserver);
         }
-        //Apply AWARE settings
-        Intent refresh = new Intent(Aware.ACTION_AWARE_REFRESH);
-        sendBroadcast(refresh);
+
+        Aware.startPlugin(this, "com.aware.plugin.poirecommender");
     }
 
     @Override
@@ -105,6 +109,8 @@ public class Plugin extends Aware_Plugin {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         ContentResolver contentResolver = getContentResolver();
         for (ContentObserver contentObserver : contentObservers) {
             contentResolver.unregisterContentObserver(contentObserver);
@@ -117,13 +123,6 @@ public class Plugin extends Aware_Plugin {
             handlerThread.quit();
         }
 
-        if( DEBUG ) Log.d(TAG, "PoiRecommender plugin terminated");
-        Aware.setSetting(getApplicationContext(), Settings.STATUS_PLUGIN_POIRECOMMENDER, false);
-
-        //Apply AWARE settings
-        Intent refresh = new Intent(Aware.ACTION_AWARE_REFRESH);
-        sendBroadcast(refresh);
-
-        super.onDestroy();
+        Aware.stopPlugin(this, "com.aware.plugin.poirecommender");
     }
 }

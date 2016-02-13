@@ -81,6 +81,7 @@
                 <action android:name="ACTION_AWARE_WEBSERVICE_CLEAR_TABLE" />
             </intent-filter>
         </service>
+        <service android:name="com.aware.utils.SSLManager" android:exported="true" />
     </application>
 
 </manifest>

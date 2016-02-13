@@ -12,7 +12,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import com.aware.utils.DatabaseHelper;
@@ -57,8 +56,7 @@ public class PoiRecommenderProvider extends ContentProvider {
                 POI_RATING);
     }
 
-    private static final String DATABASE_NAME = Environment.getExternalStorageDirectory()
-            + "/AWARE/plugin_poirecommender.db";
+    private static final String DATABASE_NAME = "plugin_poirecommender.db";
 
     public static final String[] DATABASE_TABLES = {
             PoiRecommenderContract.Contexts.TABLE_NAME,
