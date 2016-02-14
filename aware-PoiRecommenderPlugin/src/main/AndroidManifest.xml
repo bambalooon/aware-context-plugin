@@ -1,8 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
         package="com.aware.plugin.poirecommender">
 
-    <!--suppress AndroidDomInspection -->
-    <uses-permission tools:node="removeAll"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -16,14 +14,15 @@
     <uses-permission android:name="com.aware.poirecommender.provider.poirecommender.READ"/>
     <uses-permission android:name="com.aware.poirecommender.provider.poirecommender.WRITE"/>
 
-    <uses-feature tools:node="removeAll"/>
-
     <application
             android:name=".application.PoiRecommenderApplication"
             android:allowBackup="true"
             android:label="@string/app_name"
             android:icon="@drawable/ic_poirecommender"
-            tools:node="replace">
+            android:theme="@style/Theme.Aware"
+            tools:replace="android:icon, android:theme">
+
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <service
             android:name=".Plugin"
@@ -33,9 +32,11 @@
 
         <activity
             android:name=".Settings"
+            android:launchMode="singleInstance"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:label="@string/app_name"
+            android:theme="@style/Theme.Aware"
             />
 
         <service
@@ -66,22 +67,6 @@
             android:readPermission="com.aware.poirecommender.provider.poirecommender.READ"
             android:writePermission="com.aware.poirecommender.provider.poirecommender.WRITE"
             />
-
-        <!-- AWARE -->
-        <service
-            android:name="com.aware.utils.WearClient"
-            android:enabled="@bool/display_aware"
-            android:exported="true"
-            />
-        <service
-            android:name="com.aware.utils.WebserviceHelper"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="ACTION_AWARE_WEBSERVICE_SYNC_TABLE" />
-                <action android:name="ACTION_AWARE_WEBSERVICE_CLEAR_TABLE" />
-            </intent-filter>
-        </service>
-        <service android:name="com.aware.utils.SSLManager" android:exported="true" />
     </application>
 
 </manifest>
