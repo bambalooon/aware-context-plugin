@@ -8,8 +8,8 @@ android {
         applicationId "com.aware.plugin.poirecommender"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1"
+        versionCode 2
+        versionName "0.2"
         testApplicationId "test.com.aware.plugin.poirecommender" //to disable aware framework plugin detection of tests
         testInstrumentationRunner "android.test.InstrumentationTestRunnerWithMocks" //to work with mocks
     }
