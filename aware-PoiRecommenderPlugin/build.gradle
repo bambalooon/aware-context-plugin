@@ -29,8 +29,8 @@ android {
 dependencies {
     // main
     compile project(':aware-poirecommender')
+    compile "com.android.support:cardview-v7:${supportLibrary_version}"
     compile "com.google.android.gms:play-services-base:${gms_version}"
-    compile "com.google.android.gms:play-services-wearable:${gms_version}"
     compile "com.koushikdutta.ion:ion:${ion_version}"
     // testing
     androidTestCompile "org.mockito:mockito-all:${mockito_version}"
